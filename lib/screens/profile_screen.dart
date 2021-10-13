@@ -5,72 +5,92 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color(0xFFF7F9FC),
-        // appBar: AppBar(
-        //   backgroundColor: const Color(0xFFF7F9FC),
-        //   elevation: 0,
-        //   leading: IconButton(
-        //     icon: const Icon(
-        //       Icons.arrow_back_rounded,
-        //       color: Colors.black,
-        //     ),
-        //     onPressed: () {},
-        //   ),
-        // ),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 21),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    radius: 44,
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 11,
-            ),
-            const ProfileItem(
-                icon: Icon(Icons.sticky_note_2_rounded), text: "To-Do"),
-            const ProfileItem(
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: const Color(0xFFF7F9FC),
+          // appBar: AppBar(
+          //   backgroundColor: const Color(0xFFF7F9FC),
+          //   elevation: 0,
+          //   leading: IconButton(
+          //     icon: const Icon(
+          //       Icons.arrow_back_rounded,
+          //       color: Colors.black,
+          //     ),
+          //     onPressed: () {},
+          //   ),
+          // ),
+          body: Column(
+            children: [
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 21),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      radius: 44,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 11,
+              ),
+              const ProfileItem(
+                icon: Icon(Icons.sticky_note_2_rounded),
+                text: "To-Do",
+                pageRoute: "OffCampusFormPage",
+              ),
+              const ProfileItem(
                 icon: Icon(Icons.perm_contact_calendar_rounded),
-                text: "T&P Coordinators"),
-            const ProfileItem(
+                text: "T&P Coordinators",
+                pageRoute: "OffCampusFormPage",
+              ),
+              const ProfileItem(
                 icon: Icon(Icons.remove_red_eye_rounded),
-                text: "Status Tracker"),
-            const ProfileItem(
-                icon: Icon(Icons.star_rounded), text: "Off-Campus Form"),
-            const ProfileItem(
-                icon: Icon(Icons.chat_bubble_rounded), text: "Raise a Ticket"),
-            const ProfileItem(
-                icon: Icon(Icons.logout_rounded), text: "Log Out"),
-          ],
-        ));
+                text: "Status Tracker",
+                pageRoute: "OffCampusFormPage",
+              ),
+              const ProfileItem(
+                icon: Icon(Icons.star_rounded),
+                text: "Off-Campus Form",
+                pageRoute: "OffCampusFormPage",
+              ),
+              const ProfileItem(
+                icon: Icon(Icons.chat_bubble_rounded),
+                text: "Raise a Ticket",
+                pageRoute: "RaiseTicketPage",
+              ),
+              const ProfileItem(
+                icon: Icon(Icons.logout_rounded),
+                text: "Log Out",
+                pageRoute: "OffCampusFormPage",
+              ),
+            ],
+          )),
+    );
   }
 }
 
 class ProfileItem extends StatelessWidget {
   final Icon icon;
   final String text;
+  final String pageRoute;
 
   const ProfileItem({
     Key? key,
     required this.icon,
     required this.text,
+    required this.pageRoute,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/OffCampusFormPage');
+        Navigator.pushNamed(context, '/' + pageRoute);
       },
       child: Container(
         width: 374,

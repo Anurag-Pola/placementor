@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class OffCampusFormScreen extends StatefulWidget {
-  const OffCampusFormScreen({Key? key}) : super(key: key);
+class RaiseTicketPage extends StatefulWidget {
+  const RaiseTicketPage({Key? key}) : super(key: key);
 
   @override
-  State<OffCampusFormScreen> createState() => _OffCampusFormScreenState();
+  _RaiseTicketPageState createState() => _RaiseTicketPageState();
 }
 
-class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
+class _RaiseTicketPageState extends State<RaiseTicketPage> {
   final _formKey = GlobalKey<FormState>();
   double paddingToElements = 39;
   String? validateFunction(value) {
@@ -16,6 +17,25 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
     }
     return null;
   }
+
+  InputDecoration textFormFieldDecoration = InputDecoration(
+    errorStyle: const TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.w100,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide(
+        color: Color(0xffe5e5e5),
+        width: 1,
+      ),
+    ),
+    contentPadding: const EdgeInsets.only(
+      left: 18,
+      right: 18,
+    ),
+    fillColor: const Color(0xfff8f8f8),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +61,11 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
             children: [
               Expanded(
                 child: ListView(
-                  scrollDirection: Axis.vertical,
                   padding: EdgeInsets.only(
                       left: paddingToElements, right: paddingToElements),
                   children: [
                     const Text(
-                      "Let us know about an off campus opportunity, which is not available in the app",
+                      "Want to tell us about a missing or incorrect information ? \n(or)\nWant to  suggest us a new feature ?\n(or)\nWant to give feedback or complaint ?\n\nThis is the right place",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -57,25 +76,52 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    eachQuestion(
-                      "Name of the Company",
-                      textFormFieldValidator: validateFunction,
+                    SizedBox(
+                      width: 248,
+                      height: 100,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Title of the Concern *",
+                            style: TextStyle(
+                              color: Color(0xff252b42),
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            validator: (value) {
+                              return validateFunction(value);
+                            },
+                            decoration: textFormFieldDecoration,
+                          ),
+                        ],
+                      ),
                     ),
-                    eachQuestion(
-                      "Role",
-                      textFormFieldValidator: validateFunction,
+                    const Text(
+                      "Description *",
+                      style: TextStyle(
+                        color: Color(0xff252b42),
+                        fontSize: 14,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    eachQuestion(
-                      "Package (in LPA)",
-                      textFormFieldValidator: validateFunction,
-                    ),
-                    eachQuestion(
-                      "URL through which we can apply",
-                      textFormFieldValidator: validateFunction,
-                    ),
-                    eachQuestion(
-                      "Last date of application",
-                      textFormFieldValidator: validateFunction,
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      validator: (value) {
+                        return validateFunction(value);
+                      },
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline,
+                      minLines: null,
+                      maxLines: null,
+                      decoration: textFormFieldDecoration,
                     ),
                   ],
                 ),
@@ -111,7 +157,7 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
                         Text(
-                          "Send Information to T&P",
+                          "Raise a Ticket",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
@@ -128,54 +174,6 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget eachQuestion(String question,
-      {required Function textFormFieldValidator, bool necessary = true}) {
-    return SizedBox(
-      width: 248,
-      height: 100,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            question + (necessary ? " *" : ""),
-            style: const TextStyle(
-              color: Color(0xff252b42),
-              fontSize: 14,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 10),
-          TextFormField(
-            validator: (value) {
-              return textFormFieldValidator(value);
-            },
-            decoration: InputDecoration(
-              errorStyle: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w100,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: const BorderSide(
-                  color: Color(0xffe5e5e5),
-                  width: 1,
-                ),
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 18,
-                right: 18,
-              ),
-              fillColor: const Color(0xfff8f8f8),
-            ),
-          ),
-        ],
       ),
     );
   }
