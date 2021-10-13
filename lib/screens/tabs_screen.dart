@@ -18,33 +18,34 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
 
   @override
   void initState() {
-    _child = Container(
-      color: Colors.green,
-    );
+    _child = const CompaniesScreen();
     super.initState();
   }
 
   @override
   Widget build(context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF75B7E1),
-      extendBody: true,
-      body: _child,
-      bottomNavigationBar: FluidNavBar(
-        icons: [
-          FluidNavBarIcon(icon: Icons.business, extras: {"label": "companies"}),
-          FluidNavBarIcon(
-              icon: Icons.menu_book, extras: {"label": "references"}),
-          FluidNavBarIcon(icon: Icons.person, extras: {"label": "profile"}),
-        ],
-        onChange: _handleNavigationChange,
-        style:
-            const FluidNavBarStyle(iconUnselectedForegroundColor: Colors.grey),
-        scaleFactor: 1.5,
-        defaultIndex: 0,
-        itemBuilder: (icon, item) => Semantics(
-          label: icon.extras!["label"],
-          child: item,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFF75B7E1),
+        extendBody: true,
+        body: _child,
+        bottomNavigationBar: FluidNavBar(
+          icons: [
+            FluidNavBarIcon(
+                icon: Icons.business, extras: {"label": "companies"}),
+            FluidNavBarIcon(
+                icon: Icons.menu_book, extras: {"label": "references"}),
+            FluidNavBarIcon(icon: Icons.person, extras: {"label": "profile"}),
+          ],
+          onChange: _handleNavigationChange,
+          style: const FluidNavBarStyle(
+              iconUnselectedForegroundColor: Colors.grey),
+          scaleFactor: 1.5,
+          // defaultIndex: 0,
+          itemBuilder: (icon, item) => Semantics(
+            label: icon.extras!["label"],
+            child: item,
+          ),
         ),
       ),
     );
