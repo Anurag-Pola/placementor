@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class OffCampusFormScreen extends StatefulWidget {
@@ -19,6 +21,12 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double safeAreaHeight = MediaQuery.of(context).padding.top;
+    double height = MediaQuery.of(context).size.height - safeAreaHeight;
+    double width = MediaQuery.of(context).size.width;
+    print(safeAreaHeight);
+    print(height);
+    print(width);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -54,26 +62,26 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: height * 0.027,
                     ),
-                    eachQuestion(
+                    EachQuestion(
                       "Name of the Company",
                       textFormFieldValidator: validateFunction,
                     ),
-                    eachQuestion(
+                    EachQuestion(
                       "Role",
                       textFormFieldValidator: validateFunction,
                     ),
-                    eachQuestion(
+                    EachQuestion(
                       "Package (in LPA)",
                       textFormFieldValidator: validateFunction,
                     ),
-                    eachQuestion(
+                    EachQuestion(
                       "URL through which we can apply",
                       textFormFieldValidator: validateFunction,
                     ),
-                    eachQuestion(
+                    EachQuestion(
                       "Last date of application",
                       textFormFieldValidator: validateFunction,
                     ),
@@ -91,8 +99,8 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 20),
-                    width: 265,
-                    height: 58,
+                    width: width * 0.67,
+                    height: height * 0.08,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       gradient: const LinearGradient(
@@ -101,9 +109,9 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                         colors: [Color(0xff925ffc), Color(0xff3b57ff)],
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 15,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.102,
+                      vertical: height * 0.02,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -131,12 +139,24 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
       ),
     );
   }
+}
 
-  Widget eachQuestion(String question,
-      {required Function textFormFieldValidator, bool necessary = true}) {
+class EachQuestion extends StatelessWidget {
+  final String question;
+  final Function textFormFieldValidator;
+  final bool necessary;
+  const EachQuestion(this.question,
+      {required this.textFormFieldValidator, this.necessary = true, Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double safeAreaHeight = MediaQuery.of(context).padding.top;
+    double height = MediaQuery.of(context).size.height - safeAreaHeight;
+    double width = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: 248,
-      height: 100,
+      width: width * 0.633,
+      height: height * 0.14,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -151,7 +171,7 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: height * 0.014),
           TextFormField(
             validator: (value) {
               return textFormFieldValidator(value);
@@ -168,9 +188,9 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                   width: 1,
                 ),
               ),
-              contentPadding: const EdgeInsets.only(
-                left: 18,
-                right: 18,
+              contentPadding: EdgeInsets.only(
+                left: min(height, width) * 0.046,
+                right: min(height, width) * 0.046,
               ),
               fillColor: const Color(0xfff8f8f8),
             ),
