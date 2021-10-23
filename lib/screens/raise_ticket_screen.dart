@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RaiseTicketPage extends StatefulWidget {
-  const RaiseTicketPage({Key? key}) : super(key: key);
+class RaiseTicketScreen extends StatefulWidget {
+  const RaiseTicketScreen({Key? key}) : super(key: key);
 
   @override
-  _RaiseTicketPageState createState() => _RaiseTicketPageState();
+  _RaiseTicketScreenState createState() => _RaiseTicketScreenState();
 }
 
-class _RaiseTicketPageState extends State<RaiseTicketPage> {
+class _RaiseTicketScreenState extends State<RaiseTicketScreen> {
   final _formKey = GlobalKey<FormState>();
   double paddingToElements = 39;
   String? validateFunction(value) {
@@ -39,6 +39,9 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
 
   @override
   Widget build(BuildContext context) {
+    double safeAreaHeight = MediaQuery.of(context).padding.top;
+    double height = MediaQuery.of(context).size.height - safeAreaHeight;
+    double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -73,12 +76,12 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: height * 0.027,
                     ),
                     SizedBox(
-                      width: 248,
-                      height: 100,
+                      width: width * 0.633,
+                      height: height * 0.14,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -93,7 +96,7 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: height * 0.014),
                           TextFormField(
                             validator: (value) {
                               return validateFunction(value);
@@ -112,7 +115,7 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: height * 0.014),
                     TextFormField(
                       validator: (value) {
                         return validateFunction(value);
@@ -137,8 +140,8 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 20),
-                    width: 265,
-                    height: 58,
+                    width: width * 0.67,
+                    height: height * 0.08,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       gradient: const LinearGradient(
@@ -147,9 +150,9 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                         colors: [Color(0xff925ffc), Color(0xff3b57ff)],
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 15,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.102,
+                      vertical: height * 0.02,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
