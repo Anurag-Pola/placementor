@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:placementor/screens/off_campus_form_screen.dart';
-import 'package:placementor/screens/raise_ticket_page.dart';
+import './screens/off_campus_form_screen.dart';
+import './screens/off_campus_opp_screen.dart';
+import './screens/on_campus_company_screen.dart';
+import './screens/raise_ticket_page.dart';
 import './screens/tabs_screen.dart';
 
 void main() {
@@ -21,6 +23,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/OffCampusFormPage': (context) => const OffCampusFormScreen(),
         '/RaiseTicketPage': (context) => const RaiseTicketPage(),
+        '/OffCampusOppPage': (context) => const OffCampusOppScreen(),
+        '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
       },
       home: const FluidNavBarDemo(),
     );
