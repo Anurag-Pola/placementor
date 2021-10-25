@@ -1,11 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:placementor/widgets/on_campus_experience_tiles.dart';
+
+import '../widgets/on_campus_my_expandable_card.dart';
+import '../widgets/on_campus_heading.dart';
+import '../widgets/on_campus_previosly_placed_contact_tiles.dart';
 
 class OnCampusComapnyScreen extends StatelessWidget {
   const OnCampusComapnyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -32,156 +39,234 @@ class OnCampusComapnyScreen extends StatelessWidget {
               Icons.insert_invitation_rounded,
               color: Colors.black,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () {},
           ),
         ],
       ),
       backgroundColor: const Color(0xFFF5F7FC),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            OnCampusHeading(),
-            SizedBox(
-              height: 20,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
+            children: [
+              const OnCampusHeading(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const MyExpandableCard(
+                        heading: "ABOUT THE FIRM",
+                        content:
+                            "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const MyExpandableCard(
+                        heading: "JOB DESCRIPTION",
+                        content:
+                            "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: double.infinity,
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Opacity(
+                              opacity: 0.75,
+                              child: Text(
+                                "SKILLSET REQUIRED",
+                                style: TextStyle(
+                                  color: Color(0xff18191e),
+                                  fontSize: 13,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.75,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            for (var o in [
+                              "Python",
+                              "Flutter",
+                              "Firebase",
+                              "Spring Boot"
+                            ])
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const Text("• "),
+                                  Expanded(
+                                    child: Text(o),
+                                  )
+                                ],
+                              ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      PrevioslyPlacedContactTiles(
+                        height: height,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ExperienceTiles(height: height),
+                      const SizedBox(height: 20),
+                      FAQTiles(height: height),
+                      const SizedBox(height: 60),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 10,
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                width: 215,
+                height: 52,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x3f000000),
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                  gradient: const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xff925ffc), Color(0xff3b57ff)],
+                  ),
+                ),
+                padding: const EdgeInsets.only(
+                  left: 59,
+                  right: 54,
+                  top: 18,
+                  bottom: 19,
+                ),
+                child: const Text(
+                  "APPLY NOW",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ),
             ),
-            // AboutTheFirm(),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
 }
 
-class AboutTheFirm extends StatefulWidget {
-  const AboutTheFirm({
+class FAQTiles extends StatefulWidget {
+  const FAQTiles({
     Key? key,
+    required this.height,
   }) : super(key: key);
 
+  final double height;
   @override
-  State<AboutTheFirm> createState() => _AboutTheFirmState();
+  State<FAQTiles> createState() => _FAQTilesState();
 }
 
-class _AboutTheFirmState extends State<AboutTheFirm> {
+class _FAQTilesState extends State<FAQTiles> {
+  List<bool> _isOpen = List.filled(5, false);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: const ExpansionTile(
-        title: Opacity(
-          opacity: 0.75,
-          child: Text(
-            "ABOUT THE FIRM",
-            style: TextStyle(
-              color: Color(0xff18191e),
-              fontSize: 11.50,
-              fontFamily: "Poppins",
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.75,
+      child: SizedBox(
+        height: widget.height * 0.4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-        subtitle: SizedBox(
-          // width: 363,
-          child: Text(
-            "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye?\nWe believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ),
-
-      // child: Column(
-      //   mainAxisSize: MainAxisSize.min,
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: [
-      //     const
-      //     const SizedBox(height: 12),
-      //     const
-      //     const SizedBox(height: 16),
-      //     Row(
-      //       mainAxisSize: MainAxisSize.min,
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       crossAxisAlignment: CrossAxisAlignment.center,
-      //       children: [
-      //         const Text(
-      //           "See more",
-      //           style: TextStyle(
-      //             color: Color(0xff1c58f2),
-      //             fontSize: 13,
-      //             fontFamily: "Poppins",
-      //             fontWeight: FontWeight.w600,
-      //           ),
-      //         ),
-      //         const SizedBox(width: 4),
-      //         Container(
-      //           width: 16,
-      //           height: 16,
-      //           decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.circular(8),
-      //           ),
-      //           child: const FlutterLogo(size: 16),
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
-    );
-  }
-}
-
-class OnCampusHeading extends StatelessWidget {
-  const OnCampusHeading({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 8.0),
-            child: FlutterLogo(size: 60),
-          ),
-          SizedBox(height: 16),
-          Padding(
-            padding: EdgeInsets.only(left: 25.0),
-            child: Text(
-              "Senior Product Designer",
-              style: TextStyle(
-                color: Color(0xff18191e),
-                fontSize: 26,
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 25.0, top: 5.0, bottom: 15.0),
-            child: Opacity(
-              opacity: 0.80,
+            const Opacity(
+              opacity: 0.75,
               child: Text(
-                "Google INC",
+                "FAQ",
                 style: TextStyle(
                   color: Color(0xff18191e),
-                  fontSize: 14,
+                  fontSize: 13,
                   fontFamily: "Poppins",
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.75,
                 ),
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 200,
+              child: SingleChildScrollView(
+                child: ExpansionPanelList(
+                    expansionCallback: (i, isOpen) => setState(() {
+                          _isOpen[i] = !_isOpen[i];
+                        }),
+                    children: [0, 1, 2, 3, 4].map<ExpansionPanel>((e) {
+                      return ExpansionPanel(
+                          canTapOnHeader: true,
+                          headerBuilder: (context, isOpen) {
+                            return const ListTile(
+                              title: Text(
+                                "What does the company expect from students?",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            );
+                          },
+                          body: const ListTile(
+                            title: Text(
+                              "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          isExpanded: _isOpen[e]);
+                    }).toList()),
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }

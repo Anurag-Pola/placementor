@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './screens/tnp_coordinators_screen.dart';
 import './screens/off_campus_form_screen.dart';
 import './screens/off_campus_opp_screen.dart';
 import './screens/on_campus_company_screen.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/RaiseTicketPage': (context) => const RaiseTicketScreen(),
         '/OffCampusOppPage': (context) => const OffCampusOppScreen(),
         '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
+        '/tnpCoordinatorsPage': (context) => const TnPCoordinatorsScreen(),
       },
       home: const FluidNavBarDemo(),
     );

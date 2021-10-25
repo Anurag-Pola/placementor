@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
             const ProfileItem(
               icon: Icon(Icons.perm_contact_calendar_rounded),
               text: "T&P Coordinators",
-              pageRoute: "tnpCoordinators",
+              pageRoute: "tnpCoordinatorsPage",
             ),
             const ProfileItem(
               icon: Icon(Icons.remove_red_eye_rounded),

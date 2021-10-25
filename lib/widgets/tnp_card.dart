@@ -19,10 +19,6 @@ class TnPCard extends StatelessWidget {
         ],
         color: Colors.white,
       ),
-      // padding: const EdgeInsets.symmetric(
-      // horizontal: 5,
-      // vertical: 4,
-      // ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,

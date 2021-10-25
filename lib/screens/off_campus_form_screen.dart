@@ -24,9 +24,6 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     double height = MediaQuery.of(context).size.height - safeAreaHeight;
     double width = MediaQuery.of(context).size.width;
-    print(safeAreaHeight);
-    print(height);
-    print(width);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
