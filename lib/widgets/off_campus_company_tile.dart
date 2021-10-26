@@ -7,7 +7,7 @@ class OffCampusCompanyTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/OffCampusOppPage');
+        Navigator.pushNamed(context, '/offCampusCompanyPage');
       },
       child: Container(
         width: 115,
