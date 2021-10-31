@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class OnCampusHeading extends StatelessWidget {
+  final String companyName;
+
   const OnCampusHeading({
     Key? key,
+    required this.companyName,
   }) : super(key: key);
 
   @override
@@ -12,13 +15,13 @@ class OnCampusHeading extends StatelessWidget {
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Padding(
+        children: [
+          const Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 8.0),
             child: FlutterLogo(size: 60),
           ),
-          SizedBox(height: 16),
-          Padding(
+          const SizedBox(height: 16),
+          const Padding(
             padding: EdgeInsets.only(left: 25.0),
             child: Text(
               "Senior Product Designer",
@@ -31,12 +34,12 @@ class OnCampusHeading extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 25.0, top: 5.0, bottom: 15.0),
+            padding: const EdgeInsets.only(left: 25.0, top: 5.0, bottom: 15.0),
             child: Opacity(
               opacity: 0.80,
               child: Text(
-                "Google INC",
-                style: TextStyle(
+                companyName,
+                style: const TextStyle(
                   color: Color(0xff18191e),
                   fontSize: 14,
                   fontFamily: "Poppins",

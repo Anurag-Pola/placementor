@@ -18,7 +18,7 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
 
   @override
   void initState() {
-    _child = const CompaniesScreen();
+    _child = CompaniesScreen();
     super.initState();
   }
 
@@ -26,16 +26,23 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
   Widget build(context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF75B7E1),
+        // backgroundColor: const Color(0xFF75B7E1),
         extendBody: true,
         body: _child,
         bottomNavigationBar: FluidNavBar(
           icons: [
             FluidNavBarIcon(
-                icon: Icons.business, extras: {"label": "companies"}),
+              icon: Icons.business,
+              extras: {"label": "companies"},
+            ),
             FluidNavBarIcon(
-                icon: Icons.menu_book, extras: {"label": "references"}),
-            FluidNavBarIcon(icon: Icons.person, extras: {"label": "profile"}),
+              icon: Icons.menu_book,
+              extras: {"label": "references"},
+            ),
+            FluidNavBarIcon(
+              icon: Icons.person,
+              extras: {"label": "profile"},
+            ),
           ],
           onChange: _handleNavigationChange,
           style: const FluidNavBarStyle(
@@ -55,7 +62,7 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
     setState(() {
       switch (index) {
         case 0:
-          _child = const CompaniesScreen();
+          _child = CompaniesScreen();
           break;
         case 1:
           _child = const ReferencesScreen();

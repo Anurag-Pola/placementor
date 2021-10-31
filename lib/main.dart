@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:placementor/screens/off_campus_company_screen.dart';
+import 'package:flutter/services.dart';
+
+import './screens/off_campus_company_screen.dart';
+import './screens/to_do_screen.dart';
 import './screens/tnp_coordinators_screen.dart';
 import './screens/off_campus_form_screen.dart';
 import './screens/off_campus_opp_screen.dart';
@@ -15,6 +18,8 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -29,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
         '/offCampusCompanyPage': (context) => const OffCampusComapnyScreen(),
         '/tnpCoordinatorsPage': (context) => const TnPCoordinatorsScreen(),
+        '/toDoListPage': (context) => const ToDoListScreen(),
       },
       home: const FluidNavBarDemo(),
     );

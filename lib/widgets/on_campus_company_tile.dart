@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:placementor/widgets/company_class.dart';
 
 class OnCampusCompanyTile extends StatelessWidget {
-  const OnCampusCompanyTile({Key? key}) : super(key: key);
+  final String companyName;
+
+  OnCampusCompanyTile({Key? key, required this.companyName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed('/onCampusCompanyPage');
+        Navigator.of(context)
+            .pushNamed('/onCampusCompanyPage', arguments: Company(companyName));
       },
       child: Container(
         child: Column(
@@ -28,8 +32,8 @@ class OnCampusCompanyTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       "Senior Product Designer",
                       style: TextStyle(
                         color: Color(0xff18191e),
@@ -38,12 +42,12 @@ class OnCampusCompanyTile extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Opacity(
                       opacity: 0.80,
                       child: Text(
-                        "Google INC ",
-                        style: TextStyle(
+                        companyName,
+                        style: const TextStyle(
                           color: Color(0xff18191e),
                           fontSize: 12,
                           fontFamily: "Poppins",

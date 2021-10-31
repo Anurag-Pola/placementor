@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -147,29 +149,25 @@ class _RaiseTicketScreenState extends State<RaiseTicketScreen> {
                       gradient: const LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
-                        colors: [Color(0xff925ffc), Color(0xff3b57ff)],
+                        colors: [
+                          Color(0xff925ffc),
+                          Color(0xff3b57ff),
+                        ],
                       ),
                     ),
                     padding: EdgeInsets.symmetric(
                       horizontal: width * 0.102,
                       vertical: height * 0.02,
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "Raise a Ticket",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontFamily: "Montserrat",
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
+                    child: const Text(
+                      "Raise a Ticket",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),

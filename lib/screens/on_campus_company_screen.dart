@@ -7,6 +7,7 @@ import '../widgets/on_campus_faq_tiles.dart';
 import '../widgets/on_campus_my_expandable_card.dart';
 import '../widgets/on_campus_heading.dart';
 import '../widgets/on_campus_previosly_placed_contact_tiles.dart';
+import '../widgets/company_class.dart';
 
 class OnCampusComapnyScreen extends StatelessWidget {
   const OnCampusComapnyScreen({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-
+    final company = ModalRoute.of(context)!.settings.arguments as Company;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -51,7 +52,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              const OnCampusHeading(),
+              OnCampusHeading(companyName: company.companyName),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(

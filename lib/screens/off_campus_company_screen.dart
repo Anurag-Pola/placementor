@@ -37,7 +37,9 @@ class OffCampusComapnyScreen extends StatelessWidget {
         children: [
           Column(
             children: const [
-              OnCampusHeading(),
+              OnCampusHeading(
+                companyName: "Yo",
+              ),
               SizedBox(height: 20),
               MyExpandableCard(
                 content:
