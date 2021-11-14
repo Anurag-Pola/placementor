@@ -4,7 +4,8 @@ import 'package:placementor/widgets/company_class.dart';
 class OnCampusCompanyTile extends StatelessWidget {
   final String companyName;
 
-  OnCampusCompanyTile({Key? key, required this.companyName}) : super(key: key);
+  const OnCampusCompanyTile({Key? key, required this.companyName})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

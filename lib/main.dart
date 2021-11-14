@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import './screens/login_screen.dart';
 import './screens/off_campus_company_screen.dart';
 import './screens/to_do_screen.dart';
 import './screens/tnp_coordinators_screen.dart';
@@ -9,6 +10,7 @@ import './screens/off_campus_opp_screen.dart';
 import './screens/on_campus_company_screen.dart';
 import './screens/raise_ticket_screen.dart';
 import './screens/tabs_screen.dart';
+import 'screens/introduction_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Poppins',
       ),
       routes: {
+        '/loginPage': (context) => const LoginScreen(),
+        '/tabsPage': (context) => const TabsScreen(),
         '/OffCampusFormPage': (context) => const OffCampusFormScreen(),
         '/RaiseTicketPage': (context) => const RaiseTicketScreen(),
         '/OffCampusOppPage': (context) => const OffCampusOppScreen(),
@@ -36,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/tnpCoordinatorsPage': (context) => const TnPCoordinatorsScreen(),
         '/toDoListPage': (context) => const ToDoListScreen(),
       },
-      home: const FluidNavBarDemo(),
+      home: IntroductionScreen(),
     );
   }
 }

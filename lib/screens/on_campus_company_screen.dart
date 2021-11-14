@@ -30,20 +30,28 @@ class OnCampusComapnyScreen extends StatelessWidget {
           },
         ),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.description_rounded,
-              color: Colors.black,
+          GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 18,
+              child: Image.asset(
+                'assets/images/google_drive.png',
+              ),
             ),
-            onPressed: () {},
+            onTap: () {},
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.insert_invitation_rounded,
-              color: Colors.black,
+          const SizedBox(width: 10),
+          GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 18,
+              child: Image.asset(
+                'assets/images/calander.png',
+              ),
             ),
-            onPressed: () {},
+            onTap: () {},
           ),
+          const SizedBox(width: 5),
         ],
       ),
       backgroundColor: const Color(0xFFF5F7FC),

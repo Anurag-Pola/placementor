@@ -11,6 +11,8 @@ class ProcessTimeline extends StatelessWidget {
     "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
     "Voila You got the job",
   ];
+
+  ProcessTimeline({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -5,20 +5,20 @@ import './companies_screen.dart';
 import './profile_screen.dart';
 import './references_screen.dart';
 
-class FluidNavBarDemo extends StatefulWidget {
-  const FluidNavBarDemo({Key? key}) : super(key: key);
+class TabsScreen extends StatefulWidget {
+  const TabsScreen({Key? key}) : super(key: key);
   @override
   State createState() {
-    return _FluidNavBarDemoState();
+    return _TabsScreenState();
   }
 }
 
-class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
+class _TabsScreenState extends State<TabsScreen> {
   Widget? _child;
 
   @override
   void initState() {
-    _child = CompaniesScreen();
+    _child = const CompaniesScreen();
     super.initState();
   }
 
@@ -26,7 +26,6 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
   Widget build(context) {
     return SafeArea(
       child: Scaffold(
-        // backgroundColor: const Color(0xFF75B7E1),
         extendBody: true,
         body: _child,
         bottomNavigationBar: FluidNavBar(
@@ -46,7 +45,10 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
           ],
           onChange: _handleNavigationChange,
           style: const FluidNavBarStyle(
-              iconUnselectedForegroundColor: Colors.grey),
+            iconUnselectedForegroundColor: Colors.white,
+            barBackgroundColor: Color(0x9900A3FF),
+            iconBackgroundColor: Color(0x2000A3FF),
+          ),
           scaleFactor: 1.5,
           // defaultIndex: 0,
           itemBuilder: (icon, item) => Semantics(
@@ -62,7 +64,7 @@ class _FluidNavBarDemoState extends State<FluidNavBarDemo> {
     setState(() {
       switch (index) {
         case 0:
-          _child = CompaniesScreen();
+          _child = const CompaniesScreen();
           break;
         case 1:
           _child = const ReferencesScreen();

@@ -12,7 +12,7 @@ class FAQTiles extends StatefulWidget {
 }
 
 class _FAQTilesState extends State<FAQTiles> {
-  List<bool> _isOpen = List.filled(5, false);
+  final List<bool> _isOpen = List.filled(5, false);
 
   @override
   Widget build(BuildContext context) {
