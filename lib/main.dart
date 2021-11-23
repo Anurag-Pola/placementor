@@ -10,7 +10,8 @@ import './screens/off_campus_opp_screen.dart';
 import './screens/on_campus_company_screen.dart';
 import './screens/raise_ticket_screen.dart';
 import './screens/tabs_screen.dart';
-import 'screens/introduction_screen.dart';
+import './screens/introduction_screen.dart';
+import './screens/status_tracker_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/offCampusCompanyPage': (context) => const OffCampusComapnyScreen(),
         '/tnpCoordinatorsPage': (context) => const TnPCoordinatorsScreen(),
         '/toDoListPage': (context) => const ToDoListScreen(),
+        '/statusTrackerPage': (context) => const StatusTrackerScreen(),
       },
       home: IntroductionScreen(),
     );

@@ -7,31 +7,43 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
-      // appBar: AppBar(
-      //   backgroundColor: const Color(0xFFF7F9FC),
-      //   elevation: 0,
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_rounded,
-      //       color: Colors.black,
-      //     ),
-      //     onPressed: () {},
-      //   ),
-      // ),
       body: Column(
         children: [
           const SizedBox(
             height: 40,
           ),
           Row(
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.only(left: 21),
                 child: CircleAvatar(
-                  backgroundColor: Colors.grey,
+                  backgroundImage:
+                      AssetImage('assets/images/tnp_coordinators_image.png'),
                   radius: 44,
                 ),
-              )
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Arpan Jain',
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'IT',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           const SizedBox(
@@ -50,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
           const ProfileItem(
             icon: Icon(Icons.remove_red_eye_rounded),
             text: "Status Tracker",
-            pageRoute: "OffCampusFormPage",
+            pageRoute: "statusTrackerPage",
           ),
           const ProfileItem(
             icon: Icon(Icons.star_rounded),
