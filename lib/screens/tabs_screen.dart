@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
+import 'package:placementor/screens/newsfeed_screen.dart';
 
 import './companies_screen.dart';
 import './profile_screen.dart';
-import './references_screen.dart';
+import 'resources_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
@@ -35,8 +36,12 @@ class _TabsScreenState extends State<TabsScreen> {
               extras: {"label": "companies"},
             ),
             FluidNavBarIcon(
+              icon: Icons.feed_rounded,
+              extras: {"label": "newsfeed"},
+            ),
+            FluidNavBarIcon(
               icon: Icons.menu_book,
-              extras: {"label": "references"},
+              extras: {"label": "resources"},
             ),
             FluidNavBarIcon(
               icon: Icons.person,
@@ -67,9 +72,12 @@ class _TabsScreenState extends State<TabsScreen> {
           _child = const CompaniesScreen();
           break;
         case 1:
-          _child = const ReferencesScreen();
+          _child = const NewsfeedScreen();
           break;
         case 2:
+          _child = const ResourcesScreen();
+          break;
+        case 3:
           _child = const ProfileScreen();
           break;
       }

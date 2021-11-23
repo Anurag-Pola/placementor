@@ -77,6 +77,7 @@ class _RaiseTicketScreenState extends State<RaiseTicketScreen> {
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.w600,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(
                       height: height * 0.027,
@@ -159,14 +160,16 @@ class _RaiseTicketScreenState extends State<RaiseTicketScreen> {
                       horizontal: width * 0.102,
                       vertical: height * 0.02,
                     ),
-                    child: const Text(
-                      "Raise a Ticket",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w700,
+                    child: const Center(
+                      child: Text(
+                        "Raise a Ticket",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
