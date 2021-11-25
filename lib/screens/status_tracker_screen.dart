@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
-import '../widgets/slimy_card.dart';
+import '../widgets/expansion_panel_custom.dart' as panel;
 import '../widgets/status_tracker_process_tile.dart';
 
-class StatusTrackerScreen extends StatelessWidget {
+class StatusTrackerScreen extends StatefulWidget {
   const StatusTrackerScreen({Key? key}) : super(key: key);
+
+  @override
+  State<StatusTrackerScreen> createState() => _StatusTrackerScreenState();
+}
+
+class _StatusTrackerScreenState extends State<StatusTrackerScreen> {
+  List<String> companiesAppliedList = ["A", "B", "C", "D", "E"];
+  List<bool> isOpenList = [];
+
+  @override
+  void initState() {
+    isOpenList = List.generate(companiesAppliedList.length, (index) => false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,53 +38,65 @@ class StatusTrackerScreen extends StatelessWidget {
         ),
         body: ListView(
           children: [
-            SlimyCard(
-              color: Colors.lightBlue.shade100,
-              // color: Colors.red,
-              width: MediaQuery.of(context).size.width - 40,
-              topCardHeight: 200,
-              bottomCardHeight: 350,
-              borderRadius: 15,
-              topCardWidget: const TopWidget(),
-              bottomCardWidget: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StatusTrackerProcessTimeline(),
-                  Container(
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+            panel.ExpansionPanelListCustom(
+                dividerColor: null,
+                expansionCallback: (i, isOpen) => setState(() {
+                      for (int j = 0; j < companiesAppliedList.length; j++) {
+                        isOpenList[j] = false;
+                      }
+                      isOpenList[i] = !isOpen;
+                    }),
+                children:
+                    List.generate(companiesAppliedList.length, (index) => index)
+                        .map<panel.ExpansionPanelCustom>((e) {
+                  return panel.ExpansionPanelCustom(
+                    backgroundColor: const Color(0xFFF7F9FC),
+                    canTapOnHeader: true,
+                    headerBuilder: (context, isOpen) {
+                      return const TopWidget();
+                    },
+                    body: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.message_rounded,
-                            size: 40,
+                        StatusTrackerProcessTimeline(),
+                        const SizedBox(height: 15),
+                        Container(
+                          color: Colors.white,
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.message_rounded,
+                                  size: 30,
+                                ),
+                                // color: Colors.green,
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.business_rounded,
+                                  size: 30,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.edit_rounded,
+                                  size: 30,
+                                ),
+                                // color: Colors.yellow,
+                              ),
+                            ],
                           ),
-                          color: Colors.green,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.business_rounded,
-                            size: 40,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.edit_rounded,
-                            size: 40,
-                          ),
-                          color: Colors.yellow,
-                        ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-              slimeEnabled: true,
-            ),
+                    isExpanded: isOpenList[e],
+                  );
+                }).toList()),
           ],
         ),
       ),
@@ -83,84 +109,62 @@ class TopWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: const FlutterLogo(size: 40),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
               ),
-              const SizedBox(width: 10),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Senior Product Designer",
+              child: const FlutterLogo(size: 40),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "Senior Product Designer",
+                  style: TextStyle(
+                    color: Color(0xff18191e),
+                    fontSize: 16,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 3),
+                Opacity(
+                  opacity: 0.80,
+                  child: Text(
+                    "Google",
                     style: TextStyle(
                       color: Color(0xff18191e),
-                      fontSize: 16,
+                      fontSize: 12,
                       fontFamily: "Poppins",
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 3),
-                  Opacity(
-                    opacity: 0.80,
-                    child: Text(
-                      "Google",
-                      style: TextStyle(
-                        color: Color(0xff18191e),
-                        fontSize: 12,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: const [
-              Chip(
-                name: "Next Up : Interview - 28/11/2021",
-              ),
-            ],
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x3f000000),
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 15,
-      ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 5,
-      ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: const [
+            Chip(
+              name: "Next Up : Interview - 28/11/2021",
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
