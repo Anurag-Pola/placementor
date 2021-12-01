@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './screens/login_screen.dart';
-import './screens/off_campus_company_screen.dart';
-import './screens/to_do_screen.dart';
-import './screens/tnp_coordinators_screen.dart';
-import './screens/off_campus_form_screen.dart';
-import './screens/off_campus_opp_screen.dart';
-import './screens/on_campus_company_screen.dart';
-import './screens/raise_ticket_screen.dart';
-import './screens/tabs_screen.dart';
-import './screens/introduction_screen.dart';
-import './screens/status_tracker_screen.dart';
+import 'Front End/screens/login_screen.dart';
+import 'Front End/screens/off_campus_company_screen.dart';
+import 'Front End/screens/to_do_screen.dart';
+import 'Front End/screens/tnp_coordinators_screen.dart';
+import 'Front End/screens/off_campus_form_screen.dart';
+import 'Front End/screens/off_campus_opp_screen.dart';
+import 'Front End/screens/on_campus_company_screen.dart';
+import 'Front End/screens/raise_ticket_screen.dart';
+import 'Front End/screens/tabs_screen.dart';
+import 'Front End/screens/introduction_screen.dart';
+import 'Front End/screens/status_tracker_screen.dart';
 
 void main() {
   runApp(const MyApp());

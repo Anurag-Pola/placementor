@@ -12,39 +12,62 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 21),
-                child: CircleAvatar(
-                  backgroundImage:
-                      AssetImage('assets/images/tnp_coordinators_image.png'),
-                  radius: 44,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x3f000000),
+                  blurRadius: 4,
+                  offset: Offset(0, 4),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'Arpan Jain',
-                      style: TextStyle(
+              ],
+              color: Colors.white,
+            ),
+            padding: const EdgeInsets.all(
+              10,
+            ),
+            margin: const EdgeInsets.all(
+              10,
+            ),
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 21),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/images/tnp_coordinators_image.png'),
+                    radius: 44,
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Arpan Jain',
+                        style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'IT',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        '18071A1266',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(
             height: 11,
@@ -77,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
           const ProfileItem(
             icon: Icon(Icons.logout_rounded),
             text: "Log Out",
-            pageRoute: "OffCampusFormPage",
+            pageRoute: "loginPage",
           ),
         ],
       ),

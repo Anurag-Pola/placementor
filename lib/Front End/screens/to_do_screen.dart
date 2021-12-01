@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/to_do_model.dart';
+import '../../Back End/Local Storage/local_database.dart';
+import 'package:sqflite/sqflite.dart';
+
 class ToDoListScreen extends StatefulWidget {
   const ToDoListScreen({Key? key}) : super(key: key);
 
@@ -8,17 +12,47 @@ class ToDoListScreen extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoListScreen> {
-  final List<String> _todoList = [
-    "Complete HackerRank Stack Problems",
-    "Apply for Company-X",
-  ];
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  int count = 0;
+  List<Todo>? todoList = [];
 
-  final List<String> _doneList = [
-    "Complete HackerRank Array Problems",
-  ];
+  List<Todo>? doneList = [];
 
   String newToDo = "";
   bool expand = false;
+
+  void updateListView() {
+    final Future<Database> toDodbFuture =
+        databaseHelper.initializeToDoDatabase();
+    final Future<Database> donedbFuture =
+        databaseHelper.initializeDoneDatabase();
+
+    toDodbFuture.then((database) {
+      Future<List<Todo>> todoListFuture = databaseHelper.getTodoList();
+      todoListFuture.then((todoList) {
+        setState(() {
+          this.todoList = todoList;
+          count = todoList.length + doneList!.length;
+        });
+      });
+    });
+
+    donedbFuture.then((database) {
+      Future<List<Todo>> doneListFuture = databaseHelper.getDoneList();
+      doneListFuture.then((doneList) {
+        setState(() {
+          this.doneList = doneList;
+          count = doneList.length + todoList!.length;
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateListView();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +98,10 @@ class _ToDoListState extends State<ToDoListScreen> {
                   actions: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        setState(() {
-                          newToDo != "" ? _todoList.add(newToDo) : null;
-                        });
+                        newToDo != ""
+                            ? databaseHelper.insertTodo(Todo(newToDo), context)
+                            : null;
+                        updateListView();
                         newToDo = "";
                         Navigator.of(context).pop();
                       },
@@ -123,30 +158,28 @@ class _ToDoListState extends State<ToDoListScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              for (var i in _todoList)
+              for (var i in todoList!)
                 ListTile(
                   onTap: () {
-                    setState(() {
-                      _todoList.remove(i);
-                      _doneList.add(i);
-                    });
+                    databaseHelper.deleteTodo(i.todo);
+                    databaseHelper.insertDone(Todo(i.todo));
+                    updateListView();
                   },
-                  title: Text(i),
+                  title: Text(i.todo),
                   leading: const Icon(
                     Icons.circle_outlined,
                     color: Colors.blue,
                   ),
                 ),
-              for (var i in _doneList)
+              for (var i in doneList!)
                 ListTile(
                   onTap: () {
-                    setState(() {
-                      _doneList.remove(i);
-                      _todoList.add(i);
-                    });
+                    databaseHelper.deleteDone(i.todo);
+                    databaseHelper.insertTodo(Todo(i.todo), context);
+                    updateListView();
                   },
                   title: Text(
-                    i,
+                    i.todo,
                     style:
                         const TextStyle(decoration: TextDecoration.lineThrough),
                   ),
@@ -156,9 +189,8 @@ class _ToDoListState extends State<ToDoListScreen> {
                   ),
                   trailing: IconButton(
                     onPressed: () {
-                      setState(() {
-                        _doneList.remove(i);
-                      });
+                      databaseHelper.deleteDone(i.todo);
+                      updateListView();
                     },
                     icon: const Icon(
                       Icons.delete_rounded,

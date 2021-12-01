@@ -98,7 +98,7 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                 itemBuilder: (context, index) => const OffCampusCompanyTile(),
                 itemCount: 6,
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -123,13 +123,14 @@ class SearchBar extends StatelessWidget {
             child: TextField(
               controller: controller,
               decoration: const InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search_rounded,
-                    color: Color(0xffc4c4c4),
-                  ),
-                  contentPadding: EdgeInsets.only(bottom: 13),
-                  border: InputBorder.none,
-                  hintText: 'Enter a search term'),
+                prefixIcon: Icon(
+                  Icons.search_rounded,
+                  color: Color(0xffc4c4c4),
+                ),
+                contentPadding: EdgeInsets.only(bottom: 13),
+                border: InputBorder.none,
+                hintText: 'Enter a search term',
+              ),
             ),
           ),
           const Spacer(),
