@@ -76,7 +76,7 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 10),
@@ -105,20 +105,26 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    "assets/images/linkedin-logo.png",
+                    width: 30,
+                  )),
+              IconButton(
                 onPressed: () {},
                 icon: const Icon(
                   Icons.call_outlined,
                   color: Color(0xFF46B35C),
-                  size: 36,
+                  size: 30,
                 ),
               ),
-              const SizedBox(width: 30),
+              // const SizedBox(width: 30),
               IconButton(
                 onPressed: () {},
                 icon: const Icon(
                   Icons.mail_outline_rounded,
                   color: Color(0xFF1B7AF3),
-                  size: 36,
+                  size: 30,
                 ),
               )
             ],

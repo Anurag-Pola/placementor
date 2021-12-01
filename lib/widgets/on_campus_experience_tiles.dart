@@ -37,7 +37,7 @@ class ExperienceTiles extends StatelessWidget {
             height: 10,
           ),
           SizedBox(
-            height: height * 0.5,
+            height: height * 0.4,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => const ExperienceTile(),
@@ -82,13 +82,18 @@ class ExperienceTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // const SizedBox(height: 20),
-          const Text(
-            "Slate helps you see \nhow many more days \nyou need to work to \nreach your financial \ngoal.",
-            style: TextStyle(
-              color: Color(0xff727272),
-              fontSize: 18,
-              fontFamily: "Poppins",
-              fontWeight: FontWeight.w600,
+          const Expanded(
+            flex: 1,
+            child: SingleChildScrollView(
+              child: Text(
+                "Slate helps you see \nhow many more days \nyou need to work to \nreach your financial \ngoal.Slate helps you see \nhow many more days \nyou need to work to \nreach your financial \ngoal.Slate helps you see \nhow many more days \nyou need to work to \nreach your financial \ngoal.",
+                style: TextStyle(
+                  color: Color(0xff727272),
+                  fontSize: 18,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
           const SizedBox(

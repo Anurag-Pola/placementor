@@ -27,18 +27,22 @@ class ProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: const [
                     Text(
-                      'Arpan Jain',
+                      'Anurag Pola',
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       'IT',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
                       ),
                     ),
                   ],

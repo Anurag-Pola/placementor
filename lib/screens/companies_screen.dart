@@ -54,53 +54,60 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchBar(
-              controller: myController,
-              width: width,
-            ),
-            SizedBox(
-              height: height * 0.475,
-              child: ListView.builder(
-                itemBuilder: (context, index) => OnCampusCompanyTile(
-                  companyName: myController.text.isEmpty
-                      ? companies[index]
-                      : companies
-                          .where((i) =>
-                              i.contains(myController.text) |
-                              i.toLowerCase().contains(myController.text))
-                          .toList()[index],
-                ),
-                itemCount: myController.text.isEmpty
-                    ? companies.length
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SearchBar(
+            controller: myController,
+            width: width,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) => OnCampusCompanyTile(
+                companyName: myController.text.isEmpty
+                    ? companies[index]
                     : companies
                         .where((i) =>
                             i.contains(myController.text) |
                             i.toLowerCase().contains(myController.text))
-                        .toList()
-                        .length,
+                        .toList()[index],
+              ),
+              itemCount: myController.text.isEmpty
+                  ? companies.length
+                  : companies
+                      .where((i) =>
+                          i.contains(myController.text) |
+                          i.toLowerCase().contains(myController.text))
+                      .toList()
+                      .length,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 15.0,
+              vertical: 5,
+            ),
+            child: Text(
+              "Off Campus Opportunities",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.brown,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 15.0,
-                vertical: 5,
-              ),
-              child: Text("Off Campus Opportunities"),
+          ),
+          SizedBox(
+            height: height * 0.18,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => const OffCampusCompanyTile(),
+              itemCount: 6,
             ),
-            SizedBox(
-              height: height * 0.18,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => const OffCampusCompanyTile(),
-                itemCount: 6,
-              ),
-            )
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 80,
+          )
+        ],
       ),
     );
   }
@@ -120,16 +127,18 @@ class SearchBar extends StatelessWidget {
           SizedBox(
             height: 30,
             width: width * 0.8,
-            child: TextField(
-              controller: controller,
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search_rounded,
-                    color: Color(0xffc4c4c4),
-                  ),
-                  contentPadding: EdgeInsets.only(bottom: 13),
-                  border: InputBorder.none,
-                  hintText: 'Enter a search term'),
+            child: Center(
+              child: TextField(
+                controller: controller,
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      color: Color(0xffc4c4c4),
+                    ),
+                    contentPadding: EdgeInsets.only(bottom: 13),
+                    border: InputBorder.none,
+                    hintText: 'Enter a search term'),
+              ),
             ),
           ),
           const Spacer(),

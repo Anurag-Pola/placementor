@@ -138,7 +138,9 @@ class OnCampusComapnyScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      ExperienceTiles(height: height),
+                      ExperienceTiles(
+                        height: height,
+                      ),
                       const SizedBox(height: 20),
                       FAQTiles(height: height),
                       const SizedBox(height: 60),
@@ -170,20 +172,18 @@ class OnCampusComapnyScreen extends StatelessWidget {
                     colors: [Color(0xff925ffc), Color(0xff3b57ff)],
                   ),
                 ),
-                padding: const EdgeInsets.only(
-                  left: 59,
-                  right: 54,
-                  top: 18,
-                  bottom: 19,
-                ),
-                child: const Text(
-                  "APPLY NOW",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                child: const Center(
+                  child: Text(
+                    "APPLY NOW",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
               ),

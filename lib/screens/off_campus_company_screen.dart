@@ -38,7 +38,7 @@ class OffCampusComapnyScreen extends StatelessWidget {
           Column(
             children: const [
               OnCampusHeading(
-                companyName: "Yo",
+                companyName: "Google",
               ),
               SizedBox(height: 20),
               MyExpandableCard(
@@ -70,20 +70,18 @@ class OffCampusComapnyScreen extends StatelessWidget {
                     colors: [Color(0xff925ffc), Color(0xff3b57ff)],
                   ),
                 ),
-                padding: const EdgeInsets.only(
-                  left: 59,
-                  right: 54,
-                  top: 18,
-                  bottom: 19,
-                ),
-                child: const Text(
-                  "APPLY NOW",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                child: const Center(
+                  child: Text(
+                    "APPLY NOW",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
               ),

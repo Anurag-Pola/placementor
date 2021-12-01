@@ -5,13 +5,15 @@ class OffCampusCompanyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/offCampusCompanyPage');
       },
       child: Container(
         width: 115,
-        height: 115,
+        height: (height * 0.18) - 30,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           boxShadow: const [
