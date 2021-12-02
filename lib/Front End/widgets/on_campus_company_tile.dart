@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:placementor/widgets/company_class.dart';
+
+import './company_class.dart';
 
 class OnCampusCompanyTile extends StatelessWidget {
   final String companyName;

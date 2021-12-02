@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:placementor/widgets/tnp_card.dart';
+
+import '../widgets/tnp_card.dart';
 
 class TnPCoordinatorsScreen extends StatefulWidget {
   const TnPCoordinatorsScreen({Key? key}) : super(key: key);

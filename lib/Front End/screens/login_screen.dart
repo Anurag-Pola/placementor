@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/tabsPage');
+                Navigator.popAndPushNamed(context, '/tabsPage');
               },
               child: CircleAvatar(
                 backgroundColor: Colors.white,

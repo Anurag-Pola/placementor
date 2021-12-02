@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:placementor/widgets/on_campus_process_timeline.dart';
 
+import '../widgets/on_campus_process_timeline.dart';
 import '../widgets/on_campus_experience_tiles.dart';
 import '../widgets/on_campus_faq_tiles.dart';
 import '../widgets/on_campus_my_expandable_card.dart';

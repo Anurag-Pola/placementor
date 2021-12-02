@@ -33,6 +33,7 @@ class OffCampusCompanyTile extends StatelessWidget {
         ),
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 5),

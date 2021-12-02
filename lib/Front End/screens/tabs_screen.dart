@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
-import 'package:placementor/screens/newsfeed_screen.dart';
 
+import './newsfeed_screen.dart';
 import './companies_screen.dart';
 import './profile_screen.dart';
 import 'resources_screen.dart';

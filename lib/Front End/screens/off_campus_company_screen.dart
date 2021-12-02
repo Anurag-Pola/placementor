@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:placementor/widgets/on_campus_heading.dart';
-import 'package:placementor/widgets/on_campus_my_expandable_card.dart';
+
+import '../widgets/on_campus_heading.dart';
+import '../widgets/on_campus_my_expandable_card.dart';
 
 class OffCampusComapnyScreen extends StatelessWidget {
   const OffCampusComapnyScreen({Key? key}) : super(key: key);

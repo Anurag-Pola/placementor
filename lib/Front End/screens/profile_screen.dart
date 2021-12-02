@@ -9,46 +9,83 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF7F9FC),
       body: Column(
         children: [
-          const SizedBox(
-            height: 40,
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: SizedBox(
+              height: 40,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "My Profile",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
           ),
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 21),
-                child: CircleAvatar(
-                  backgroundImage:
-                      AssetImage('assets/images/tnp_coordinators_image.png'),
-                  radius: 44,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x3f000000),
+                  blurRadius: 4,
+                  offset: Offset(0, 4),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'Anurag Pola',
-                      style: TextStyle(
+              ],
+              color: Colors.white,
+            ),
+            padding: const EdgeInsets.all(
+              10,
+            ),
+            margin: const EdgeInsets.only(
+              bottom: 10,
+              left: 10,
+              right: 10,
+            ),
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 21),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/images/tnp_coordinators_image.png'),
+                    radius: 44,
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Anurag Pola',
+                        style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'IT',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        '18071A1266',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(
             height: 11,
@@ -81,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
           const ProfileItem(
             icon: Icon(Icons.logout_rounded),
             text: "Log Out",
-            pageRoute: "OffCampusFormPage",
+            pageRoute: "loginPage",
           ),
         ],
       ),
