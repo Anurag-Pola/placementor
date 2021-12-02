@@ -90,35 +90,47 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(
             height: 11,
           ),
-          const ProfileItem(
-            icon: Icon(Icons.sticky_note_2_rounded),
+          ProfileItem(
+            icon: const Icon(Icons.sticky_note_2_rounded),
             text: "To-Do",
-            pageRoute: "toDoListPage",
+            action: () {
+              Navigator.pushNamed(context, '/' + "toDoListPage");
+            },
           ),
-          const ProfileItem(
-            icon: Icon(Icons.perm_contact_calendar_rounded),
+          ProfileItem(
+            icon: const Icon(Icons.perm_contact_calendar_rounded),
             text: "T&P Coordinators",
-            pageRoute: "tnpCoordinatorsPage",
+            action: () {
+              Navigator.pushNamed(context, '/' + "tnpCoordinatorsPage");
+            },
           ),
-          const ProfileItem(
-            icon: Icon(Icons.remove_red_eye_rounded),
+          ProfileItem(
+            icon: const Icon(Icons.remove_red_eye_rounded),
             text: "Status Tracker",
-            pageRoute: "statusTrackerPage",
+            action: () {
+              Navigator.pushNamed(context, '/' + "statusTrackerPage");
+            },
           ),
-          const ProfileItem(
-            icon: Icon(Icons.star_rounded),
+          ProfileItem(
+            icon: const Icon(Icons.star_rounded),
             text: "Off-Campus Form",
-            pageRoute: "OffCampusFormPage",
+            action: () {
+              Navigator.pushNamed(context, '/' + "OffCampusFormPage");
+            },
           ),
-          const ProfileItem(
-            icon: Icon(Icons.chat_bubble_rounded),
+          ProfileItem(
+            icon: const Icon(Icons.chat_bubble_rounded),
             text: "Raise a Ticket",
-            pageRoute: "RaiseTicketPage",
+            action: () {
+              Navigator.pushNamed(context, '/' + "RaiseTicketPage");
+            },
           ),
-          const ProfileItem(
-            icon: Icon(Icons.logout_rounded),
+          ProfileItem(
+            icon: const Icon(Icons.logout_rounded),
             text: "Log Out",
-            pageRoute: "loginPage",
+            action: () {
+              Navigator.popAndPushNamed(context, '/' + "loginPage");
+            },
           ),
         ],
       ),
@@ -129,20 +141,20 @@ class ProfileScreen extends StatelessWidget {
 class ProfileItem extends StatelessWidget {
   final Icon icon;
   final String text;
-  final String pageRoute;
+  final Function action;
 
   const ProfileItem({
     Key? key,
     required this.icon,
     required this.text,
-    required this.pageRoute,
+    required this.action,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/' + pageRoute);
+        action();
       },
       child: Container(
         width: 374,
@@ -172,18 +184,14 @@ class ProfileItem extends StatelessWidget {
             SizedBox(
               width: 32,
               height: 32,
-              child: Stack(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xffeeeeee),
-                    ),
-                    child: icon,
-                  ),
-                ],
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xffeeeeee),
+                ),
+                child: icon,
               ),
             ),
             const SizedBox(width: 12),
