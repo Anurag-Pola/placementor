@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -128,8 +129,8 @@ class ProfileScreen extends StatelessWidget {
           ProfileItem(
             icon: const Icon(Icons.logout_rounded),
             text: "Log Out",
-            action: () {
-              Navigator.popAndPushNamed(context, '/' + "loginPage");
+            action: () async {
+              await FirebaseAuth.instance.signOut();
             },
           ),
         ],

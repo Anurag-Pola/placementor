@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import '../widgets/on_campus_company_tile.dart';
 import '../widgets/off_campus_company_tile.dart';
