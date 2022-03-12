@@ -3,14 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import './tickets_screen.dart';
-import './tabs_screen.dart';
 import 'login_screen.dart';
+import 'manage_users.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  //   name: "SecondaryApp",
+  // );
   runApp(const MyApp());
 }
 
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginScreen(),
       routes: {
+        '/login-screen': (context) => const LoginScreen(),
+        '/manage-users': (context) => const ManageUsers(),
         '/tickets': (context) => const TicketsScreen(),
       },
     );
