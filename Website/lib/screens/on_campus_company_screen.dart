@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:placementor_tnp/screens/on_campus_company_form.dart';
 
-import '../widgets/on_campus_process_timeline.dart';
-import '../widgets/on_campus_experience_tiles.dart';
-import '../widgets/on_campus_faq_tiles.dart';
-import '../widgets/on_campus_my_expandable_card.dart';
-import '../widgets/on_campus_heading.dart';
-import '../widgets/on_campus_previosly_placed_contact_tiles.dart';
-import '../widgets/company_class.dart';
+import '../../widgets/on_campus_process_timeline.dart';
+import '../../widgets/on_campus_experience_tiles.dart';
+import '../../widgets/on_campus_faq_tiles.dart';
+import '../../widgets/on_campus_my_expandable_card.dart';
+import '../../widgets/on_campus_heading.dart';
+import '../../widgets/on_campus_previosly_placed_contact_tiles.dart';
+import '../../widgets/company_class.dart';
 
 class OnCampusComapnyScreen extends StatelessWidget {
   const OnCampusComapnyScreen({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               radius: 18,
               child: Image.asset(
-                'assets/images/google_drive.png',
+                'assets/Images/google_drive.png',
               ),
             ),
             onTap: () {},
@@ -45,7 +46,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               radius: 18,
               child: Image.asset(
-                'assets/images/calander.png',
+                'assets/Images/calander.png',
               ),
             ),
             onTap: () {},
@@ -59,31 +60,27 @@ class OnCampusComapnyScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              OnCampusHeading(
-                companyName: company.companyName,
-                roleName: company.roleName,
-              ),
+              OnCampusHeading(companyName: company.companyName),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: MyExpandableCard(
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      MyExpandableCard(
                           heading: "ABOUT THE FIRM",
-                          content: company.aboutTheFirm,
-                        ),
+                          content: company.aboutTheFirm),
+                      const SizedBox(
+                        height: 20,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: MyExpandableCard(
-                            heading: "JOB DESCRIPTION",
-                            content: company.jobDescription),
-                      ),
+                      MyExpandableCard(
+                          heading: "JOB DESCRIPTION",
+                          content: company.jobDescription),
+                      const SizedBox(height: 20),
                       Container(
                         width: double.infinity,
                         color: Colors.white,
-                        margin: const EdgeInsets.only(top: 20),
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,33 +118,29 @@ class OnCampusComapnyScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: ProcessTimeline(
-                          processTimeline: company.processTimeline,
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: PrevioslyPlacedContactTiles(
-                          height: height,
-                          previoslyPlacedContactDetailsList:
-                              company.previouslyPlacedContactDetails,
-                        ),
+                      ProcessTimeline(
+                        processTimeline: company.processTimeline,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: ExperienceTiles(
-                          height: height,
-                          experienceTilesInfo: company.experienceTilesInfo,
-                        ),
+                      const SizedBox(height: 20),
+                      PrevioslyPlacedContactTiles(
+                        height: height,
+                        previoslyPlacedContactDetailsList:
+                            company.previouslyPlacedContactDetails,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: FAQTiles(
-                          height: height,
-                          faqTilesInfo: company.faqTilesInfo,
-                        ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ExperienceTiles(
+                        height: height,
+                        experienceTilesInfo: company.experienceTilesInfo,
+                      ),
+                      const SizedBox(height: 20),
+                      FAQTiles(
+                        height: height,
+                        faqTilesInfo: company.faqTilesInfo,
                       ),
                       const SizedBox(height: 60),
                     ],
@@ -175,7 +168,10 @@ class OnCampusComapnyScreen extends StatelessWidget {
                   gradient: const LinearGradient(
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
-                    colors: [Color(0xff925ffc), Color(0xff3b57ff)],
+                    colors: [
+                      Color(0xff925ffc),
+                      Color(0xff3b57ff),
+                    ],
                   ),
                 ),
                 padding:
@@ -194,7 +190,73 @@ class OnCampusComapnyScreen extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
+          Positioned(
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              height: 40.0,
+              width: 40.0,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x3f000000),
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Color(0xff925ffc),
+                    Color(0xff3b57ff),
+                  ],
+                ),
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OnCampusCompanyForm(
+                        companyName: company.companyName,
+                        companyType: company.companyType,
+                        roleName: company.roleName,
+                        roleType: company.roleType,
+                        jobDescription: company.jobDescription,
+                        aboutTheFirm: company.aboutTheFirm,
+                        salary: company.salary,
+                        linkToApply: company.linkToApply,
+                        driveLink: company.driveLink,
+                        lastDate: company.lastDate,
+                        eligibility: company.eligibility,
+                      ),
+                    ),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Icon(
+                      Icons.edit_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ), // icon
+                    Text(
+                      "Edit",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
+                    ), // text
+                  ],
+                ),
+              ),
+            ),
+            right: 0,
+            top: 0,
+          ),
         ],
       ),
     );

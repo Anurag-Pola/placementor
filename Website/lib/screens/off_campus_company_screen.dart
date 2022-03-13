@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/on_campus_heading.dart';
-import '../widgets/on_campus_my_expandable_card.dart';
+import '../../widgets/on_campus_heading.dart';
+import '../../widgets/on_campus_my_expandable_card.dart';
 
 class OffCampusComapnyScreen extends StatelessWidget {
   const OffCampusComapnyScreen({Key? key}) : super(key: key);
@@ -39,7 +39,6 @@ class OffCampusComapnyScreen extends StatelessWidget {
             children: const [
               OnCampusHeading(
                 companyName: "Google",
-                roleName: "Blah",
               ),
               SizedBox(height: 20),
               MyExpandableCard(

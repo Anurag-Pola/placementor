@@ -1,11 +1,12 @@
-import 'package:placementor/Front%20End/widgets/experience_tile_class.dart';
-import 'package:placementor/Front%20End/widgets/faq_tiles_class.dart';
-import 'package:placementor/Front%20End/widgets/previosly_placed_contact_details_class.dart';
+import '/widgets/experience_tile_class.dart';
+import '/widgets/faq_tiles_class.dart';
+import '/widgets/previosly_placed_contact_details_class.dart';
 
 import './process_timeline_class.dart';
 
 class Company {
   final String companyName;
+  final String companyType;
   final String roleName;
   final String roleType;
   final String aboutTheFirm;
@@ -18,9 +19,13 @@ class Company {
   final List<FAQTilesClass> faqTilesInfo;
   final String lastDate;
   final String salary;
+  final String linkToApply;
+  final String driveLink;
+  final String eligibility;
 
   const Company({
     required this.companyName,
+    required this.companyType,
     required this.roleName,
     required this.roleType,
     required this.aboutTheFirm,
@@ -32,5 +37,8 @@ class Company {
     required this.faqTilesInfo,
     required this.lastDate,
     required this.salary,
+    required this.linkToApply,
+    required this.driveLink,
+    required this.eligibility,
   });
 }

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class OnCampusHeading extends StatelessWidget {
   final String companyName;
-  final String roleName;
 
   const OnCampusHeading({
     Key? key,
     required this.companyName,
-    required this.roleName,
   }) : super(key: key);
 
   @override
@@ -23,11 +21,11 @@ class OnCampusHeading extends StatelessWidget {
             child: FlutterLogo(size: 60),
           ),
           const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(left: 25.0),
+          const Padding(
+            padding: EdgeInsets.only(left: 25.0),
             child: Text(
-              roleName,
-              style: const TextStyle(
+              "Senior Product Designer",
+              style: TextStyle(
                 color: Color(0xff18191e),
                 fontSize: 26,
                 fontFamily: "Poppins",

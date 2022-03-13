@@ -42,7 +42,7 @@ class PrevioslyPlacedContactTiles extends StatelessWidget {
             height: 10,
           ),
           SizedBox(
-            height: height * 0.2,
+            height: height * 0.3,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => PrevioslyPlacedContactTile(
@@ -71,7 +71,7 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * 0.5,
+      width: width * 0.4,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -117,7 +117,7 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
               IconButton(
                   onPressed: () {},
                   icon: Image.asset(
-                    "assets/images/linkedin-logo.png",
+                    "assets/Images/linkedin-logo.png",
                     width: 30,
                   )),
               IconButton(

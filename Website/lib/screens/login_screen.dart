@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:placementor_tnp/tabs_screen.dart';
+import 'package:placementor_tnp/screens/tabs_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -56,15 +54,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: OrientationBuilder(
                   builder: (context, orientation) =>
                       orientation == Orientation.portrait
-                          ? Column(
-                              children: [
-                                Image.asset(
-                                  'assets/login_pic.png',
-                                  height: h * 0.5,
-                                  width: w * 0.5,
-                                ),
-                                const LoginWidget(),
-                              ],
+                          ? SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/Images/login_pic.png',
+                                    height: h * 0.5,
+                                    width: w * 0.5,
+                                  ),
+                                  const LoginWidget(),
+                                ],
+                              ),
                             )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   width: w * 0.45,
                                   child: Image.asset(
-                                    'assets/login_pic.png',
+                                    'assets/Images/login_pic.png',
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -157,8 +157,8 @@ class _LoginWidgetState extends State<LoginWidget> {
       setState(() {
         // _isLoading = true;
       });
-      UserCredential user =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _email,
         password: _password,
       );
@@ -195,7 +195,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
         const Text(
           "Please, Log In",
           textAlign: TextAlign.center,
@@ -206,8 +206,8 @@ class _LoginWidgetState extends State<LoginWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(
-          height: h * 0.04,
+        const SizedBox(
+          height: 5,
         ),
         Form(
           key: _formKey,
@@ -228,9 +228,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     _email = value!;
                   },
                   decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.black, width: 2.0),
+                      borderRadius: BorderRadius.circular(h * 0.035),
+                    ),
                     hintText: 'Email',
                     hintStyle: TextStyle(
-                      color: Colors.black,
+                      color: Colors.black54,
                       fontWeight: FontWeight.bold,
                       fontSize: h * 0.05,
                     ),
@@ -255,8 +260,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                   cursorColor: Colors.black,
                   obscureText: true,
                   validator: (value) {
-                    if (value!.length < 6) {
-                      return 'Password is too short';
+                    if (value!.isEmpty) {
+                      return 'Password is Required';
                     }
                     return null;
                   },
@@ -264,9 +269,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                     _password = value!;
                   },
                   decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.black, width: 2.0),
+                      borderRadius: BorderRadius.circular(h * 0.035),
+                    ),
                     hintText: 'Password',
                     hintStyle: TextStyle(
-                      color: Colors.black,
+                      color: Colors.black54,
                       fontWeight: FontWeight.bold,
                       fontSize: h * 0.05,
                     ),

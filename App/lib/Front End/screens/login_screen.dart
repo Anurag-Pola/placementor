@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       Form(
                         key: _formKey,
                         child: Column(
@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: h * 0.04,
+                              height: h * 0.03,
                             ),
                           ],
                         ),

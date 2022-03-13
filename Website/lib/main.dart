@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import 'firebase_options.dart';
 
-import './tickets_screen.dart';
-import './tabs_screen.dart';
-import 'login_screen.dart';
+import './screens/companies_screen.dart';
+import './screens/on_campus_company_form.dart';
+import './screens/tickets_screen.dart';
+import './screens/login_screen.dart';
+import './screens/off_campus_company_screen.dart';
+import './screens/on_campus_company_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,10 +28,16 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Poppins',
       ),
       home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
       routes: {
         '/tickets': (context) => const TicketsScreen(),
+        '/companies': (context) => const CompaniesScreen(),
+        '/onCampusCompanyForm': (context) => const OnCampusCompanyForm(),
+        '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
+        '/offCampusCompanyPage': (context) => const OffCampusComapnyScreen(),
       },
     );
   }

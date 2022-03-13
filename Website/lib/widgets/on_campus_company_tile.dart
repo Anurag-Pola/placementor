@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import './experience_tile_class.dart';
 import './faq_tiles_class.dart';
 import './previosly_placed_contact_details_class.dart';
@@ -7,6 +8,7 @@ import './company_class.dart';
 
 class OnCampusCompanyTile extends StatelessWidget {
   final String companyName;
+  final String companyType;
   final String roleName;
   final String roleType;
   final String aboutTheFirm;
@@ -19,10 +21,14 @@ class OnCampusCompanyTile extends StatelessWidget {
   final List<FAQTilesClass> faqTilesInfo;
   final String lastDate;
   final String salary;
+  final String linkToApply;
+  final String driveLink;
+  final String eligibility;
 
   const OnCampusCompanyTile({
     Key? key,
     required this.companyName,
+    required this.companyType,
     required this.roleName,
     required this.roleType,
     required this.aboutTheFirm,
@@ -34,6 +40,9 @@ class OnCampusCompanyTile extends StatelessWidget {
     required this.faqTilesInfo,
     required this.lastDate,
     required this.salary,
+    required this.linkToApply,
+    required this.driveLink,
+    required this.eligibility,
   }) : super(key: key);
 
   @override
@@ -44,6 +53,7 @@ class OnCampusCompanyTile extends StatelessWidget {
           '/onCampusCompanyPage',
           arguments: Company(
             companyName: companyName,
+            companyType: companyType,
             roleName: roleName,
             roleType: roleType,
             aboutTheFirm: aboutTheFirm,
@@ -55,61 +65,61 @@ class OnCampusCompanyTile extends StatelessWidget {
             faqTilesInfo: faqTilesInfo,
             lastDate: lastDate,
             salary: salary,
+            linkToApply: linkToApply,
+            driveLink: driveLink,
+            eligibility: eligibility,
           ),
         );
       },
       child: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const FlutterLogo(size: 40),
+            ),
+            const SizedBox(height: 5),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
+                FittedBox(
+                  child: Text(
+                    roleName,
+                    style: const TextStyle(
+                      color: Color(0xff18191e),
+                      fontSize: 16,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  child: const FlutterLogo(size: 40),
                 ),
-                const SizedBox(width: 10),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        roleName,
-                        style: const TextStyle(
-                          color: Color(0xff18191e),
-                          fontSize: 16,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                const SizedBox(height: 2),
+                Opacity(
+                  opacity: 0.80,
+                  child: Text(
+                    companyName,
+                    style: const TextStyle(
+                      color: Color(0xff18191e),
+                      fontSize: 12,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w500,
                     ),
-                    const SizedBox(height: 3),
-                    Opacity(
-                      opacity: 0.80,
-                      child: Text(
-                        companyName,
-                        style: const TextStyle(
-                          color: Color(0xff18191e),
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
             const SizedBox(
-              height: 20,
+              height: 5,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Chip(
                   name: roleType,
@@ -117,20 +127,20 @@ class OnCampusCompanyTile extends StatelessWidget {
                 Chip(
                   name: lastDate,
                 ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: SizedBox(
-                    child: Text(
-                      salary,
-                      style: const TextStyle(
-                        color: Color(0xff18191e),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                )
               ],
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SizedBox(
+                child: Text(
+                  salary,
+                  style: const TextStyle(
+                    color: Color(0xff18191e),
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -146,8 +156,8 @@ class OnCampusCompanyTile extends StatelessWidget {
           color: Colors.white,
         ),
         padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 15,
+          horizontal: 2,
+          vertical: 2,
         ),
         margin: const EdgeInsets.symmetric(
           horizontal: 16,

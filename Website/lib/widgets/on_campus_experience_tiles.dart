@@ -41,7 +41,7 @@ class ExperienceTiles extends StatelessWidget {
             height: 10,
           ),
           SizedBox(
-            height: height * 0.4,
+            height: height * 0.5,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => ExperienceTile(
@@ -71,7 +71,7 @@ class ExperienceTile extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      width: width * 0.6,
+      width: width * 0.4,
       height: height * 0.5,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -94,17 +94,19 @@ class ExperienceTile extends StatelessWidget {
           Expanded(
             flex: 1,
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  experienceTileInfo.experience,
-                  style: const TextStyle(
-                    color: Color(0xff727272),
-                    fontSize: 18,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w600,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Text(
+                    experienceTileInfo.experience,
+                    style: const TextStyle(
+                      color: Color(0xff727272),
+                      fontSize: 18,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -123,7 +125,7 @@ class ExperienceTile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: Image.asset(
-                    'assets/images/tnp_coordinators_image.png',
+                    'assets/Images/tnp_coordinators_image.png',
                     scale: 1.5,
                   ),
                 ),
@@ -139,7 +141,7 @@ class ExperienceTile extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xff23a6f0),
                       fontSize: 14,
-                      fontFamily: "Montserrat",
+                      // fontFamily: "Montserrat",
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -148,13 +150,16 @@ class ExperienceTile extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xff252b42),
                       fontSize: 14,
-                      fontFamily: "Montserrat",
+                      // fontFamily: "Montserrat",
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               )
             ],
+          ),
+          const SizedBox(
+            height: 10,
           ),
         ],
       ),

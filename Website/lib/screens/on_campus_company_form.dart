@@ -1,9 +1,49 @@
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
 
+import '../widgets/experience_tile_class.dart';
+import '../widgets/faq_tiles_class.dart';
+import '../widgets/previosly_placed_contact_details_class.dart';
+import '../widgets/process_timeline_class.dart';
+
 class OnCampusCompanyForm extends StatefulWidget {
-  const OnCampusCompanyForm({Key? key}) : super(key: key);
+  const OnCampusCompanyForm(
+      {Key? key,
+      this.companyName = "",
+      this.companyType = "",
+      this.roleName = "",
+      this.aboutTheFirm = "",
+      // this.experienceTilesInfo = "",
+      // this.faqTilesInfo = "",
+      // this.previouslyPlacedContactDetails = "",
+      // this.processTimeline = "",
+      this.jobDescription = "",
+      this.lastDate = "",
+      this.roleType = "",
+      this.salary = "",
+      // this.skillset,
+      this.linkToApply = "",
+      this.driveLink = "",
+      this.eligibility = ""})
+      : super(key: key);
+
+  final String companyName;
+  final String companyType;
+  final String roleName;
+  final String aboutTheFirm;
+  final String roleType;
+  final String jobDescription;
+  // final List<String> skillset;
+  // final ProcessTimelineClass processTimeline;
+  // final List<PreviouslyPlacedContactDetailsClass>
+  // previouslyPlacedContactDetails;
+  // final List<ExperienceTileClass> experienceTilesInfo;
+  // final List<FAQTilesClass> faqTilesInfo;
+  final String lastDate;
+  final String salary;
+  final String linkToApply;
+  final String driveLink;
+  final String eligibility;
 
   @override
   State<OnCampusCompanyForm> createState() => _OnCampusCompanyFormState();
@@ -12,25 +52,34 @@ class OnCampusCompanyForm extends StatefulWidget {
 class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   final _formKey = GlobalKey<FormState>();
 
-  // CollectionReference tickets =
-  final TextEditingController _companyNameController = TextEditingController();
-  final TextEditingController _roleNameController = TextEditingController();
-  final TextEditingController _aboutTheFirmController = TextEditingController();
-  final TextEditingController _applyLinkController = TextEditingController();
-  final TextEditingController _googleDriveLinkController =
-      TextEditingController();
-  final TextEditingController _eligibilityController = TextEditingController();
-  final TextEditingController _jobDescriptionController =
-      TextEditingController();
-  final TextEditingController _packageController = TextEditingController();
+  late final TextEditingController _companyNameController =
+      TextEditingController(text: widget.companyName);
+  late final TextEditingController _roleNameController =
+      TextEditingController(text: widget.roleName);
+  late final TextEditingController _aboutTheFirmController =
+      TextEditingController(text: widget.aboutTheFirm);
+  late final TextEditingController _applyLinkController =
+      TextEditingController(text: widget.linkToApply);
+  late final TextEditingController _googleDriveLinkController =
+      TextEditingController(text: widget.driveLink);
+  late final TextEditingController _eligibilityController =
+      TextEditingController(text: widget.eligibility);
+  late final TextEditingController _jobDescriptionController =
+      TextEditingController(text: widget.jobDescription);
+  late final TextEditingController _packageController =
+      TextEditingController(text: widget.salary);
   final TextEditingController _skillsetRequiredController =
       TextEditingController();
+  late var lastdate = widget.lastDate.split('/').reversed.join('-');
+  late DateTime selectedDate =
+      widget.lastDate == "" ? DateTime.now() : DateTime.parse(lastdate);
+  late final TextEditingController _date =
+      TextEditingController(text: lastdate);
 
-  DateTime selectedDate = DateTime.now();
-  final TextEditingController _date = TextEditingController();
-
-  String? companyType = "Select an Option";
-  String? roleType = "Select an Option";
+  late String? companyType =
+      widget.companyType == "" ? "Select an Option" : widget.companyType;
+  late String? roleType =
+      widget.roleType == "" ? "Select an Option" : widget.roleType;
 
   double paddingToElements = 39;
 
@@ -165,7 +214,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                     Field(
                       text: "Job Description",
                       validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
+                      textInputType: TextInputType.multiline,
                       textInputAction: TextInputAction.next,
                       controller: _jobDescriptionController,
                     ),
@@ -175,7 +224,12 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                         onTap: () => _selectDate(context),
                         child: AbsorbPointer(
                           child: TextFormField(
-                            style: const TextStyle(fontSize: 12.0),
+                            style: const TextStyle(
+                              color: Color(0xff252b42),
+                              fontSize: 14,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.w600,
+                            ),
                             controller: _date,
                             keyboardType: TextInputType.datetime,
                             decoration: const InputDecoration(
@@ -264,7 +318,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Raise a Ticket",
+                        "Submit",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -306,7 +360,7 @@ class Field extends StatelessWidget {
   final TextStyle textStyle = const TextStyle(
     color: Color(0xff252b42),
     fontSize: 14,
-    fontFamily: "Montserrat",
+    fontFamily: "Poppins",
     fontWeight: FontWeight.w600,
   );
 
@@ -334,7 +388,9 @@ class Field extends StatelessWidget {
 
     return SizedBox(
       width: width * 0.633,
-      height: height * 0.14,
+      height: textInputType == TextInputType.multiline
+          ? height * 0.2
+          : height * 0.14,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -354,7 +410,7 @@ class Field extends StatelessWidget {
             controller: controller,
             keyboardType: textInputType,
             textInputAction: textInputAction,
-            maxLines: null,
+            maxLines: textInputType == TextInputType.multiline ? 2 : 1,
           ),
         ],
       ),

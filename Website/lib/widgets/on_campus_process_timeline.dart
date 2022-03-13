@@ -5,8 +5,10 @@ import './process_timeline_class.dart';
 class ProcessTimeline extends StatelessWidget {
   final ProcessTimelineClass processTimeline;
 
-  const ProcessTimeline({Key? key, required this.processTimeline})
-      : super(key: key);
+  const ProcessTimeline({
+    Key? key,
+    required this.processTimeline,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
