@@ -45,6 +45,7 @@ dependencies:
   cloud_firestore_web: ^2.6.5
   firebase_auth: ^3.3.5
   flutterfire_ui: ^0.2.0+2
+  flutter_quill: ^4.0.8
 
 dev_dependencies:
   flutter_test:
