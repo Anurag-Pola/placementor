@@ -9,12 +9,15 @@ import './screens/tickets_screen.dart';
 import './screens/login_screen.dart';
 import './screens/off_campus_company_screen.dart';
 import './screens/on_campus_company_screen.dart';
+import './screens/manage_users.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  //   name: "SecondaryApp",
+  // );
   runApp(const MyApp());
 }
 
@@ -33,6 +36,8 @@ class MyApp extends StatelessWidget {
       home: const LoginScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
+        '/login-screen': (context) => const LoginScreen(),
+        '/manage-users': (context) => const ManageUsers(),
         '/tickets': (context) => const TicketsScreen(),
         '/companies': (context) => const CompaniesScreen(),
         '/onCampusCompanyForm': (context) => const OnCampusCompanyForm(),

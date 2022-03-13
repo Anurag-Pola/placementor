@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference admins = FirebaseFirestore.instance.collection('Admins');
   // .withConverter<Admins>(
   //     fromFirestore: (snapshots, _) => Admins.fromJson(snapshots.data()!),
@@ -28,16 +31,16 @@ class _LoginScreenState extends State<LoginScreen> {
     // print(FirebaseAuth.instance.currentUser!.email);
     // print(allData
     //     .contains('{mailid: ${FirebaseAuth.instance.currentUser!.email}}'));
-    return allData
-        .contains('{mailid: ${FirebaseAuth.instance.currentUser!.email}}');
+    return allData.contains('{mailid: ${auth.currentUser!.email}}');
   }
 
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
     return StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
+        stream: auth.authStateChanges(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Scaffold(
@@ -54,17 +57,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: OrientationBuilder(
                   builder: (context, orientation) =>
                       orientation == Orientation.portrait
-                          ? SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/Images/login_pic.png',
-                                    height: h * 0.5,
-                                    width: w * 0.5,
-                                  ),
-                                  const LoginWidget(),
-                                ],
-                              ),
+                          ? Column(
+                              children: [
+                                Image.asset(
+                                  'assets/login_pic.png',
+                                  height: h * 0.5,
+                                  width: w * 0.5,
+                                ),
+                                LoginWidget(auth: auth),
+                              ],
                             )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 40),
-                                const LoginWidget(),
+                                LoginWidget(auth: auth),
                               ],
                             ),
                 ),
@@ -114,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 class LoginWidget extends StatefulWidget {
-  const LoginWidget({Key? key}) : super(key: key);
-
+  final FirebaseAuth auth;
+  const LoginWidget({Key? key, required this.auth}) : super(key: key);
   @override
   _LoginWidgetState createState() => _LoginWidgetState();
 }
@@ -127,7 +128,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   String _password = "";
 
-  RegExp emailexp = RegExp(r'_[a-z][0-9][0-9]@vnrvjiet.in');
+  RegExp emailexp = RegExp(r'@vnrvjiet.in');
 
   void showErrorDialog(String errorMessage) {
     showDialog(
@@ -147,7 +148,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(FirebaseAuth auth) async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -157,11 +158,13 @@ class _LoginWidgetState extends State<LoginWidget> {
       setState(() {
         // _isLoading = true;
       });
-
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential user = await auth.signInWithEmailAndPassword(
         email: _email,
         password: _password,
       );
+      print(
+          "Succesfully logged in ${user.user!.email} with uid : ${user.user!.uid}");
+      Navigator.of(context).pushReplacementNamed('/manage-users');
     } on PlatformException catch (err) {
       var message = 'An error occurred, pelase check your credentials!';
 
@@ -172,6 +175,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     } catch (error) {
       var errorMessage = 'Could not authenticate you. Please try again later.';
       showErrorDialog(errorMessage);
+      print(error);
       // setState(() {
       //   // _isLoading = false;
       // });
@@ -300,7 +304,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         GestureDetector(
           onTap: () {
-            _submit();
+            _submit(widget.auth);
           },
           child: Container(
             margin: const EdgeInsets.only(top: 10, bottom: 20),
