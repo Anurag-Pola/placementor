@@ -231,6 +231,12 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         driveLink: company.driveLink,
                         lastDate: company.lastDate,
                         eligibility: company.eligibility,
+                        skillset: company.skillset,
+                        previouslyPlacedContactDetails:
+                            company.previouslyPlacedContactDetails,
+                        experienceTilesInfo: company.experienceTilesInfo,
+                        faqTilesInfo: company.faqTilesInfo,
+                        processTimeline: company.processTimeline,
                       ),
                     ),
                   );
