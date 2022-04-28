@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:placementor_tnp/screens/newsfeed_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/onCampusCompanyForm': (context) => const OnCampusCompanyForm(),
         '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
         '/offCampusCompanyPage': (context) => const OffCampusComapnyScreen(),
+        '/newsfeed': (context) => const NewsfeedScreen(),
       },
     );
   }

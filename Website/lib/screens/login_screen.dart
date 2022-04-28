@@ -164,9 +164,13 @@ class _LoginWidgetState extends State<LoginWidget> {
       );
       print(
           "Succesfully logged in ${user.user!.email} with uid : ${user.user!.uid}");
-      Navigator.of(context).pushReplacementNamed('/manage-users');
+      // Navigator.of(context)
+      //     .pushNamedAndRemoveUntil('/tabs-screen', (route) => false);
+      setState(() {
+        // _isLoading = false;
+      });
     } on PlatformException catch (err) {
-      var message = 'An error occurred, pelase check your credentials!';
+      var message = 'An error occurred, please check your credentials!';
 
       if (err.message != null) {
         message = err.message!;

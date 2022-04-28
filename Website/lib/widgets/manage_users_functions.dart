@@ -12,23 +12,47 @@ import '../firebase_options.dart';
 
 Future<FirebaseApp?> secondaryAppGetter() async {
   try {
+    print("Tried secondary app getter");
     return await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
       name: "SecondaryApp",
     );
   } on FirebaseException catch (e) {
     if (e.code == 'duplicate-app') {
+      print("Failed with duplicate app error");
       return Firebase.app('SecondaryApp');
+    } else {
+      rethrow;
     }
   } catch (e) {
-    print(e);
+    print("Failed with error : $e");
   }
   return null;
 }
 
+Future<void> deleteSecondaryAppInstance() async {
+  try {
+    print("Tried secondary app deletion");
+    await Firebase.app('SecondaryApp').delete();
+  } on FirebaseException catch (e) {
+    if (e.code == 'app-not-found') {
+      print("Failed with app not found error");
+    } else {
+      rethrow;
+    }
+  } catch (e) {
+    print("Failed with error : $e");
+  }
+}
+
 Future<void> registerUserWithEmailPassword(
-    QuerySnapshot<Object?> metadataQuerySnapshot) async {
+    QuerySnapshot<Object?> metadataQuerySnapshot,
+    CollectionReference studentDataCollectionRef) async {
   FirebaseApp? secondaryApp = await secondaryAppGetter();
+  if (secondaryApp == null) {
+    print("Failed to get secondary app");
+    return;
+  }
   String createUsersAppScriptUrl = metadataQuerySnapshot.docs
       .firstWhere((element) => element.id == "AppScriptUrl")
       .get("createUsers")
@@ -39,6 +63,7 @@ Future<void> registerUserWithEmailPassword(
       .toString();
   Uri createUsersWebAPI = Uri.parse(
       "$createUsersAppScriptUrl?CreateUsersSheetUrl=$createUsersSheetsUrl");
+  print(createUsersWebAPI);
   final response = await http.get(
     createUsersWebAPI,
     headers: {
@@ -49,6 +74,9 @@ Future<void> registerUserWithEmailPassword(
       "Access-Control-Allow-Methods": "GET"
     },
   );
+  print("Response status: ${response.statusCode}");
+  print(response.toString());
+
   if (response.statusCode == 200) {
     print(response.body);
     final body = json.decode(response.body);
@@ -58,14 +86,27 @@ Future<void> registerUserWithEmailPassword(
             name: eachUser["name"],
             email: eachUser["email"],
             password: eachUser["password"],
+            rollNo: eachUser["id"],
             uid: null);
         print("Registering User - ${user.toString()}");
         user = await registerUser(user, secondaryApp);
         if (user.uid == null) {
           print("Cannot create user ${user.email}");
         } else {
-          print(
-              "Successfully created user ${user.email} with user.uid = ${user.uid}");
+          String studentCreateDBStatus = await addStudentToDB(
+              studentDataCollectionRef,
+              name: user.name!,
+              email: user.email,
+              uid: user.uid!,
+              rollNo: user.rollNo!);
+          print(studentCreateDBStatus);
+          if (studentCreateDBStatus == "SUCCESS") {
+            print(
+                "Successfully created user ${user.email} with user.uid = ${user.uid}");
+          } else {
+            print(
+                "ERROR : Cannot create user ${user.email} with user.uid = ${user.uid} in DB");
+          }
         }
       }
     } else {
@@ -96,9 +137,47 @@ Future<CustomUser> registerUser(
   return customUser;
 }
 
-Future<void> deleteUserWithEmail(
-    QuerySnapshot<Object?> metadataQuerySnapshot) async {
+Future<String> addStudentToDB(
+  CollectionReference studentDataCollectionRef, {
+  required String name,
+  required String email,
+  required String uid,
+  required String rollNo,
+}) {
+  return studentDataCollectionRef.doc(uid).set({
+    "name": name,
+    "email": email,
+    "uid": uid,
+    "rollNo": rollNo,
+  }).then((value) {
+    print("Student $rollNo created successfully on Database.");
+    return "SUCCESS";
+  }).catchError((e) {
+    print("ERROR : $e");
+    return "ERROR : $e";
+  });
+}
+
+Future<String> deleteStudentFromDB(
+  CollectionReference studentDataCollectionRef, {
+  required String uid,
+}) {
+  return studentDataCollectionRef.doc(uid).delete().then((value) {
+    print("Student $uid deleted successfully on Database.");
+    return "SUCCESS";
+  }).catchError((e) {
+    print("ERROR : $e");
+    return "ERROR : $e";
+  });
+}
+
+Future<void> deleteUserWithEmail(QuerySnapshot<Object?> metadataQuerySnapshot,
+    CollectionReference studentDataCollectionRef) async {
   FirebaseApp? secondaryApp = await secondaryAppGetter();
+  if (secondaryApp == null) {
+    print("Failed to get secondary app");
+    return;
+  }
   String deleteUsersAppScriptUrl = metadataQuerySnapshot.docs
       .firstWhere((element) => element.id == "AppScriptUrl")
       .get("deleteUsers")
@@ -128,11 +207,21 @@ Future<void> deleteUserWithEmail(
             name: eachUser["name"],
             email: eachUser["email"],
             password: eachUser["password"],
+            rollNo: eachUser["id"],
             uid: null);
         print("Deleting User - ${user.email}");
-        bool _isDeleted = await deleteUser(user, secondaryApp);
-        if (_isDeleted) {
-          print("Successfully deleted user ${user.email}");
+        var _afterDeleteResponse = await deleteUser(user, secondaryApp);
+        if (_afterDeleteResponse["isDeleted"] == true) {
+          user = _afterDeleteResponse["user"];
+          String studentDeleteDBStatus = await deleteStudentFromDB(
+              studentDataCollectionRef,
+              uid: user.uid!);
+          print(studentDeleteDBStatus);
+          if (studentDeleteDBStatus == "SUCCESS") {
+            print("Successfully deleted user ${user.email}");
+          } else {
+            print("ERROR : Cannot delete user ${user.email} from DB");
+          }
         } else {
           print("Cannot delete user ${user.email}");
         }
@@ -143,10 +232,9 @@ Future<void> deleteUserWithEmail(
   } else {
     print("ERROR : ${response.statusCode}-${response.reasonPhrase}");
   }
-  secondaryApp?.delete();
 }
 
-Future<bool> deleteUser(
+Future<Map<String, dynamic>> deleteUser(
     CustomUser customUser, FirebaseApp? secondaryApp) async {
   try {
     FirebaseAuth _auth = FirebaseAuth.instanceFor(app: secondaryApp!);
@@ -154,12 +242,13 @@ Future<bool> deleteUser(
         .signInWithEmailAndPassword(
             email: customUser.email, password: customUser.password!)
         .then((value) async {
+      customUser.uid = value.user!.uid;
       await _auth.currentUser!.delete();
     });
     _auth.signOut();
-    return true;
+    return {"isDeleted": true, "user": customUser};
   } catch (e) {
     print(e);
-    return false;
+    return {"isDeleted": false, "user": customUser, "error": e};
   }
 }

@@ -95,35 +95,35 @@ class ProfileScreen extends StatelessWidget {
             icon: const Icon(Icons.sticky_note_2_rounded),
             text: "To-Do",
             action: () {
-              Navigator.pushNamed(context, '/' + "toDoListPage");
+              Navigator.pushNamed(context, '/' "toDoListPage");
             },
           ),
           ProfileItem(
             icon: const Icon(Icons.perm_contact_calendar_rounded),
             text: "T&P Coordinators",
             action: () {
-              Navigator.pushNamed(context, '/' + "tnpCoordinatorsPage");
+              Navigator.pushNamed(context, '/' "tnpCoordinatorsPage");
             },
           ),
           ProfileItem(
             icon: const Icon(Icons.remove_red_eye_rounded),
             text: "Status Tracker",
             action: () {
-              Navigator.pushNamed(context, '/' + "statusTrackerPage");
+              Navigator.pushNamed(context, '/' "statusTrackerPage");
             },
           ),
           ProfileItem(
             icon: const Icon(Icons.star_rounded),
             text: "Off-Campus Form",
             action: () {
-              Navigator.pushNamed(context, '/' + "OffCampusFormPage");
+              Navigator.pushNamed(context, '/' "OffCampusFormPage");
             },
           ),
           ProfileItem(
             icon: const Icon(Icons.chat_bubble_rounded),
             text: "Raise a Ticket",
             action: () {
-              Navigator.pushNamed(context, '/' + "RaiseTicketPage");
+              Navigator.pushNamed(context, '/' "RaiseTicketPage");
             },
           ),
           ProfileItem(

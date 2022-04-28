@@ -14,8 +14,10 @@ class ManageUsers extends StatefulWidget {
 }
 
 class _ManageUsersState extends State<ManageUsers> {
-  CollectionReference metadata =
+  CollectionReference metadataCollectionRef =
       FirebaseFirestore.instance.collection('Metadata');
+  CollectionReference studentDataCollectionRef =
+      FirebaseFirestore.instance.collection('Students');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,16 +31,20 @@ class _ManageUsersState extends State<ManageUsers> {
             ElevatedButton(
               child: const Text("Add Users"),
               onPressed: () async {
-                QuerySnapshot metadataQuerySnapshot = await metadata.get();
-                await registerUserWithEmailPassword(metadataQuerySnapshot);
+                QuerySnapshot metadataQuerySnapshot =
+                    await metadataCollectionRef.get();
+                await registerUserWithEmailPassword(
+                    metadataQuerySnapshot, studentDataCollectionRef);
               },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               child: const Text("Delete Users"),
               onPressed: () async {
-                QuerySnapshot metadataQuerySnapshot = await metadata.get();
-                await deleteUserWithEmail(metadataQuerySnapshot);
+                QuerySnapshot metadataQuerySnapshot =
+                    await metadataCollectionRef.get();
+                await deleteUserWithEmail(
+                    metadataQuerySnapshot, studentDataCollectionRef);
               },
             ),
             const SizedBox(height: 20),
