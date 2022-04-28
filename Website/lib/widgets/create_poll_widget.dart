@@ -16,7 +16,7 @@ Future<dynamic> createPollWidget(BuildContext context) {
           options: _pollOptions,
           question: question,
           pollBy: _auth.currentUser?.email);
-      print(result);
+      // print(result);
       if (result == "SUCCESS") {
         Navigator.of(context).pop();
       } else {

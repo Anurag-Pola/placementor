@@ -11,7 +11,7 @@ Future<dynamic> createPostWidget(BuildContext context) {
   void _saveForm() async {
     String result = await createPostFunction(
         postText: postText, postBy: _auth.currentUser?.email);
-    print(result);
+    // print(result);
     if (result == "SUCCESS") {
       Navigator.of(context).pop();
     } else {
