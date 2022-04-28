@@ -20,7 +20,6 @@ class _FAQTilesState extends State<FAQTiles> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isOpen = List.filled(widget.faqTilesInfo.length, false);
   }

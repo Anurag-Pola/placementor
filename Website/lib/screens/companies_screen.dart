@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:placementor_tnp/screens/on_campus_company_form.dart';
 
 import '../../widgets/company_class.dart';
 import '../../widgets/experience_tile_class.dart';
@@ -20,7 +21,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Go", "R"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/21", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -120,7 +121,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -169,7 +170,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -218,7 +219,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -267,7 +268,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -316,7 +317,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -365,7 +366,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -432,7 +433,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -481,7 +482,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -530,7 +531,7 @@ const companies = [
         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
     processTimeline: ProcessTimelineClass(
-      steps: [1, 2, 3, 4],
+      steps: ['1', '2', '3', '4'],
       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
       descriptions: [
         "The application is to be done from the provided URL",
@@ -606,6 +607,56 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      floatingActionButton: Container(
+        margin: const EdgeInsets.all(10),
+        height: 40.0,
+        width: 40.0,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x3f000000),
+              blurRadius: 4,
+              offset: Offset(0, 4),
+            ),
+          ],
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xff925ffc),
+              Color(0xff3b57ff),
+            ],
+          ),
+        ),
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const OnCampusCompanyForm(),
+              ),
+            );
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+                size: 20,
+              ), // icon
+              Text(
+                "Add",
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                ),
+              ), // text
+            ],
+          ),
+        ),
+      ),
       backgroundColor: const Color(0xFFF7F9FC),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
