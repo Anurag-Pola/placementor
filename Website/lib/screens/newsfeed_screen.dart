@@ -43,121 +43,123 @@ class _NewsfeedScreenState extends State<NewsfeedScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: _controller!.stream,
-        builder: (context, AsyncSnapshot snapshot) {
-          return Scaffold(
-            appBar: AppBar(
-              iconTheme: const IconThemeData(color: Colors.black),
-              backgroundColor: Colors.blue.shade100,
-              elevation: 0,
-              title: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                child: SizedBox(
-                  height: 40,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "T&P NewsFeed",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w600,
-                      ),
+      stream: _controller!.stream,
+      builder: (context, AsyncSnapshot snapshot) {
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: const IconThemeData(color: Colors.black),
+            backgroundColor: Colors.blue.shade100,
+            elevation: 0,
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: SizedBox(
+                height: 40,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "T&P NewsFeed",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
             ),
-            drawer: Drawer(
-              child: ListView(
-                children: <Widget>[
-                  const DrawerHeader(
-                    child: Text("Newsfeed"),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
+          ),
+          drawer: Drawer(
+            child: ListView(
+              children: <Widget>[
+                const DrawerHeader(
+                  child: Text("Newsfeed"),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
                   ),
-                  ListTile(
-                    title: const Text("Home"),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: const Text("Profile"),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: const Text("Settings"),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            floatingActionButton: SpeedDial(
-              icon: Icons.add,
-              activeIcon: Icons.close,
-              spacing: 3,
-              childPadding: const EdgeInsets.all(5),
-              spaceBetweenChildren: 4,
-              overlayColor: Colors.black,
-              overlayOpacity: 0.5,
-              heroTag: 'speed-dial-hero-tag',
-              elevation: 8.0,
-              children: [
-                SpeedDialChild(
-                    child: const Icon(Icons.post_add_rounded),
-                    backgroundColor: Colors.deepOrange,
-                    foregroundColor: Colors.white,
-                    label: 'Create a Post',
-                    onTap: () async {
-                      _subscribedData?.pause();
-                      await createPostWidget(context);
-                      _subscribedData?.resume();
-                    }),
-                SpeedDialChild(
-                    child: const Icon(Icons.add_chart_rounded),
-                    backgroundColor: Colors.deepOrange,
-                    foregroundColor: Colors.white,
-                    label: 'Create a Poll',
-                    onTap: () async {
-                      _subscribedData?.pause();
-                      await createPollWidget(context);
-                      _subscribedData?.resume();
-                    }),
+                ),
+                ListTile(
+                  title: const Text("Home"),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text("Profile"),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text("Settings"),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
-            backgroundColor: Colors.blue.shade100,
-            body: Column(
-              children: [
-                !snapshot.hasData && !snapshot.hasError
-                    ? const Center(child: CircularProgressIndicator())
-                    : snapshot.hasError
-                        ? Center(
-                            child: SelectableText("Error : ${snapshot.error}",
-                                style: const TextStyle(color: Colors.red)))
-                        // : !(snapshot.data!.exists)
-                        //     ? const Center(child: Text("No posts yet :("))
-                        : Expanded(
-                            child: ListView.builder(
-                                itemCount: snapshot.data.docs.length,
-                                itemBuilder: (context, index) {
-                                  final feed = snapshot.data.docs[index];
-                                  // print("${feed.data()}");
-                                  return feed["type"] == "post"
-                                      ? NewsfeedPost(post: feed)
-                                      : NewsfeedPoll(poll: feed);
-                                }),
+          ),
+          floatingActionButton: SpeedDial(
+            icon: Icons.add,
+            activeIcon: Icons.close,
+            spacing: 3,
+            childPadding: const EdgeInsets.all(5),
+            spaceBetweenChildren: 4,
+            overlayColor: Colors.black,
+            overlayOpacity: 0.5,
+            heroTag: 'speed-dial-hero-tag',
+            elevation: 8.0,
+            children: [
+              SpeedDialChild(
+                  child: const Icon(Icons.post_add_rounded),
+                  backgroundColor: Colors.deepOrange,
+                  foregroundColor: Colors.white,
+                  label: 'Create a Post',
+                  onTap: () async {
+                    _subscribedData?.pause();
+                    await createPostWidget(context);
+                    _subscribedData?.resume();
+                  }),
+              SpeedDialChild(
+                  child: const Icon(Icons.add_chart_rounded),
+                  backgroundColor: Colors.deepOrange,
+                  foregroundColor: Colors.white,
+                  label: 'Create a Poll',
+                  onTap: () async {
+                    _subscribedData?.pause();
+                    await createPollWidget(context);
+                    _subscribedData?.resume();
+                  }),
+            ],
+          ),
+          backgroundColor: Colors.blue.shade100,
+          body: Column(
+            children: [
+              !snapshot.hasData && !snapshot.hasError
+                  ? const Center(child: CircularProgressIndicator())
+                  : snapshot.hasError
+                      ? Center(
+                          child: SelectableText("Error : ${snapshot.error}",
+                              style: const TextStyle(color: Colors.red)))
+                      // : !(snapshot.data!.exists)
+                      //     ? const Center(child: Text("No posts yet :("))
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              final feed = snapshot.data.docs[index];
+                              // print("${feed.data()}");
+                              return feed["type"] == "post"
+                                  ? NewsfeedPost(post: feed)
+                                  : NewsfeedPoll(poll: feed);
+                            },
                           ),
-              ],
-            ),
-          );
-        });
+                        ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

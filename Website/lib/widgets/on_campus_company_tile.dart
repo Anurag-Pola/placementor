@@ -7,6 +7,7 @@ import './process_timeline_class.dart';
 import './company_class.dart';
 
 class OnCampusCompanyTile extends StatelessWidget {
+  final String id;
   final String companyName;
   final String companyType;
   final String roleName;
@@ -15,18 +16,19 @@ class OnCampusCompanyTile extends StatelessWidget {
   final String jobDescription;
   final List<String> skillset;
   final ProcessTimelineClass processTimeline;
-  final List<PreviouslyPlacedContactDetailsClass>
-      previouslyPlacedContactDetails;
+  final List<PreviouslyPlacedContactDetailsClass> previouslyPlacedContacts;
   final List<ExperienceTileClass> experienceTilesInfo;
-  final List<FAQTilesClass> faqTilesInfo;
+  final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String salary;
+  final String package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;
+  final String offerType;
 
   const OnCampusCompanyTile({
     Key? key,
+    required this.id,
     required this.companyName,
     required this.companyType,
     required this.roleName,
@@ -35,14 +37,15 @@ class OnCampusCompanyTile extends StatelessWidget {
     required this.jobDescription,
     required this.skillset,
     required this.processTimeline,
-    required this.previouslyPlacedContactDetails,
+    required this.previouslyPlacedContacts,
     required this.experienceTilesInfo,
-    required this.faqTilesInfo,
+    required this.faqs,
     required this.lastDate,
-    required this.salary,
+    required this.package,
     required this.linkToApply,
     required this.driveLink,
     required this.eligibility,
+    required this.offerType,
   }) : super(key: key);
 
   @override
@@ -52,6 +55,7 @@ class OnCampusCompanyTile extends StatelessWidget {
         Navigator.of(context).pushNamed(
           '/onCampusCompanyPage',
           arguments: Company(
+            id: id,
             companyName: companyName,
             companyType: companyType,
             roleName: roleName,
@@ -60,14 +64,15 @@ class OnCampusCompanyTile extends StatelessWidget {
             jobDescription: jobDescription,
             skillset: skillset,
             processTimeline: processTimeline,
-            previouslyPlacedContactDetails: previouslyPlacedContactDetails,
-            experienceTilesInfo: experienceTilesInfo,
-            faqTilesInfo: faqTilesInfo,
+            previouslyPlacedContacts: previouslyPlacedContacts,
+            experiences: experienceTilesInfo,
+            faqs: faqs,
             lastDate: lastDate,
-            salary: salary,
+            package: package,
             linkToApply: linkToApply,
             driveLink: driveLink,
             eligibility: eligibility,
+            offerType: offerType,
           ),
         );
       },
@@ -134,7 +139,7 @@ class OnCampusCompanyTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SizedBox(
                 child: Text(
-                  salary,
+                  package,
                   style: const TextStyle(
                     color: Color(0xff18191e),
                     fontSize: 12,

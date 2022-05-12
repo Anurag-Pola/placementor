@@ -3,12 +3,13 @@ import 'package:timeline_tile/timeline_tile.dart';
 import './process_timeline_class.dart';
 
 class ProcessTimeline extends StatelessWidget {
-  final ProcessTimelineClass processTimeline;
-
   const ProcessTimeline({
     Key? key,
     required this.processTimeline,
   }) : super(key: key);
+
+  final ProcessTimelineClass processTimeline;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,10 +98,10 @@ class Content extends StatelessWidget {
     required this.dates,
   }) : super(key: key);
 
-  final List<String> names;
+  final List names;
   final int i;
-  final List<String> descriptions;
-  final List<String> dates;
+  final List descriptions;
+  final List dates;
 
   @override
   Widget build(BuildContext context) {

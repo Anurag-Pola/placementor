@@ -1,34 +1,51 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../widgets/company_class.dart';
 import '../widgets/experience_tile_class.dart';
 import '../widgets/faq_tiles_class.dart';
 import '../widgets/on_campus_process_timeline.dart';
 import '../widgets/previosly_placed_contact_details_class.dart';
 import '../widgets/process_timeline_class.dart';
 
+final firebaseInstance =
+    FirebaseFirestore.instance.collection('Companies').withConverter<Company>(
+          fromFirestore: (snapshot, _) => Company.fromJson(snapshot.data()!),
+          toFirestore: (company, _) => company.toJson(),
+        );
+
+List<String> globalSkillset = [];
+ProcessTimelineClass globalProcessTimeline = const ProcessTimelineClass(
+    steps: [], names: [], dates: [], descriptions: []);
+List<PreviouslyPlacedContactDetailsClass> globalPreviouslyPlacedContacts = [];
+List<ExperienceTileClass> globalExperiences = [];
+List<FAQTilesClass> globalFaqs = [];
+
 class OnCampusCompanyForm extends StatefulWidget {
   const OnCampusCompanyForm(
       {Key? key,
+      this.id = "",
       this.companyName = "",
       this.companyType = "",
       this.roleName = "",
       this.aboutTheFirm = "",
-      this.experienceTilesInfo = const [],
-      this.faqTilesInfo = const [],
-      this.previouslyPlacedContactDetails = const [],
+      this.experiences = const [],
+      this.faqs = const [],
+      this.previouslyPlacedContacts = const [],
       this.processTimeline = const ProcessTimelineClass(
           dates: [], steps: [], names: [], descriptions: []),
       this.jobDescription = "",
       this.lastDate = "",
       this.roleType = "",
-      this.salary = "",
+      this.package = "",
       this.skillset = const [],
       this.linkToApply = "",
       this.driveLink = "",
       this.eligibility = ""})
       : super(key: key);
 
+  final String id;
   final String companyName;
   final String companyType;
   final String roleName;
@@ -37,12 +54,11 @@ class OnCampusCompanyForm extends StatefulWidget {
   final String jobDescription;
   final List<String> skillset;
   final ProcessTimelineClass processTimeline;
-  final List<PreviouslyPlacedContactDetailsClass>
-      previouslyPlacedContactDetails;
-  final List<ExperienceTileClass> experienceTilesInfo;
-  final List<FAQTilesClass> faqTilesInfo;
+  final List<PreviouslyPlacedContactDetailsClass> previouslyPlacedContacts;
+  final List<ExperienceTileClass> experiences;
+  final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String salary;
+  final String package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;
@@ -69,12 +85,12 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   late final TextEditingController _jobDescriptionController =
       TextEditingController(text: widget.jobDescription);
   late final TextEditingController _packageController =
-      TextEditingController(text: widget.salary);
+      TextEditingController(text: widget.package);
 
-  late var lastdate = widget.lastDate.split('/').reversed.join('-');
+  late var lastdate = widget.lastDate.split('/').reversed.join('/');
   late DateTime selectedDate =
       widget.lastDate == "" ? DateTime.now() : DateTime.parse(lastdate);
-  late final TextEditingController _date =
+  late TextEditingController lastDateToApplyController =
       TextEditingController(text: lastdate);
 
   late String? companyType =
@@ -83,30 +99,6 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
       widget.roleType == "" ? "Select an Option" : widget.roleType;
 
   double paddingToElements = 39;
-
-  Future _selectDate(BuildContext context) async {
-    DateFormat formatter =
-        DateFormat('dd/MM/yyyy'); //specifies day/month/year format
-
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(
-        const Duration(
-          days: 365,
-        ),
-      ),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        _date.value = TextEditingValue(
-            text: formatter.format(
-                picked)); //Use formatter to format selected date and assign to text field
-      });
-    }
-  }
 
   String? validateFunction(value) {
     if (value == null || value.isEmpty) {
@@ -119,7 +111,11 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   Widget build(BuildContext context) {
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     double height = MediaQuery.of(context).size.height - safeAreaHeight;
-
+    globalSkillset = widget.skillset;
+    globalProcessTimeline = widget.processTimeline;
+    globalPreviouslyPlacedContacts = widget.previouslyPlacedContacts;
+    globalExperiences = widget.experiences;
+    globalFaqs = widget.faqs;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -165,13 +161,6 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                       textInputType: TextInputType.text,
                       controller: _companyNameController,
                     ),
-                    Field(
-                      text: "Role Name",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _roleNameController,
-                    ),
                     AppDropdownInput(
                       hintText: "Company Type",
                       options: const ["Select an Option", "Product", "Service"],
@@ -182,6 +171,93 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                         });
                       },
                       getLabel: (String value) => value,
+                    ),
+                    Field(
+                      text: "Role Name",
+                      validateFunction: validateFunction,
+                      textInputType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      controller: _roleNameController,
+                    ),
+                    AppDropdownInput(
+                      hintText: "Role Type",
+                      options: const [
+                        "Select an Option",
+                        "Full Time",
+                        "Internship",
+                        "Internship + Full Time",
+                        "Internship Based Full Time"
+                      ],
+                      value: roleType,
+                      onChanged: (String? value) {
+                        setState(() {
+                          roleType = value;
+                        });
+                      },
+                      getLabel: (String value) => value,
+                    ),
+                    Field(
+                      text: "About the firm",
+                      validateFunction: validateFunction,
+                      textInputType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline,
+                      controller: _aboutTheFirmController,
+                    ),
+                    Field(
+                      text: "Job Description",
+                      validateFunction: validateFunction,
+                      textInputType: TextInputType.multiline,
+                      textInputAction: TextInputAction.next,
+                      controller: _jobDescriptionController,
+                    ),
+                    Field(
+                      text: "Eligibility",
+                      validateFunction: validateFunction,
+                      textInputType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      controller: _eligibilityController,
+                    ),
+                    Field(
+                      text: "Package",
+                      validateFunction: validateFunction,
+                      textInputType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      controller: _packageController,
+                    ),
+                    LastDateToApplyField(
+                      lastDateToApplyController: lastDateToApplyController,
+                      selectedDate: selectedDate,
+                    ),
+                    ComplexField(
+                      text: "Skillset Required",
+                      validateFunction: validateFunction,
+                      options: widget.skillset,
+                      optionsFor: "Skillset",
+                    ),
+                    ComplexField(
+                      text: "Process Timeline",
+                      validateFunction: validateFunction,
+                      options: [widget.processTimeline],
+                      optionsFor: "Process Timeline",
+                      buttonText: "Add or Update",
+                    ),
+                    ComplexField(
+                      text: "Previously Placed Contact Details",
+                      validateFunction: validateFunction,
+                      options: widget.previouslyPlacedContacts,
+                      optionsFor: "Previously Placed Contact Details",
+                    ),
+                    ComplexField(
+                      text: "Experiences",
+                      validateFunction: validateFunction,
+                      options: widget.experiences,
+                      optionsFor: "Experiences",
+                    ),
+                    ComplexField(
+                      text: "FAQs",
+                      validateFunction: validateFunction,
+                      options: widget.faqs,
+                      optionsFor: "FAQs",
                     ),
                     Field(
                       text: "Link for Applying",
@@ -197,127 +273,58 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                       textInputAction: TextInputAction.next,
                       controller: _googleDriveLinkController,
                     ),
-                    Field(
-                      text: "About the firm",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                      controller: _aboutTheFirmController,
-                    ),
-                    Field(
-                      text: "Eligibility",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _eligibilityController,
-                    ),
-                    Field(
-                      text: "Job Description",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.multiline,
-                      textInputAction: TextInputAction.next,
-                      controller: _jobDescriptionController,
-                    ),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => _selectDate(context),
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            style: const TextStyle(
-                              color: Color(0xff252b42),
-                              fontSize: 14,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600,
-                            ),
-                            controller: _date,
-                            keyboardType: TextInputType.datetime,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              fillColor: Colors.white,
-                              hintText: 'Last Date to Apply',
-                              filled: true,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1.0),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: 18.0, bottom: 18.0, top: 18.0),
-                            ),
-                            // onSaved: (value) => selectedDate  = value,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Field(
-                      text: "Package",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _packageController,
-                    ),
-                    AppDropdownInput(
-                      options: const [
-                        "Select an Option",
-                        "Full Time",
-                        "Internship",
-                        "Internship + Full Time",
-                        "Internship Based Full Time"
-                      ],
-                      hintText: "Role Type",
-                      value: roleType,
-                      onChanged: (String? value) {
-                        setState(() {
-                          roleType = value;
-                        });
-                      },
-                      getLabel: (String value) => value,
-                    ),
-                    ComplexField(
-                      text: "Skillset Required",
-                      validateFunction: validateFunction,
-                      options: widget.skillset,
-                      optionsFor: "Skillset",
-                    ),
-                    ComplexField(
-                      text: "Previously Placed Contact Details",
-                      validateFunction: validateFunction,
-                      options: widget.previouslyPlacedContactDetails,
-                      optionsFor: "Previously Placed Contact Details",
-                    ),
-                    ComplexField(
-                      text: "Experiences",
-                      validateFunction: validateFunction,
-                      options: widget.experienceTilesInfo,
-                      optionsFor: "Experiences",
-                    ),
-                    ComplexField(
-                      text: "Process Timeline",
-                      validateFunction: validateFunction,
-                      options: [widget.processTimeline],
-                      optionsFor: "Process Timeline",
-                      buttonText: "Add or Update",
-                    ),
-                    ComplexField(
-                      text: "FAQs",
-                      validateFunction: validateFunction,
-                      options: widget.faqTilesInfo,
-                      optionsFor: "FAQs",
-                    ),
                   ],
                 ),
               ),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    // tickets.add({
-                    // 'title': _titleController.text,
-                    // 'description': _descriptionController.text,
-                    // });
-                    // _titleController.clear();
-                    // _descriptionController.clear();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Posted Successfully')),
+                    Map previoslyPlacedContactDetails = {};
+                    Map experiences = {};
+                    Map faqs = {};
+                    for (var contact in globalPreviouslyPlacedContacts) {
+                      previoslyPlacedContactDetails[contact.rollNo] =
+                          contact.toJson();
+                    }
+                    for (var experience in globalExperiences) {
+                      experiences[experience.rollNo] = experience.toJson();
+                    }
+                    for (var faq in globalFaqs) {
+                      faqs[faq.timestamp] = faq.toJson();
+                    }
+
+                    final company = Company.fromJson(
+                      {
+                        "id": widget.id == ""
+                            ? DateTime.now().millisecondsSinceEpoch.toString()
+                            : widget.id,
+                        "companyName": _companyNameController.text,
+                        "companyType": companyType,
+                        "roleName": _roleNameController.text,
+                        "roleType": roleType,
+                        "aboutTheFirm": _aboutTheFirmController.text,
+                        "jobDescription": _jobDescriptionController.text,
+                        "eligibility": _eligibilityController.text,
+                        "package": _packageController.text,
+                        "lastDate": lastDateToApplyController.text,
+                        "linkToApply": _applyLinkController.text,
+                        "driveLink": _googleDriveLinkController.text,
+                        "skillset": globalSkillset,
+                        "processTimeline": globalProcessTimeline.toJson(),
+                        "previouslyPlacedContacts":
+                            previoslyPlacedContactDetails,
+                        "experiences": experiences,
+                        "faqs": faqs,
+                        "offerType": "On Campus",
+                      },
                     );
+                    firebaseInstance.doc(company.id).set(company);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('🤘Done and Dusted!!✌️')),
+                    );
+                    await Future.delayed(const Duration(seconds: 2));
+                    Navigator.pop(context);
                   }
                 },
                 child: Container(
@@ -408,8 +415,6 @@ class Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double safeAreaHeight = MediaQuery.of(context).padding.top;
-    double height = MediaQuery.of(context).size.height - safeAreaHeight;
     double width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width * 0.633,
@@ -423,7 +428,9 @@ class Field extends StatelessWidget {
             text,
             style: textStyle,
           ),
-          SizedBox(height: height * 0.014),
+          const SizedBox(
+            height: 5,
+          ),
           TextFormField(
             validator: (value) {
               return validateFunction!(value);
@@ -445,12 +452,6 @@ class Field extends StatelessWidget {
 }
 
 class AppDropdownInput<T> extends StatelessWidget {
-  final String hintText;
-  final List<T> options;
-  final T? value;
-  final String Function(T)? getLabel;
-  final void Function(T?)? onChanged;
-
   const AppDropdownInput({
     Key? key,
     this.hintText = 'Please select an Option',
@@ -460,10 +461,31 @@ class AppDropdownInput<T> extends StatelessWidget {
     this.onChanged,
   }) : super(key: key);
 
+  final String hintText;
+  final List<T> options;
+  final T? value;
+  final String Function(T)? getLabel;
+  final void Function(T?)? onChanged;
+
+  final TextStyle textStyle = const TextStyle(
+    color: Color(0xff252b42),
+    fontSize: 14,
+    fontFamily: "Poppins",
+    fontWeight: FontWeight.w600,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          hintText,
+          style: textStyle,
+        ),
+        const SizedBox(
+          height: 5,
+        ),
         FormField<T>(
           builder: (FormFieldState<T> state) {
             return InputDecorator(
@@ -472,7 +494,6 @@ class AppDropdownInput<T> extends StatelessWidget {
                   horizontal: 20.0,
                   vertical: 15.0,
                 ),
-                labelText: hintText,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(
                     5.0,
@@ -560,6 +581,25 @@ class _ComplexFieldState extends State<ComplexField> {
 
   @override
   Widget build(BuildContext context) {
+    switch (widget.optionsFor) {
+      case "Skillset":
+        globalSkillset = options as List<String>;
+        break;
+      case "Previously Placed Contact Details":
+        globalPreviouslyPlacedContacts =
+            options as List<PreviouslyPlacedContactDetailsClass>;
+        break;
+      case "Experiences":
+        globalExperiences = options as List<ExperienceTileClass>;
+        break;
+      case "FAQs":
+        globalFaqs = options as List<FAQTilesClass>;
+        break;
+      case "Process Timeline":
+        globalProcessTimeline = options[0] as ProcessTimelineClass;
+        break;
+      default:
+    }
     List<Widget> optionsContent = [];
     for (var option in options) {
       switch (widget.optionsFor) {
@@ -626,6 +666,9 @@ class _ComplexFieldState extends State<ComplexField> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(
+          height: 5,
+        ),
         SizedBox(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -778,7 +821,7 @@ class _ComplexFieldState extends State<ComplexField> {
 
   AlertDialog previouslyPlacedContactDetailsDialog(BuildContext context) {
     final TextEditingController _nameController = TextEditingController();
-    final TextEditingController _batchController = TextEditingController();
+    final TextEditingController _rollNoController = TextEditingController();
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _phoneController = TextEditingController();
     final TextEditingController _linkedinController = TextEditingController();
@@ -800,9 +843,9 @@ class _ComplexFieldState extends State<ComplexField> {
             controller: _nameController,
           ),
           TextFormField(
-            decoration: textFormFieldDecoration.copyWith(hintText: "Batch"),
+            decoration: textFormFieldDecoration.copyWith(hintText: "Roll No"),
             autocorrect: true,
-            controller: _batchController,
+            controller: _rollNoController,
           ),
           TextFormField(
             decoration: textFormFieldDecoration.copyWith(hintText: "Email"),
@@ -831,21 +874,21 @@ class _ComplexFieldState extends State<ComplexField> {
           ),
           onPressed: () {
             if (_nameController.text != '' &&
-                _batchController.text != '' &&
+                _rollNoController.text != '' &&
                 _emailController.text != '' &&
                 _phoneController.text != '' &&
                 _linkedinController.text != '') {
               options.add(
                 PreviouslyPlacedContactDetailsClass(
                   name: _nameController.text,
-                  batch: _batchController.text,
+                  rollNo: _rollNoController.text,
                   email: _emailController.text,
                   phone: _phoneController.text,
                   linkedin: _linkedinController.text,
                 ),
               );
               _nameController.text = '';
-              _batchController.text = '';
+              _rollNoController.text = '';
               _emailController.text = '';
               _phoneController.text = '';
               _linkedinController.text = '';
@@ -871,6 +914,7 @@ class _ComplexFieldState extends State<ComplexField> {
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _batchController = TextEditingController();
     final TextEditingController _experienceController = TextEditingController();
+    final TextEditingController _rollNoController = TextEditingController();
 
     return AlertDialog(
       title: const Text("Add"),
@@ -899,6 +943,11 @@ class _ComplexFieldState extends State<ComplexField> {
             autocorrect: true,
             controller: _batchController,
           ),
+          TextFormField(
+            decoration: textFormFieldDecoration.copyWith(hintText: "Roll No"),
+            autocorrect: true,
+            controller: _rollNoController,
+          ),
         ],
       ),
       actions: [
@@ -918,11 +967,13 @@ class _ComplexFieldState extends State<ComplexField> {
                   experience: _experienceController.text,
                   name: _nameController.text,
                   batch: _batchController.text,
+                  rollNo: _rollNoController.text,
                 ),
               );
               _experienceController.text = '';
               _nameController.text = '';
               _batchController.text = '';
+              _rollNoController.text = '';
               Navigator.pop(context);
               setState(() {});
             }
@@ -983,6 +1034,7 @@ class _ComplexFieldState extends State<ComplexField> {
                 FAQTilesClass(
                   question: _questionController.text,
                   answer: _answerController.text,
+                  timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
                 ),
               );
               _questionController.text = '';
@@ -1184,7 +1236,7 @@ class PreviouslyPlacedContactDetailsOption extends StatelessWidget {
           Column(
             children: [
               Text(previoslyPlacedContact.name),
-              Text(previoslyPlacedContact.batch),
+              Text(previoslyPlacedContact.rollNo),
               Text(previoslyPlacedContact.email),
               Text(previoslyPlacedContact.phone),
               Text(previoslyPlacedContact.linkedin),
@@ -1399,5 +1451,103 @@ class ProcessTimelineOption extends StatelessWidget {
             margin: const EdgeInsets.all(4),
           )
         : Container();
+  }
+}
+
+class LastDateToApplyField extends StatefulWidget {
+  LastDateToApplyField({
+    Key? key,
+    required this.lastDateToApplyController,
+    required this.selectedDate,
+  }) : super(key: key);
+
+  final TextEditingController lastDateToApplyController;
+  DateTime selectedDate;
+
+  final TextStyle textStyle = const TextStyle(
+    color: Color(0xff252b42),
+    fontSize: 14,
+    fontFamily: "Poppins",
+    fontWeight: FontWeight.w600,
+  );
+
+  @override
+  State<LastDateToApplyField> createState() => _LastDateToApplyFieldState();
+}
+
+class _LastDateToApplyFieldState extends State<LastDateToApplyField> {
+  Future _selectDate(BuildContext context) async {
+    DateFormat formatter =
+        DateFormat('dd/MM/yyyy'); //specifies day/month/year format
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: widget.selectedDate,
+      firstDate: widget.selectedDate,
+      lastDate: widget.selectedDate.add(
+        const Duration(
+          days: 365,
+        ),
+      ),
+    );
+    if (picked != null && picked != widget.selectedDate) {
+      setState(() {
+        widget.selectedDate = picked;
+        widget.lastDateToApplyController.value = TextEditingValue(
+          text: formatter.format(
+            picked,
+          ),
+        ); //Use formatter to format selected date and assign to text field
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Last Date to Apply',
+          style: widget.textStyle,
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => _selectDate(context),
+            child: AbsorbPointer(
+              child: TextFormField(
+                style: const TextStyle(
+                  color: Color(0xff252b42),
+                  fontSize: 14,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w600,
+                ),
+                controller: widget.lastDateToApplyController,
+                keyboardType: TextInputType.datetime,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  fillColor: Colors.white,
+                  hintText: 'Last Date to Apply',
+                  filled: true,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1.0),
+                  ),
+                  contentPadding:
+                      EdgeInsets.only(left: 18.0, bottom: 18.0, top: 18.0),
+                ),
+                // onSaved: (value) => selectedDate  = value,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+      ],
+    );
   }
 }
