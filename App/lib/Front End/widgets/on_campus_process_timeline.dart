@@ -7,6 +7,7 @@ class ProcessTimeline extends StatelessWidget {
 
   const ProcessTimeline({Key? key, required this.processTimeline})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,10 +96,10 @@ class Content extends StatelessWidget {
     required this.dates,
   }) : super(key: key);
 
-  final List<String> names;
+  final List names;
   final int i;
-  final List<String> descriptions;
-  final List<String> dates;
+  final List descriptions;
+  final List dates;
 
   @override
   Widget build(BuildContext context) {

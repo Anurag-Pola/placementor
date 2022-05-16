@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import './faq_tiles_class.dart';
 
 class FAQTiles extends StatefulWidget {
-  final List<FAQTilesClass> faqTilesInfo;
-
   const FAQTiles({
     Key? key,
     required this.height,
-    required this.faqTilesInfo,
+    required this.faqs,
   }) : super(key: key);
 
   final double height;
+  final List<FAQTilesClass> faqs;
+
   @override
   State<FAQTiles> createState() => _FAQTilesState();
 }
@@ -18,7 +18,7 @@ class FAQTiles extends StatefulWidget {
 class _FAQTilesState extends State<FAQTiles> {
   @override
   Widget build(BuildContext context) {
-    final List<bool> _isOpen = List.filled(widget.faqTilesInfo.length, false);
+    final List<bool> _isOpen = List.filled(widget.faqs.length, false);
 
     return Container(
       width: double.infinity,
@@ -55,7 +55,7 @@ class _FAQTilesState extends State<FAQTiles> {
                     expansionCallback: (i, isOpen) => setState(() {
                           _isOpen[i] = !_isOpen[i];
                         }),
-                    children: widget.faqTilesInfo.map<ExpansionPanel>((e) {
+                    children: widget.faqs.map<ExpansionPanel>((e) {
                       return ExpansionPanel(
                         canTapOnHeader: true,
                         headerBuilder: (context, isOpen) {
@@ -82,7 +82,7 @@ class _FAQTilesState extends State<FAQTiles> {
                             ),
                           ),
                         ),
-                        isExpanded: _isOpen[widget.faqTilesInfo.indexOf(e)],
+                        isExpanded: _isOpen[widget.faqs.indexOf(e)],
                       );
                     }).toList()),
               ),

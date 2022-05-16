@@ -68,17 +68,22 @@ class OnCampusComapnyScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         child: MyExpandableCard(
                           heading: "ABOUT THE FIRM",
                           content: company.aboutTheFirm,
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         child: MyExpandableCard(
-                            heading: "JOB DESCRIPTION",
-                            content: company.jobDescription),
+                          heading: "JOB DESCRIPTION",
+                          content: company.jobDescription,
+                        ),
                       ),
                       Container(
                         width: double.infinity,
@@ -122,31 +127,39 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         child: ProcessTimeline(
                           processTimeline: company.processTimeline,
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         child: PrevioslyPlacedContactTiles(
                           height: height,
                           previoslyPlacedContactDetailsList:
-                              company.previouslyPlacedContactDetails,
+                              company.previouslyPlacedContacts,
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         child: ExperienceTiles(
                           height: height,
-                          experienceTilesInfo: company.experienceTilesInfo,
+                          experienceTilesInfo: company.experiences,
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         child: FAQTiles(
                           height: height,
-                          faqTilesInfo: company.faqTilesInfo,
+                          faqs: company.faqs,
                         ),
                       ),
                       const SizedBox(height: 60),

@@ -39,6 +39,7 @@ class OffCampusComapnyScreen extends StatelessWidget {
             children: const [
               OnCampusHeading(
                 companyName: "Google",
+                roleName: "Engineer",
               ),
               SizedBox(height: 20),
               MyExpandableCard(

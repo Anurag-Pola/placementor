@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:placementor_tnp/screens/on_campus_company_form.dart';
 
-import '../../widgets/on_campus_process_timeline.dart';
-import '../../widgets/on_campus_experience_tiles.dart';
-import '../../widgets/on_campus_faq_tiles.dart';
-import '../../widgets/on_campus_my_expandable_card.dart';
-import '../../widgets/on_campus_heading.dart';
-import '../../widgets/on_campus_previosly_placed_contact_tiles.dart';
-import '../../widgets/company_class.dart';
+import '../widgets/on_campus_process_timeline.dart';
+import '../widgets/on_campus_experience_tiles.dart';
+import '../widgets/on_campus_faq_tiles.dart';
+import '../widgets/on_campus_my_expandable_card.dart';
+import '../widgets/on_campus_heading.dart';
+import '../widgets/on_campus_previosly_placed_contact_tiles.dart';
+import '../widgets/company_class.dart';
 
 final firestoreInstance = FirebaseFirestore.instance.collection('Companies');
 
@@ -63,7 +63,10 @@ class OnCampusComapnyScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              OnCampusHeading(companyName: company.companyName),
+              OnCampusHeading(
+                companyName: company.companyName,
+                roleName: company.roleName,
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -71,16 +74,24 @@ class OnCampusComapnyScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      MyExpandableCard(
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: MyExpandableCard(
                           heading: "ABOUT THE FIRM",
-                          content: company.aboutTheFirm),
-                      const SizedBox(
-                        height: 20,
+                          content: company.aboutTheFirm,
+                        ),
                       ),
-                      MyExpandableCard(
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: MyExpandableCard(
                           heading: "JOB DESCRIPTION",
-                          content: company.jobDescription),
-                      const SizedBox(height: 20),
+                          content: company.jobDescription,
+                        ),
+                      ),
                       Container(
                         width: double.infinity,
                         color: Colors.white,
@@ -121,29 +132,37 @@ class OnCampusComapnyScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: ProcessTimeline(
+                          processTimeline: company.processTimeline,
+                        ),
                       ),
-                      ProcessTimeline(
-                        processTimeline: company.processTimeline,
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: PrevioslyPlacedContactTiles(
+                          height: height,
+                          previoslyPlacedContactDetailsList:
+                              company.previouslyPlacedContacts,
+                        ),
                       ),
-                      const SizedBox(height: 20),
-                      PrevioslyPlacedContactTiles(
-                        height: height,
-                        previoslyPlacedContactDetailsList:
-                            company.previouslyPlacedContacts,
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: ExperienceTiles(
+                          height: height,
+                          experienceTilesInfo: company.experiences,
+                        ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ExperienceTiles(
-                        height: height,
-                        experienceTilesInfo: company.experiences,
-                      ),
-                      const SizedBox(height: 20),
-                      FAQTiles(
-                        height: height,
-                        faqs: company.faqs,
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: FAQTiles(
+                          height: height,
+                          faqs: company.faqs,
+                        ),
                       ),
                       const SizedBox(height: 60),
                     ],

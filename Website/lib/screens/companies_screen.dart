@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../screens/on_campus_company_form.dart';
-import '../../widgets/company_class.dart';
-// import '../../widgets/experience_tile_class.dart';
-// import '../../widgets/faq_tiles_class.dart';
-// import '../../widgets/previosly_placed_contact_details_class.dart';
-// import '../../widgets/process_timeline_class.dart';
-
-import '../../widgets/on_campus_company_tile.dart';
-import '../../widgets/off_campus_company_tile.dart';
+import '../widgets/company_class.dart';
+import '../widgets/on_campus_company_tile.dart';
+import '../widgets/off_campus_company_tile.dart';
 
 // const companies = [
 //   Company(
@@ -590,6 +585,19 @@ import '../../widgets/off_campus_company_tile.dart';
 
 List<Company> searched = [];
 
+List<String> companyTypeList = ["Product", "Service"];
+List<String> roleTypeList = [
+  "Full Time",
+  "Internship",
+  "Internship + Full Time",
+  "Internship Based Full Time"
+];
+List<String> offerTypeList = ["On Campus", "Off Campus"];
+
+List<String> selectedCompanyTypeList = [];
+List<String> selectedRoleTypeList = [];
+List<String> selectedOfferTypeList = [];
+
 class CompaniesScreen extends StatefulWidget {
   const CompaniesScreen({Key? key}) : super(key: key);
 
@@ -638,7 +646,6 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
           }
           List<Company> companies =
               snapshot.data!.docs.map((doc) => doc.data()).toList();
-          print(companies);
           return Scaffold(
             floatingActionButton: Container(
               margin: const EdgeInsets.all(10),
@@ -899,9 +906,16 @@ class SearchBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          GestureDetector(
-            child: const Icon(Icons.filter_list_rounded),
-            onTap: () {},
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              child: const Icon(Icons.filter_list_rounded),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => const FilterAlertDialog());
+              },
+            ),
           )
         ],
       ),
@@ -924,6 +938,110 @@ class SearchBar extends StatelessWidget {
         ],
         color: Colors.white,
       ),
+    );
+  }
+}
+
+class FilterAlertDialog extends StatelessWidget {
+  const FilterAlertDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Filter"),
+      content: Column(
+        children: [
+          const Text("Company Type"),
+          Filter(
+            chipsList: companyTypeList
+                .map((e) => Chip(label: e, isSelected: false))
+                .toList(),
+            selectedChips: selectedCompanyTypeList,
+          ),
+          const SizedBox(height: 10),
+          const Text("Role Type"),
+          Filter(
+            chipsList: roleTypeList
+                .map((e) => Chip(label: e, isSelected: false))
+                .toList(),
+            selectedChips: selectedRoleTypeList,
+          ),
+          const SizedBox(height: 10),
+          const Text("Offer Type"),
+          Filter(
+            chipsList: offerTypeList
+                .map((e) => Chip(label: e, isSelected: false))
+                .toList(),
+            selectedChips: selectedOfferTypeList,
+          ),
+          const SizedBox(height: 10),
+          const Text(""),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: const Text("Close"),
+          onPressed: () => Navigator.pop(context),
+        )
+      ],
+    );
+  }
+}
+
+class Chip {
+  String label;
+  bool isSelected;
+  Chip({required this.label, required this.isSelected});
+}
+
+class Filter extends StatefulWidget {
+  const Filter({Key? key, required this.chipsList, required this.selectedChips})
+      : super(key: key);
+
+  final List<Chip> chipsList;
+  final List<String> selectedChips;
+
+  @override
+  State<Filter> createState() => _Filter();
+}
+
+class _Filter extends State<Filter> {
+  List<Widget> chips() {
+    List<Widget> chips = [];
+    for (int i = 0; i < widget.chipsList.length; i++) {
+      Widget item = Container(
+        padding: const EdgeInsets.only(left: 10, right: 5),
+        margin: const EdgeInsets.all(5),
+        child: FilterChip(
+          label: Text(widget.chipsList[i].label),
+          labelStyle: const TextStyle(color: Colors.white),
+          selectedColor: Colors.green,
+          selected: widget.chipsList[i].isSelected,
+          onSelected: (bool value) {
+            setState(() {
+              widget.chipsList[i].isSelected = value;
+              if (value) {
+                widget.selectedChips.add(widget.chipsList[i].label);
+              } else {
+                widget.selectedChips.remove(widget.chipsList[i].label);
+              }
+            });
+          },
+        ),
+      );
+      chips.add(item);
+    }
+    return chips;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      direction: Axis.horizontal,
+      children: chips(),
     );
   }
 }

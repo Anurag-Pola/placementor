@@ -46,8 +46,6 @@ class Company {
                   email: e.value["email"],
                   phone: e.value["phone"],
                   linkedin: e.value["linkedin"]))
-              // .fromJson(
-              //     e.value as Map<String, Object?>))
               .toList(),
           experiences: (json['experiences'] as Map)
               .entries

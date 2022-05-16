@@ -102,7 +102,7 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
           ),
           // const SizedBox(height: 5),
           Text(
-            previouslyPlacedContactDetails.batch,
+            previouslyPlacedContactDetails.rollNo,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xff252b42),
