@@ -17,7 +17,11 @@ final firebaseInstance =
 
 List<String> globalSkillset = [];
 ProcessTimelineClass globalProcessTimeline = const ProcessTimelineClass(
-    steps: [], names: [], dates: [], descriptions: []);
+  steps: [],
+  names: [],
+  dates: [],
+  descriptions: [],
+);
 List<PreviouslyPlacedContactDetailsClass> globalPreviouslyPlacedContacts = [];
 List<ExperienceTileClass> globalExperiences = [];
 List<FAQTilesClass> globalFaqs = [];
@@ -87,7 +91,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   late final TextEditingController _packageController =
       TextEditingController(text: widget.package);
 
-  late var lastdate = widget.lastDate.split('/').reversed.join('/');
+  late var lastdate = widget.lastDate.split('/').reversed.join('-');
   late DateTime selectedDate =
       widget.lastDate == "" ? DateTime.now() : DateTime.parse(lastdate);
   late TextEditingController lastDateToApplyController =

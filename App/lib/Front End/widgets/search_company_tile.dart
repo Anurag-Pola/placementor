@@ -84,7 +84,7 @@ class OnCampusCompanyTile extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: SizedBox(
                     child: Text(
-                      company.salary,
+                      company.package,
                       style: const TextStyle(
                         color: Color(0xff18191e),
                         fontSize: 12,
