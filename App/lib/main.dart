@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import './firebase_options.dart';
 import 'Front End/screens/login_screen.dart';
+import 'Front End/screens/companies_search_screen.dart';
 import 'Front End/screens/off_campus_company_screen.dart';
 import 'Front End/screens/to_do_screen.dart';
 import 'Front End/screens/tnp_coordinators_screen.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/tnpCoordinatorsPage': (context) => const TnPCoordinatorsScreen(),
         '/toDoListPage': (context) => const ToDoListScreen(),
         '/statusTrackerPage': (context) => const StatusTrackerScreen(),
+        '/companySearchPage': (context) => const CompaniesSearchScreen(),
       },
       home: IntroductionScreen(),
     );
