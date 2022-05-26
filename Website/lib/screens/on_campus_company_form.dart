@@ -42,7 +42,7 @@ class OnCampusCompanyForm extends StatefulWidget {
       this.jobDescription = "",
       this.lastDate = "",
       this.roleType = "",
-      this.package = "",
+      this.package = 0.0,
       this.skillset = const [],
       this.linkToApply = "",
       this.driveLink = "",
@@ -62,7 +62,7 @@ class OnCampusCompanyForm extends StatefulWidget {
   final List<ExperienceTileClass> experiences;
   final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String package;
+  final double package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;
@@ -89,7 +89,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   late final TextEditingController _jobDescriptionController =
       TextEditingController(text: widget.jobDescription);
   late final TextEditingController _packageController =
-      TextEditingController(text: widget.package);
+      TextEditingController(text: widget.package.toString());
 
   late var lastdate = widget.lastDate.split('/').reversed.join('-');
   late DateTime selectedDate =
@@ -146,7 +146,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                       left: paddingToElements, right: paddingToElements),
                   children: [
                     const Text(
-                      "Add a Company",
+                      "Add an On-Campus Company",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -380,7 +380,7 @@ class Field extends StatelessWidget {
   const Field({
     Key? key,
     required this.text,
-    required this.validateFunction,
+    this.validateFunction,
     required this.textInputType,
     required this.textInputAction,
     required this.controller,
@@ -437,7 +437,7 @@ class Field extends StatelessWidget {
           ),
           TextFormField(
             validator: (value) {
-              return validateFunction!(value);
+              return validateFunction == null ? validateFunction!(value) : true;
             },
             decoration: textFormFieldDecoration,
             autocorrect: true,
@@ -533,7 +533,7 @@ class ComplexField extends StatefulWidget {
   const ComplexField({
     Key? key,
     required this.text,
-    required this.validateFunction,
+    this.validateFunction,
     required this.options,
     required this.optionsFor,
     this.expand = false,
@@ -785,7 +785,9 @@ class _ComplexFieldState extends State<ComplexField> {
           ),
           TextFormField(
             validator: (value) {
-              return widget.validateFunction!(value);
+              return widget.validateFunction == null
+                  ? widget.validateFunction!(value)
+                  : true;
             },
             decoration: textFormFieldDecoration,
             autocorrect: true,

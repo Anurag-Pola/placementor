@@ -11,6 +11,8 @@ import './screens/login_screen.dart';
 import './screens/off_campus_company_screen.dart';
 import './screens/on_campus_company_screen.dart';
 import './screens/manage_users.dart';
+import './screens/resources_screen.dart';
+import 'screens/off_campus_opportunities_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +47,9 @@ class MyApp extends StatelessWidget {
         '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
         '/offCampusCompanyPage': (context) => const OffCampusComapnyScreen(),
         '/newsfeed': (context) => const NewsfeedScreen(),
+        '/resources': (context) => const ResourcesScreen(),
+        '/offCampusOpportunities': (context) =>
+            const OffCampusOpportunitiesScreen(),
       },
     );
   }

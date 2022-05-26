@@ -141,9 +141,12 @@ class _RaiseTicketScreenState extends State<RaiseTicketScreen> {
                 child: InkWell(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      tickets.add({
+                      var timestamp =
+                          DateTime.now().millisecondsSinceEpoch.toString();
+                      tickets.doc(timestamp).set({
                         'title': _titleController.text,
                         'description': _descriptionController.text,
+                        'timestamp': timestamp,
                       });
                       _titleController.clear();
                       _descriptionController.clear();

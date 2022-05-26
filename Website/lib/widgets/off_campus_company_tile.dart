@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 
 class OffCampusCompanyTile extends StatelessWidget {
-  const OffCampusCompanyTile({Key? key}) : super(key: key);
+  final String timestamp;
+  final String companyName;
+  final String roleName;
+  final String description;
+  final String linkToApply;
+
+  const OffCampusCompanyTile({
+    Key? key,
+    required this.timestamp,
+    required this.companyName,
+    required this.roleName,
+    required this.description,
+    required this.linkToApply,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/offCampusCompanyPage');
+        Navigator.pushNamed(context, '/offCampusCompanyPage', arguments: {
+          "companyName": companyName,
+          "roleName": roleName,
+          "description": description,
+          "linkToApply": linkToApply,
+          "timestamp": timestamp,
+        });
       },
       child: Container(
         width: 115,
@@ -43,21 +62,21 @@ class OffCampusCompanyTile extends StatelessWidget {
               child: const FlutterLogo(size: 40),
             ),
             const SizedBox(height: 8),
-            const FittedBox(
+            FittedBox(
               child: Text(
-                "Analyst",
+                roleName,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
             ),
-            const Text(
-              "Google INC",
+            Text(
+              companyName,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: "Poppins",
                 fontWeight: FontWeight.w500,
                 fontSize: 12,

@@ -1,587 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../screens/on_campus_company_form.dart';
 import '../widgets/company_class.dart';
 import '../widgets/on_campus_company_tile.dart';
 import '../widgets/off_campus_company_tile.dart';
-
-// const companies = [
-//   Company(
-//     companyName: "Google",
-//     companyType: "Product",
-//     roleName: "Software Engineer",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Go", "R"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/21", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       //   [ProcessTimelineClass(step: 1, title: "Application", date: "28/11/20", description: "The application is to be done from the provided URL",),
-//       // ProcessTimelineClass(step: 2, title: "Online Test", date: "28/11/20", description: "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",),
-//       // ProcessTimelineClass(step: 3, title: "Interview", date: "28/11/20", description: "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",),
-//       // ProcessTimelineClass(step: 4, title: "Offer", date: "28/11/20", description: "An offer is given to the candidate",),
-//       // ]
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//       FAQTilesClass(
-//         question: "What does the company expect from student?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//       FAQTilesClass(
-//         question: "What does the company expect from studen?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//       FAQTilesClass(
-//         question: "What does the company expect from stud?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Amazon",
-//     companyType: "Product",
-//     roleName: "Manager",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and atmost 1 backlog",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Microsoft",
-//     companyType: "Product",
-//     roleName: "Junior Developer",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Facebook",
-//     companyType: "Product",
-//     roleName: "Senior Developer",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Apple",
-//     companyType: "Product",
-//     roleName: "Full Stack Developer",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Uber",
-//     companyType: "Service",
-//     roleName: "Vice President",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Netflix",
-//     companyType: "Service",
-//     roleName: "Data Analyst",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Tesla",
-//     companyType: "Product",
-//     roleName: "Data Scientist",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "JPMC",
-//     companyType: "Product",
-//     roleName: "Software Developer",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-//   Company(
-//     companyName: "Deloitte",
-//     companyType: "Service",
-//     roleName: "App Developer",
-//     aboutTheFirm:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     jobDescription:
-//         "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
-//     skillset: ["Python", "Flutter", "Dart", "Java", "C++"],
-//     processTimeline: ProcessTimelineClass(
-//       steps: ['1', '2', '3', '4'],
-//       dates: ["28/11/20", "28/11/20", "28/11/20", "28/11/20"],
-//       descriptions: [
-//         "The application is to be done from the provided URL",
-//         "A test is put on HackerRank platform which consists of 30 aptitude and 2 coding questions with a timeframe of 1 hour ",
-//         "An interiew is conducted for 1 hour which consists of technical,managerial and hr related questions",
-//         "Voila You got the job",
-//       ],
-//       names: ["Application", "Online Test", "Interview", "Results"],
-//     ),
-//     previouslyPlacedContacts: [
-//       PreviouslyPlacedContactDetailsClass(
-//           name: "Name",
-//           rollNo: "batch",
-//           email: "email",
-//           phone: "phone",
-//           linkedin: "linkedin"),
-//     ],
-//     experiences: [
-//       ExperienceTileClass(
-//         experience:
-//             "Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.Slate helps you see how many more days you need to work to reach your financial goal.",
-//         name: "Andrew Garfield",
-//         batch: "2018-2022",
-//         rollNo: "18071A1266",
-//       ),
-//     ],
-//     faqs: [
-//       FAQTilesClass(
-//         question: "What does the company expect from students?",
-//         answer:
-//             "Basic knowledge on mezzanine technologies like flutter, dart and firebase.",
-//         timestamp: "28/11/20",
-//       ),
-//     ],
-//     roleType: "Full Time",
-//     lastDate: "28/11/2022",
-//     package: "10 LPA",
-//     linkToApply: "www.google.com",
-//     driveLink: "www.google.com",
-//     eligibility: "CGPA -7.5 and no backlogs",
-//     offerType: "On Campus",
-//   ),
-// ];
+import 'off_campus_company_form.dart';
 
 List<Company> searched = [];
 
@@ -593,10 +18,19 @@ List<String> roleTypeList = [
   "Internship Based Full Time"
 ];
 List<String> offerTypeList = ["On Campus", "Off Campus"];
+List<String> companyNameList = ["Google", "JPMC"];
+List<String> roleNameList = ["Software Engineer", "Software Developer"];
+List<String> skillList = ["Python", "Java", "Flutter"];
 
 List<String> selectedCompanyTypeList = [];
 List<String> selectedRoleTypeList = [];
 List<String> selectedOfferTypeList = [];
+List<String> selectedCompanyNameList = [];
+List<String> selectedRoleNameList = [];
+List<String> selectedSkillList = [];
+
+double packageMax = 14;
+RangeValues _currentRangeValues = const RangeValues(0, 14);
 
 class CompaniesScreen extends StatefulWidget {
   const CompaniesScreen({Key? key}) : super(key: key);
@@ -630,242 +64,229 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return FutureBuilder<QuerySnapshot<Company>>(
-        future: FirebaseFirestore.instance
-            .collection('Companies')
-            .withConverter<Company>(
-              fromFirestore: (snapshot, _) =>
-                  Company.fromJson(snapshot.data()!),
-              toFirestore: (company, _) => company.toJson(),
-            )
-            .get(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) return const Text('Something went wrong');
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          List<Company> companies =
-              snapshot.data!.docs.map((doc) => doc.data()).toList();
-          return Scaffold(
-            floatingActionButton: Container(
-              margin: const EdgeInsets.all(10),
-              height: 40.0,
-              width: 40.0,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x3f000000),
-                    blurRadius: 4,
-                    offset: Offset(0, 4),
-                  ),
+    return FutureBuilder<QuerySnapshot>(
+      future: toggleValue
+          ? FirebaseFirestore.instance
+              .collection('Companies')
+              .withConverter<Company>(
+                fromFirestore: (snapshot, _) =>
+                    Company.fromJson(snapshot.data()!),
+                toFirestore: (company, _) => company.toJson(),
+              )
+              .get()
+          : FirebaseFirestore.instance.collection('OffCampusCompanies').get(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) return const Text('Something went wrong');
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        List companies = snapshot.data!.docs.map((doc) => doc.data()).toList();
+        return Scaffold(
+          floatingActionButton: SpeedDial(
+            icon: Icons.add,
+            activeIcon: Icons.close,
+            spacing: 3,
+            childPadding: const EdgeInsets.all(5),
+            spaceBetweenChildren: 4,
+            overlayColor: Colors.black,
+            overlayOpacity: 0.5,
+            heroTag: 'speed-dial-hero-tag',
+            elevation: 8.0,
+            children: [
+              SpeedDialChild(
+                  child: const Icon(Icons.fort_rounded),
+                  backgroundColor: Colors.deepOrange,
+                  foregroundColor: Colors.white,
+                  label: 'Off Campus',
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OffCampusCompanyForm(),
+                      ),
+                    );
+                  }),
+              SpeedDialChild(
+                  child: const Icon(Icons.apartment_rounded),
+                  backgroundColor: Colors.deepOrange,
+                  foregroundColor: Colors.white,
+                  label: 'On Campus',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OnCampusCompanyForm(),
+                      ),
+                    );
+                  }),
+            ],
+          ),
+          backgroundColor: const Color(0xFFF7F9FC),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Spacer(),
+                  Switch(
+                      activeThumbImage:
+                          const AssetImage('assets/Images/login_pic.png'),
+                      mouseCursor: SystemMouseCursors.click,
+                      value: toggleValue,
+                      onChanged: (value) {
+                        setState(() {
+                          toggleValue = !toggleValue;
+                        });
+                      })
                 ],
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Color(0xff925ffc),
-                    Color(0xff3b57ff),
-                  ],
-                ),
               ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OnCampusCompanyForm(),
-                    ),
-                  );
+              SearchBar(
+                controller: myController,
+                width: width,
+                onChanged: (i) {
+                  searched = (companies as List<Company>)
+                      .where((x) =>
+                          x.companyName.contains(i) |
+                          x.companyName.toLowerCase().contains(i))
+                      .toList();
                 },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Icon(
-                      Icons.add_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ), // icon
-                    Text(
-                      "Add",
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.white,
-                      ),
-                    ), // text
-                  ],
-                ),
               ),
-            ),
-            backgroundColor: const Color(0xFFF7F9FC),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Spacer(),
-                    Switch(
-                        activeThumbImage:
-                            const AssetImage('assets/Images/login_pic.png'),
-                        mouseCursor: SystemMouseCursors.click,
-                        value: toggleValue,
-                        onChanged: (value) {
-                          setState(() {
-                            toggleValue = !toggleValue;
-                          });
-                        })
-                  ],
-                ),
-                SearchBar(
-                  controller: myController,
-                  width: width,
-                  onChanged: (i) {
-                    searched = companies
-                        .where((x) =>
-                            x.companyName.contains(i) |
-                            x.companyName.toLowerCase().contains(i))
-                        .toList();
-                  },
-                ),
-                toggleValue == true
-                    ? Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                              vertical: 5,
-                            ),
-                            child: Text(
-                              "On Campus",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.brown,
-                              ),
+              toggleValue == true
+                  ? Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                            vertical: 5,
+                          ),
+                          child: Text(
+                            "On Campus",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown,
                             ),
                           ),
-                          SizedBox(
-                            height: height - 200,
-                            child: GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 400,
-                                      childAspectRatio: 1.4,
-                                      crossAxisSpacing: 20,
-                                      mainAxisSpacing: 20),
-                              itemBuilder: (context, index) => myController
-                                      .text.isEmpty
-                                  ? MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: OnCampusCompanyTile(
-                                        id: companies[index].id,
-                                        companyName:
-                                            companies[index].companyName,
-                                        companyType:
-                                            companies[index].companyType,
-                                        roleName: companies[index].roleName,
-                                        roleType: companies[index].roleType,
-                                        aboutTheFirm:
-                                            companies[index].aboutTheFirm,
-                                        jobDescription:
-                                            companies[index].jobDescription,
-                                        skillset: companies[index].skillset
-                                            as List<String>,
-                                        processTimeline:
-                                            companies[index].processTimeline,
-                                        previouslyPlacedContacts:
-                                            companies[index]
-                                                .previouslyPlacedContacts,
-                                        experienceTilesInfo:
-                                            companies[index].experiences,
-                                        faqs: companies[index].faqs,
-                                        lastDate: companies[index].lastDate,
-                                        package: companies[index].package,
-                                        linkToApply:
-                                            companies[index].linkToApply,
-                                        driveLink: companies[index].driveLink,
-                                        eligibility:
-                                            companies[index].eligibility,
-                                        offerType: companies[index].offerType,
-                                      ),
-                                    )
-                                  : MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: OnCampusCompanyTile(
-                                        id: searched[index].id,
-                                        companyName:
-                                            searched[index].companyName,
-                                        companyType:
-                                            searched[index].companyType,
-                                        roleName: searched[index].roleName,
-                                        roleType: searched[index].roleType,
-                                        aboutTheFirm:
-                                            searched[index].aboutTheFirm,
-                                        jobDescription:
-                                            searched[index].jobDescription,
-                                        skillset: searched[index].skillset
-                                            as List<String>,
-                                        processTimeline:
-                                            searched[index].processTimeline,
-                                        previouslyPlacedContacts:
-                                            searched[index]
-                                                .previouslyPlacedContacts,
-                                        experienceTilesInfo:
-                                            searched[index].experiences,
-                                        faqs: searched[index].faqs,
-                                        lastDate: searched[index].lastDate,
-                                        package: searched[index].package,
-                                        linkToApply:
-                                            searched[index].linkToApply,
-                                        driveLink: searched[index].driveLink,
-                                        eligibility:
-                                            searched[index].eligibility,
-                                        offerType: searched[index].offerType,
-                                      ),
+                        ),
+                        SizedBox(
+                          height: height - 200,
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 400,
+                                    childAspectRatio: 1.4,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20),
+                            itemBuilder: (context, index) => myController
+                                    .text.isEmpty
+                                ? MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: OnCampusCompanyTile(
+                                      id: companies[index].id,
+                                      companyName: companies[index].companyName,
+                                      companyType: companies[index].companyType,
+                                      roleName: companies[index].roleName,
+                                      roleType: companies[index].roleType,
+                                      aboutTheFirm:
+                                          companies[index].aboutTheFirm,
+                                      jobDescription:
+                                          companies[index].jobDescription,
+                                      skillset: companies[index].skillset
+                                          as List<String>,
+                                      processTimeline:
+                                          companies[index].processTimeline,
+                                      previouslyPlacedContacts: companies[index]
+                                          .previouslyPlacedContacts,
+                                      experienceTilesInfo:
+                                          companies[index].experiences,
+                                      faqs: companies[index].faqs,
+                                      lastDate: companies[index].lastDate,
+                                      package: companies[index].package,
+                                      linkToApply: companies[index].linkToApply,
+                                      driveLink: companies[index].driveLink,
+                                      eligibility: companies[index].eligibility,
+                                      offerType: companies[index].offerType,
                                     ),
-                              itemCount: myController.text.isEmpty
-                                  ? companies.length
-                                  : searched.length,
+                                  )
+                                : MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: OnCampusCompanyTile(
+                                      id: searched[index].id,
+                                      companyName: searched[index].companyName,
+                                      companyType: searched[index].companyType,
+                                      roleName: searched[index].roleName,
+                                      roleType: searched[index].roleType,
+                                      aboutTheFirm:
+                                          searched[index].aboutTheFirm,
+                                      jobDescription:
+                                          searched[index].jobDescription,
+                                      skillset: searched[index].skillset
+                                          as List<String>,
+                                      processTimeline:
+                                          searched[index].processTimeline,
+                                      previouslyPlacedContacts: searched[index]
+                                          .previouslyPlacedContacts,
+                                      experienceTilesInfo:
+                                          searched[index].experiences,
+                                      faqs: searched[index].faqs,
+                                      lastDate: searched[index].lastDate,
+                                      package: searched[index].package,
+                                      linkToApply: searched[index].linkToApply,
+                                      driveLink: searched[index].driveLink,
+                                      eligibility: searched[index].eligibility,
+                                      offerType: searched[index].offerType,
+                                    ),
+                                  ),
+                            itemCount: myController.text.isEmpty
+                                ? companies.length
+                                : searched.length,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                            vertical: 5,
+                          ),
+                          child: Text(
+                            "Off Campus",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown,
                             ),
                           ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                              vertical: 5,
+                        ),
+                        SizedBox(
+                          height: height - 200,
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 250,
+                                    childAspectRatio: 1.3,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20),
+                            itemBuilder: (context, index) =>
+                                OffCampusCompanyTile(
+                              companyName: companies[index]["companyName"],
+                              roleName: companies[index]["roleName"],
+                              description: companies[index]["description"],
+                              linkToApply: companies[index]["linkToApply"],
+                              timestamp: companies[index]["timestamp"],
                             ),
-                            child: Text(
-                              "Off Campus",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.brown,
-                              ),
-                            ),
+                            itemCount: companies.length,
                           ),
-                          SizedBox(
-                            height: height - 200,
-                            child: GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 250,
-                                      childAspectRatio: 1.3,
-                                      crossAxisSpacing: 20,
-                                      mainAxisSpacing: 20),
-                              itemBuilder: (context, index) =>
-                                  const OffCampusCompanyTile(),
-                              itemCount: 6,
-                            ),
-                          ),
-                        ],
-                      ),
-              ],
-            ),
-          );
-        });
+                        ),
+                      ],
+                    ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -913,7 +334,7 @@ class SearchBar extends StatelessWidget {
               onTap: () {
                 showDialog(
                     context: context,
-                    builder: (context) => const FilterAlertDialog());
+                    builder: (context) => FilterAlertDialog());
               },
             ),
           )
@@ -942,15 +363,43 @@ class SearchBar extends StatelessWidget {
   }
 }
 
+const InputDecoration textFormFieldDecoration = InputDecoration(
+  errorStyle: TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w100,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+    borderSide: BorderSide(
+      color: Color(0xffe5e5e5),
+      width: 1,
+    ),
+  ),
+  contentPadding: EdgeInsets.all(18),
+  fillColor: Color(0xfff8f8f8),
+);
+
+const TextStyle textStyle = TextStyle(
+  color: Color(0xff252b42),
+  fontSize: 14,
+  fontFamily: "Poppins",
+  fontWeight: FontWeight.w600,
+);
+
 class FilterAlertDialog extends StatelessWidget {
-  const FilterAlertDialog({
+  FilterAlertDialog({
     Key? key,
   }) : super(key: key);
+
+  final TextEditingController _companyNameController = TextEditingController();
+  final TextEditingController _roleNameController = TextEditingController();
+  final TextEditingController _skillsetController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text("Filter"),
+      scrollable: true,
       content: Column(
         children: [
           const Text("Company Type"),
@@ -961,6 +410,9 @@ class FilterAlertDialog extends StatelessWidget {
             selectedChips: selectedCompanyTypeList,
           ),
           const SizedBox(height: 10),
+          const Divider(
+            color: Colors.black38,
+          ),
           const Text("Role Type"),
           Filter(
             chipsList: roleTypeList
@@ -969,6 +421,9 @@ class FilterAlertDialog extends StatelessWidget {
             selectedChips: selectedRoleTypeList,
           ),
           const SizedBox(height: 10),
+          const Divider(
+            color: Colors.black38,
+          ),
           const Text("Offer Type"),
           Filter(
             chipsList: offerTypeList
@@ -977,7 +432,50 @@ class FilterAlertDialog extends StatelessWidget {
             selectedChips: selectedOfferTypeList,
           ),
           const SizedBox(height: 10),
-          const Text(""),
+          const Divider(
+            color: Colors.black38,
+          ),
+          const Text("Company Name"),
+          LittleSearch(
+            controller: _companyNameController,
+            hintText: "Enter a Company Name",
+            chipsList: companyNameList,
+            selectedChipsList: selectedCompanyNameList,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            color: Colors.black38,
+          ),
+          const Text("Role Name"),
+          LittleSearch(
+            controller: _roleNameController,
+            hintText: "Enter a Role Name",
+            chipsList: roleNameList,
+            selectedChipsList: selectedRoleNameList,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            color: Colors.black38,
+          ),
+          const Text("Skillset"),
+          LittleSearch(
+            controller: _skillsetController,
+            hintText: "Enter the skill",
+            chipsList: skillList,
+            selectedChipsList: selectedSkillList,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            color: Colors.black38,
+          ),
+          const Text("Package Range (LPA)"),
+          const PackageSlider(),
         ],
       ),
       actions: [
@@ -986,6 +484,78 @@ class FilterAlertDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         )
       ],
+    );
+  }
+}
+
+class LittleSearch extends StatefulWidget {
+  const LittleSearch({
+    Key? key,
+    required TextEditingController controller,
+    required String hintText,
+    required List<String> chipsList,
+    required List<String> selectedChipsList,
+  })  : _controller = controller,
+        _hintText = hintText,
+        _chipsList = chipsList,
+        _selectedChipsList = selectedChipsList,
+        super(key: key);
+
+  final TextEditingController _controller;
+  final String _hintText;
+  final List<String> _chipsList;
+  final List<String> _selectedChipsList;
+
+  @override
+  State<LittleSearch> createState() => _LittleSearchState();
+}
+
+class _LittleSearchState extends State<LittleSearch> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget._hintText,
+            style: textStyle,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            onChanged: (value) {
+              setState(() {});
+            },
+            decoration: textFormFieldDecoration,
+            autocorrect: true,
+            controller: widget._controller,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Filter(
+            chipsList: widget._chipsList
+                .where((element) => element
+                    .toLowerCase()
+                    .contains(widget._controller.text.toLowerCase()))
+                .map((e) => Chip(label: e, isSelected: false))
+                .toList(),
+            selectedChips: widget._selectedChipsList,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1018,7 +588,9 @@ class _Filter extends State<Filter> {
           label: Text(widget.chipsList[i].label),
           labelStyle: const TextStyle(color: Colors.white),
           selectedColor: Colors.green,
-          selected: widget.chipsList[i].isSelected,
+          selected: widget.selectedChips.contains(widget.chipsList[i].label)
+              ? true
+              : false,
           onSelected: (bool value) {
             setState(() {
               widget.chipsList[i].isSelected = value;
@@ -1042,6 +614,33 @@ class _Filter extends State<Filter> {
       spacing: 8,
       direction: Axis.horizontal,
       children: chips(),
+    );
+  }
+}
+
+class PackageSlider extends StatefulWidget {
+  const PackageSlider({Key? key}) : super(key: key);
+
+  @override
+  State<PackageSlider> createState() => _PackageSliderState();
+}
+
+class _PackageSliderState extends State<PackageSlider> {
+  @override
+  Widget build(BuildContext context) {
+    return RangeSlider(
+      values: _currentRangeValues,
+      max: packageMax,
+      divisions: packageMax.toInt(),
+      labels: RangeLabels(
+        _currentRangeValues.start.round().toString(),
+        _currentRangeValues.end.round().toString(),
+      ),
+      onChanged: (RangeValues values) {
+        setState(() {
+          _currentRangeValues = values;
+        });
+      },
     );
   }
 }
