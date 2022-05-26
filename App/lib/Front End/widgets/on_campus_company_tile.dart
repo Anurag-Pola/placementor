@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import './experience_tile_class.dart';
-import './faq_tiles_class.dart';
-import './previosly_placed_contact_details_class.dart';
-import './process_timeline_class.dart';
-import './company_class.dart';
+import '../models/experience_tile_class.dart';
+import '../models/faq_tiles_class.dart';
+import '../models/previosly_placed_contact_details_class.dart';
+import '../models/process_timeline_class.dart';
+import '../models/company_class.dart';
 
 class OnCampusCompanyTile extends StatelessWidget {
   final String id;
@@ -20,7 +20,7 @@ class OnCampusCompanyTile extends StatelessWidget {
   final List<ExperienceTileClass> experienceTilesInfo;
   final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String package;
+  final double package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;
@@ -140,7 +140,7 @@ class OnCampusCompanyTile extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: SizedBox(
                     child: Text(
-                      package,
+                      '$package LPA',
                       style: const TextStyle(
                         color: Color(0xff18191e),
                         fontSize: 12,

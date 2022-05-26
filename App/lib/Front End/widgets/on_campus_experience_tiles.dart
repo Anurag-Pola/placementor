@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './experience_tile_class.dart';
+import '../models/experience_tile_class.dart';
 
 class ExperienceTiles extends StatelessWidget {
   final List<ExperienceTileClass> experienceTilesInfo;

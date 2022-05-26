@@ -1,8 +1,8 @@
-import './experience_tile_class.dart';
-import './faq_tiles_class.dart';
-import './previosly_placed_contact_details_class.dart';
+import 'experience_tile_class.dart';
+import 'faq_tiles_class.dart';
+import 'previosly_placed_contact_details_class.dart';
 
-import './process_timeline_class.dart';
+import 'process_timeline_class.dart';
 
 class Company {
   const Company({
@@ -58,7 +58,7 @@ class Company {
                   FAQTilesClass.fromJson(e.value as Map<String, Object?>))
               .toList(),
           lastDate: json['lastDate'] as String,
-          package: json['package'] as String,
+          package: double.parse(json['package'].toString()),
           linkToApply: json['linkToApply'] as String,
           driveLink: json['driveLink'] as String,
           eligibility: json['eligibility'] as String,
@@ -78,7 +78,7 @@ class Company {
   final List<ExperienceTileClass> experiences;
   final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String package;
+  final double package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;
@@ -122,5 +122,19 @@ class Company {
       'eligibility': eligibility,
       'offerType': offerType,
     };
+  }
+
+  String toSearchTypeString() {
+    return [
+      companyName,
+      companyType,
+      roleName,
+      roleType,
+      aboutTheFirm,
+      jobDescription,
+      skillset.join(' '),
+      eligibility,
+      offerType
+    ].join(' ');
   }
 }

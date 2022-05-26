@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './previosly_placed_contact_details_class.dart';
+import '../models/previosly_placed_contact_details_class.dart';
 
 class PrevioslyPlacedContactTiles extends StatelessWidget {
   final List<PreviouslyPlacedContactDetailsClass>

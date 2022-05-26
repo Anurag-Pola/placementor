@@ -6,7 +6,7 @@ import '../widgets/on_campus_faq_tiles.dart';
 import '../widgets/on_campus_my_expandable_card.dart';
 import '../widgets/on_campus_heading.dart';
 import '../widgets/on_campus_previosly_placed_contact_tiles.dart';
-import '../widgets/company_class.dart';
+import '../models/company_class.dart';
 
 class OnCampusComapnyScreen extends StatelessWidget {
   const OnCampusComapnyScreen({Key? key}) : super(key: key);

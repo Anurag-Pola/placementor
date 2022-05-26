@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:placementor/Front%20End/models/companies_metadata_class.dart';
 
-import '../widgets/company_class.dart';
+import '../models/company_class.dart';
 import '../widgets/on_campus_company_tile.dart';
 import '../widgets/off_campus_company_tile.dart';
-import '/companies_data.dart';
 import 'companies_search_screen.dart';
 
 List<Company> searched = [];
@@ -17,22 +17,41 @@ class CompaniesScreen extends StatefulWidget {
 }
 
 class _CompaniesScreenState extends State<CompaniesScreen> {
+  CompaniesMetadataClass? companiesMetadata;
+
+  Future<QuerySnapshot<Company>> _getCompaniesSetMetadata() async {
+    // var companiesMetadataObj = (await _getCompaniesMetadata()).data() as Map;
+    companiesMetadata = (await _getCompaniesMetadata()).data();
+    return FirebaseFirestore.instance
+        .collection('Companies')
+        .withConverter<Company>(
+          fromFirestore: (json, _) => Company.fromJson(json.data()!),
+          toFirestore: (company, _) => company.toJson(),
+        )
+        .get();
+  }
+
+  Future<DocumentSnapshot<CompaniesMetadataClass>> _getCompaniesMetadata() {
+    return FirebaseFirestore.instance
+        .collection('Metadata')
+        .doc('CompaniesMetadata')
+        // .get();
+        .withConverter<CompaniesMetadataClass>(
+            fromFirestore: (json, _) =>
+                CompaniesMetadataClass.fromJson(json.data()!),
+            toFirestore: (companyMetadata, _) => companyMetadata.toJson())
+        .get();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return FutureBuilder<QuerySnapshot<Company>>(
-        future: FirebaseFirestore.instance
-            .collection('Companies')
-            .withConverter<Company>(
-              fromFirestore: (snapshot, _) =>
-                  Company.fromJson(snapshot.data()!),
-              toFirestore: (company, _) => company.toJson(),
-            )
-            .get(),
+        future: _getCompaniesSetMetadata(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) return const Text('Something went wrong');
+          if (snapshot.hasError)
+            return Text('Something went wrong ${snapshot.error}');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -44,8 +63,9 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () =>
-                      Navigator.of(context).pushNamed('/companySearchPage'),
+                  onTap: () => Navigator.of(context).pushNamed(
+                      '/companySearchPage',
+                      arguments: [companies, companiesMetadata]),
                   child: Container(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

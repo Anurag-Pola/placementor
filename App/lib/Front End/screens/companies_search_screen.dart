@@ -1,4 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
+import 'package:placementor/Front%20End/models/company_class.dart';
+import 'package:placementor/Front%20End/models/companies_search_filter_class.dart';
+import 'package:placementor/Front%20End/screens/companies_screen.dart';
+import 'package:placementor/Front%20End/widgets/search_company_tile.dart';
+
+import '../models/companies_metadata_class.dart';
+import '../widgets/search_bar.dart';
+import '../widgets/search_filter.dart';
+
+CompaniesSearchFilter companiesSearchFilter = CompaniesSearchFilter();
+List<String> searchedCompaniesIndex = [];
+
+void refreshCompaniesSearchScreen() {
+  companiesSearchFilter = CompaniesSearchFilter();
+  searchedCompaniesIndex = [];
+}
 
 class CompaniesSearchScreen extends StatefulWidget {
   const CompaniesSearchScreen({Key? key}) : super(key: key);
@@ -9,6 +26,8 @@ class CompaniesSearchScreen extends StatefulWidget {
 
 class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
   final myController = TextEditingController();
+  Map<String, Company> companiesMap = {};
+  bool _searchInUse = false;
 
   @override
   void initState() {
@@ -29,83 +48,84 @@ class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final args = ModalRoute.of(context)!.settings.arguments as List;
+    final companies = args[0] as List<Company>;
+    final companiesMetadata = args[1] as CompaniesMetadataClass;
+    for (var company in companies) {
+      companiesMap[company.id] = company;
+    }
+    if (!companiesSearchFilter.lateVariablesInitialized) {
+      companiesSearchFilter.addCompaniesAndPackageMax(
+          companies, companiesMetadata.packageMax);
+    }
+    if (searchedCompaniesIndex.isEmpty &&
+        myController.text.trim().isEmpty &&
+        companiesSearchFilter.isEmpty) {
+      searchedCompaniesIndex = companies.map((company) => company.id).toList();
+    }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchBar(
-            controller: myController,
-            width: width,
-            onChanged: (i) {},
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  final TextEditingController controller;
-  final double width;
-  final Function onChanged;
-  const SearchBar(
-      {Key? key,
-      required this.controller,
-      required this.width,
-      required this.onChanged})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 30,
-            width: width * 0.8,
-            child: Center(
-              child: TextField(
-                controller: controller,
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      color: Color(0xffc4c4c4),
-                    ),
-                    contentPadding: EdgeInsets.only(bottom: 13),
-                    border: InputBorder.none,
-                    hintText: 'Enter a search term'),
-                onChanged: (value) => onChanged(value),
-              ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF7F9FC),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SearchBar(
+              companies: companies,
+              companiesMetadata: companiesMetadata,
+              companiesSearchFilter: companiesSearchFilter,
+              controller: myController,
+              width: width,
+              onFilterChanged: () {
+                setState(() {
+                  searchedCompaniesIndex =
+                      companiesSearchFilter.filterCompanies().keys.toList();
+                });
+              },
+              onSearchTextChanged: (searchText) {
+                setState(() {
+                  if (searchText.length >= 3) {
+                    Map<String, int> _weightedSearchMap = {};
+                    companiesSearchFilter
+                        .filterCompanies()
+                        .forEach((companyId, companySearchText) {
+                      int _weightedRatio =
+                          weightedRatio(searchText, companySearchText);
+                      if (_weightedRatio >= 50) {
+                        _weightedSearchMap[companyId] = _weightedRatio;
+                      }
+                    });
+                    var _weightedSearchList =
+                        _weightedSearchMap.entries.toList();
+                    _weightedSearchList
+                        .sort((a, b) => b.value.compareTo(a.value));
+                    searchedCompaniesIndex =
+                        _weightedSearchList.map((e) => e.key).toList();
+                  } else {
+                    searchedCompaniesIndex =
+                        companiesSearchFilter.filterCompanies().keys.toList();
+                  }
+                });
+              },
             ),
-          ),
-          const Spacer(),
-          GestureDetector(
-            child: const Icon(Icons.filter_list_rounded),
-            onTap: () {},
-          )
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 15,
-      ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 20,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x3f000000),
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-        color: Colors.white,
+            searchedCompaniesIndex.isEmpty
+                ? Center(
+                    child: Text("Sorry, no opportunities found!",
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontStyle: FontStyle.italic)),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: searchedCompaniesIndex.length,
+                    itemBuilder: (context, index) {
+                      return SearchCompanyTile(
+                          company:
+                              companiesMap[searchedCompaniesIndex[index]]!);
+                    },
+                  ),
+          ],
+        ),
       ),
     );
   }

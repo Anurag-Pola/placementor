@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/to_do_model.dart';
+import '../models/to_do_model.dart';
 import '../../Back End/Local Storage/local_database.dart';
 import 'package:sqflite/sqflite.dart';
 

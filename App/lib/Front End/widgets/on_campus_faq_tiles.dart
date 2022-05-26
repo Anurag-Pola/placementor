@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './faq_tiles_class.dart';
+import '../models/faq_tiles_class.dart';
 
 class FAQTiles extends StatefulWidget {
   const FAQTiles({

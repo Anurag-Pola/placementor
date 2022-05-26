@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import './process_timeline_class.dart';
+import '../models/process_timeline_class.dart';
 
 class ProcessTimeline extends StatelessWidget {
   final ProcessTimelineClass processTimeline;

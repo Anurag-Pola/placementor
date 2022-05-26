@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import './experience_tile_class.dart';
-import './faq_tiles_class.dart';
-import './previosly_placed_contact_details_class.dart';
-import './process_timeline_class.dart';
-import './company_class.dart';
+import '../models/experience_tile_class.dart';
+import '../models/faq_tiles_class.dart';
+import '../models/previosly_placed_contact_details_class.dart';
+import '../models/process_timeline_class.dart';
+import '../models/company_class.dart';
 
-class OnCampusCompanyTile extends StatelessWidget {
+class SearchCompanyTile extends StatelessWidget {
   final Company company;
 
-  const OnCampusCompanyTile({
+  const SearchCompanyTile({
     Key? key,
     required this.company,
   }) : super(key: key);
@@ -17,8 +17,8 @@ class OnCampusCompanyTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context)
-            .pushNamed('/onCampusCompanyPage', arguments: company);
+        // Navigator.of(context)
+        //     .pushNamed('/onCampusCompanyPage', arguments: company);
       },
       child: Container(
         child: Column(
@@ -73,25 +73,28 @@ class OnCampusCompanyTile extends StatelessWidget {
             ),
             Row(
               children: [
-                Chip(
-                  name: company.roleType,
-                ),
-                Chip(
-                  name: company.lastDate,
-                ),
+                if (company.roleType.isNotEmpty)
+                  Chip(
+                    name: company.roleType,
+                  ),
+                if (company.roleType.isNotEmpty)
+                  Chip(
+                    name: company.lastDate,
+                  ),
                 const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: SizedBox(
-                    child: Text(
-                      company.package,
-                      style: const TextStyle(
-                        color: Color(0xff18191e),
-                        fontSize: 12,
+                if (company.package != 0.0)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: SizedBox(
+                      child: Text(
+                        '${company.package} LPA',
+                        style: const TextStyle(
+                          color: Color(0xff18191e),
+                          fontSize: 12,
+                        ),
                       ),
                     ),
-                  ),
-                )
+                  )
               ],
             ),
           ],
