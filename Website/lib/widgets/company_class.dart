@@ -58,7 +58,7 @@ class Company {
                   FAQTilesClass.fromJson(e.value as Map<String, Object?>))
               .toList(),
           lastDate: json['lastDate'] as String,
-          package: json['package'] as String,
+          package: json['package'] as double,
           linkToApply: json['linkToApply'] as String,
           driveLink: json['driveLink'] as String,
           eligibility: json['eligibility'] as String,
@@ -78,7 +78,7 @@ class Company {
   final List<ExperienceTileClass> experiences;
   final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String package;
+  final double package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;

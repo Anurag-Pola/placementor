@@ -28,6 +28,16 @@ class TabsScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, '/manage-users');
             }),
+        ListTile(
+            title: const Text("Resources"),
+            onTap: () {
+              Navigator.pushNamed(context, '/resources');
+            }),
+        ListTile(
+            title: const Text("Off Campus Opportunities"),
+            onTap: () {
+              Navigator.pushNamed(context, '/offCampusOpportunities');
+            }),
       ],
     ));
   }

@@ -1,13 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/on_campus_heading.dart';
 import '../../widgets/on_campus_my_expandable_card.dart';
+import 'off_campus_company_form.dart';
+
+final firestoreInstance =
+    FirebaseFirestore.instance.collection('OffCampusCompanies');
 
 class OffCampusComapnyScreen extends StatelessWidget {
   const OffCampusComapnyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final company =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -36,15 +44,14 @@ class OffCampusComapnyScreen extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Column(
-            children: const [
+            children: [
               OnCampusHeading(
-                companyName: "Google",
-                roleName: "Engineer",
+                companyName: company["companyName"]!,
+                roleName: company["roleName"]!,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               MyExpandableCard(
-                content:
-                    "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
+                content: company["description"]!,
                 heading: "DESCRIPTION",
               )
             ],
@@ -87,7 +94,145 @@ class OffCampusComapnyScreen extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
+          Positioned(
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              height: 40.0,
+              width: 40.0,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x3f000000),
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Color(0xff925ffc),
+                    Color(0xff3b57ff),
+                  ],
+                ),
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OffCampusCompanyForm(
+                        companyName: company["companyName"]!,
+                        roleName: company["roleName"]!,
+                        description: company["description"]!,
+                        linkToApply: company["linkToApply"]!,
+                        timestamp: company["timestamp"]!,
+                      ),
+                    ),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Icon(
+                      Icons.edit_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ), // icon
+                    Text(
+                      "Edit",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
+                    ), // text
+                  ],
+                ),
+              ),
+            ),
+            right: 0,
+            top: 0,
+          ),
+          Positioned(
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              height: 40.0,
+              width: 40.0,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x3f000000),
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Color.fromARGB(255, 252, 95, 95),
+                    Color.fromARGB(255, 255, 59, 59),
+                  ],
+                ),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Delete"),
+                      content: const Text("Are you sure you want to delete?"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "No",
+                            style: TextStyle(color: Colors.green),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            firestoreInstance
+                                .doc(company["timestamp"])
+                                .delete();
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ).then((value) => Navigator.pop(context));
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Icon(
+                      Icons.delete_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ), // icon
+                    Text(
+                      "Delete",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
+                    ), // text
+                  ],
+                ),
+              ),
+            ),
+            right: 0,
+            top: 50,
+          ),
         ],
       ),
     );

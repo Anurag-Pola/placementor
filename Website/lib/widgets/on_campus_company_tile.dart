@@ -20,7 +20,7 @@ class OnCampusCompanyTile extends StatelessWidget {
   final List<ExperienceTileClass> experienceTilesInfo;
   final List<FAQTilesClass> faqs;
   final String lastDate;
-  final String package;
+  final double package;
   final String linkToApply;
   final String driveLink;
   final String eligibility;
@@ -139,7 +139,7 @@ class OnCampusCompanyTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SizedBox(
                 child: Text(
-                  package,
+                  package.toString(),
                   style: const TextStyle(
                     color: Color(0xff18191e),
                     fontSize: 12,

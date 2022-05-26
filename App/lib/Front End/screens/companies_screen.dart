@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../widgets/company_class.dart';
 import '../widgets/on_campus_company_tile.dart';
 import '../widgets/off_campus_company_tile.dart';
-import '/companies_data.dart';
 import 'companies_search_screen.dart';
 
 List<Company> searched = [];

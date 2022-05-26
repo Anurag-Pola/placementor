@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class OffCampusFormScreen extends StatefulWidget {
@@ -21,9 +22,16 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference offCampusOpportunities =
+        FirebaseFirestore.instance.collection('offCampusOpportunities');
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     double height = MediaQuery.of(context).size.height - safeAreaHeight;
     double width = MediaQuery.of(context).size.width;
+    final TextEditingController _companyNameController =
+        TextEditingController();
+    final TextEditingController _roleNameController = TextEditingController();
+    final TextEditingController _packageController = TextEditingController();
+    final TextEditingController _urlController = TextEditingController();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -63,24 +71,24 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                       height: height * 0.027,
                     ),
                     EachQuestion(
-                      "Name of the Company",
+                      question: "Name of the Company",
                       textFormFieldValidator: validateFunction,
+                      controller: _companyNameController,
                     ),
                     EachQuestion(
-                      "Role",
+                      question: "Role",
                       textFormFieldValidator: validateFunction,
+                      controller: _roleNameController,
                     ),
                     EachQuestion(
-                      "Package (in LPA)",
+                      question: "Package (in LPA)",
                       textFormFieldValidator: validateFunction,
+                      controller: _packageController,
                     ),
                     EachQuestion(
-                      "URL through which we can apply",
+                      question: "URL through which we can apply",
                       textFormFieldValidator: validateFunction,
-                    ),
-                    EachQuestion(
-                      "Last date of application",
-                      textFormFieldValidator: validateFunction,
+                      controller: _urlController,
                     ),
                   ],
                 ),
@@ -89,8 +97,21 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                 child: InkWell(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
+                      var timestamp =
+                          DateTime.now().millisecondsSinceEpoch.toString();
+                      offCampusOpportunities.doc(timestamp).set({
+                        'companyName': _companyNameController.text,
+                        'roleName': _roleNameController.text,
+                        'package': _packageController.text,
+                        'url': _urlController.text,
+                        'timestamp': timestamp,
+                      });
+                      _companyNameController.clear();
+                      _roleNameController.clear();
+                      _packageController.clear();
+                      _urlController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
+                        const SnackBar(content: Text('Succesfully sent!')),
                       );
                     }
                   },
@@ -135,10 +156,15 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
 
 class EachQuestion extends StatelessWidget {
   final String question;
+  final TextEditingController controller;
   final Function textFormFieldValidator;
   final bool necessary;
-  const EachQuestion(this.question,
-      {required this.textFormFieldValidator, this.necessary = true, Key? key})
+  const EachQuestion(
+      {required this.question,
+      required this.controller,
+      required this.textFormFieldValidator,
+      this.necessary = true,
+      Key? key})
       : super(key: key);
 
   @override
@@ -165,6 +191,7 @@ class EachQuestion extends StatelessWidget {
           ),
           SizedBox(height: height * 0.014),
           TextFormField(
+            controller: controller,
             validator: (value) {
               return textFormFieldValidator(value);
             },
