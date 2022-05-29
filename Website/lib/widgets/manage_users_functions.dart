@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -10,115 +8,123 @@ import 'package:firebase_core/firebase_core.dart';
 import 'custom_user.dart';
 import '../firebase_options.dart';
 
-Future<FirebaseApp?> secondaryAppGetter() async {
+Future<Map<String, dynamic>> secondaryAppGetter() async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
   try {
-    print("Tried secondary app getter");
-    return await Firebase.initializeApp(
+    FirebaseApp _app = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
       name: "SecondaryApp",
     );
+    _response["body"] = _app;
   } on FirebaseException catch (e) {
     if (e.code == 'duplicate-app') {
-      print("Failed with duplicate app error");
-      return Firebase.app('SecondaryApp');
+      _response["body"] = Firebase.app('SecondaryApp');
     } else {
       rethrow;
     }
   } catch (e) {
-    print("Failed with error : $e");
+    _response["status"] = "ERROR";
+    _response["body"] = e;
   }
-  return null;
+  return _response;
 }
 
-Future<void> deleteSecondaryAppInstance() async {
+Future<Map<String, dynamic>> deleteSecondaryAppInstance() async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
   try {
-    print("Tried secondary app deletion");
     await Firebase.app('SecondaryApp').delete();
   } on FirebaseException catch (e) {
     if (e.code == 'app-not-found') {
-      print("Failed with app not found error");
+      _response["status"] = "ERROR";
+      _response["body"] = e.code;
     } else {
       rethrow;
     }
   } catch (e) {
-    print("Failed with error : $e");
+    _response["status"] = "ERROR";
+    _response["body"] = e;
   }
+  return _response;
 }
 
-Future<void> registerUserWithEmailPassword(
+Future<Map<String, dynamic>> registerStudentWithEmailPassword(
     QuerySnapshot<Object?> metadataQuerySnapshot,
     CollectionReference studentDataCollectionRef) async {
-  FirebaseApp? secondaryApp = await secondaryAppGetter();
-  if (secondaryApp == null) {
-    print("Failed to get secondary app");
-    return;
-  }
-  String createUsersAppScriptUrl = metadataQuerySnapshot.docs
-      .firstWhere((element) => element.id == "AppScriptUrl")
-      .get("createUsers")
-      .toString();
-  String createUsersSheetsUrl = metadataQuerySnapshot.docs
-      .firstWhere((element) => element.id == "SheetsUrl")
-      .get("createUsers")
-      .toString();
-  Uri createUsersWebAPI = Uri.parse(
-      "$createUsersAppScriptUrl?CreateUsersSheetUrl=$createUsersSheetsUrl");
-  print(createUsersWebAPI);
-  final response = await http.get(
-    createUsersWebAPI,
-    headers: {
-      "Accept": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers":
-          "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-      "Access-Control-Allow-Methods": "GET"
-    },
-  );
-  print("Response status: ${response.statusCode}");
-  print(response.toString());
-
-  if (response.statusCode == 200) {
-    print(response.body);
-    final body = json.decode(response.body);
-    if (body["status"] == "SUCCESS") {
-      for (var eachUser in body["data"]) {
-        CustomUser user = CustomUser(
-            name: eachUser["name"],
-            email: eachUser["email"],
-            password: eachUser["password"],
-            rollNo: eachUser["id"],
-            uid: null);
-        print("Registering User - ${user.toString()}");
-        user = await registerUser(user, secondaryApp);
-        if (user.uid == null) {
-          print("Cannot create user ${user.email}");
-        } else {
-          String studentCreateDBStatus = await addStudentToDB(
-              studentDataCollectionRef,
-              name: user.name!,
-              email: user.email,
-              uid: user.uid!,
-              rollNo: user.rollNo!);
-          print(studentCreateDBStatus);
-          if (studentCreateDBStatus == "SUCCESS") {
-            print(
-                "Successfully created user ${user.email} with user.uid = ${user.uid}");
-          } else {
-            print(
-                "ERROR : Cannot create user ${user.email} with user.uid = ${user.uid} in DB");
-          }
-        }
-      }
-    } else {
-      print("ERROR : ${body["message"]}");
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": []};
+  try {
+    Map<String, dynamic> _secondaryAppResponse = await secondaryAppGetter();
+    if (_secondaryAppResponse["status"] == "ERROR") {
+      throw (_secondaryAppResponse["body"]);
     }
-  } else {
-    print("ERROR : ${response.statusCode}-${response.reasonPhrase}");
+    FirebaseApp secondaryApp = _secondaryAppResponse["body"];
+    String createUsersAppScriptUrl = metadataQuerySnapshot.docs
+        .firstWhere((element) => element.id == "AppScriptUrl")
+        .get("createUsers")
+        .toString();
+    String createUsersSheetsUrl = metadataQuerySnapshot.docs
+        .firstWhere((element) => element.id == "SheetsUrl")
+        .get("createUsers")
+        .toString();
+    Uri createUsersWebAPI = Uri.parse(
+        "$createUsersAppScriptUrl?CreateUsersSheetUrl=$createUsersSheetsUrl");
+    final response = await http.get(
+      createUsersWebAPI,
+      headers: {
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers":
+            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+        "Access-Control-Allow-Methods": "GET"
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw ("${response.statusCode} - ${response.body}");
+    }
+    final body = json.decode(response.body);
+    if (body["status"] != "SUCCESS") {
+      throw ("${body["status"]} - $body");
+    }
+    for (var eachUser in body["data"]) {
+      CustomStudentUser user = CustomStudentUser(
+          name: eachUser["name"],
+          email: eachUser["email"],
+          password: eachUser["password"],
+          rollNo: eachUser["id"],
+          uid: null);
+      Map<String, dynamic> _responsePerUser = {
+        "status": "SUCCESS",
+        "body": "",
+        "user": user
+      };
+      try {
+        Map<String, dynamic> _resgisterUser =
+            await registerStudent(user, secondaryApp);
+        if (_resgisterUser["status"] == "ERROR") {
+          throw (_resgisterUser["body"]);
+        }
+        user = _resgisterUser["body"];
+        Map<String, dynamic> _studentCreateDB =
+            await addStudentToDB(studentDataCollectionRef, student: user);
+        if (_studentCreateDB["status"] == "ERROR") {
+          throw (_studentCreateDB["body"]);
+        }
+      } catch (e) {
+        _responsePerUser["status"] = "ERROR";
+        _responsePerUser["body"] = e;
+      }
+      _response["body"].add(_responsePerUser);
+    }
+  } catch (e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
   }
+  return _response;
 }
 
-Future<CustomUser> registerUser(
-    CustomUser customUser, FirebaseApp? secondaryApp) async {
+Future<Map<String, dynamic>> registerStudent(
+    CustomStudentUser customUser, FirebaseApp? secondaryApp) async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
   try {
     FirebaseAuth _auth = FirebaseAuth.instanceFor(app: secondaryApp!);
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -126,116 +132,117 @@ Future<CustomUser> registerUser(
       password: customUser.password!,
     );
     User? user = userCredential.user;
-    if (user != null) {
-      user.updateDisplayName(customUser.name);
-      customUser.uid = user.uid;
+    if (user == null) {
+      throw ("Cannot create user (returns null)");
     }
+
+    user.updateDisplayName(customUser.name);
+    customUser.uid = user.uid;
+
     _auth.signOut();
+    _response["body"] = customUser;
   } catch (e) {
-    print(e);
+    _response["status"] = "ERROR";
+    _response["body"] = e;
   }
-  return customUser;
+  return _response;
 }
 
-Future<String> addStudentToDB(
+Future<Map<String, dynamic>> addStudentToDB(
   CollectionReference studentDataCollectionRef, {
-  required String name,
-  required String email,
-  required String uid,
-  required String rollNo,
+  required CustomStudentUser student,
 }) {
-  return studentDataCollectionRef.doc(uid).set({
-    "name": name,
-    "email": email,
-    "uid": uid,
-    "rollNo": rollNo,
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
+  return studentDataCollectionRef.doc(student.uid!).set({
+    "name": student.name!,
+    "email": student.email,
+    "uid": student.uid!,
+    "rollNo": student.rollNo!,
   }).then((value) {
-    print("Student $rollNo created successfully on Database.");
-    return "SUCCESS";
+    return _response;
   }).catchError((e) {
-    print("ERROR : $e");
-    return "ERROR : $e";
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+    return _response;
   });
 }
 
-Future<String> deleteStudentFromDB(
-  CollectionReference studentDataCollectionRef, {
-  required String uid,
-}) {
-  return studentDataCollectionRef.doc(uid).delete().then((value) {
-    print("Student $uid deleted successfully on Database.");
-    return "SUCCESS";
-  }).catchError((e) {
-    print("ERROR : $e");
-    return "ERROR : $e";
-  });
-}
-
-Future<void> deleteUserWithEmail(QuerySnapshot<Object?> metadataQuerySnapshot,
+Future<Map<String, dynamic>> deleteStudentWithEmail(
+    QuerySnapshot<Object?> metadataQuerySnapshot,
     CollectionReference studentDataCollectionRef) async {
-  FirebaseApp? secondaryApp = await secondaryAppGetter();
-  if (secondaryApp == null) {
-    print("Failed to get secondary app");
-    return;
-  }
-  String deleteUsersAppScriptUrl = metadataQuerySnapshot.docs
-      .firstWhere((element) => element.id == "AppScriptUrl")
-      .get("deleteUsers")
-      .toString();
-  String deleteUsersSheetsUrl = metadataQuerySnapshot.docs
-      .firstWhere((element) => element.id == "SheetsUrl")
-      .get("deleteUsers")
-      .toString();
-  Uri deleteUsersWebAPI = Uri.parse(
-      "$deleteUsersAppScriptUrl?DeleteUsersSheetUrl=$deleteUsersSheetsUrl");
-  final response = await http.get(
-    deleteUsersWebAPI,
-    headers: {
-      "Accept": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers":
-          "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-      "Access-Control-Allow-Methods": "GET"
-    },
-  );
-  if (response.statusCode == 200) {
-    print(response.body);
-    final body = json.decode(response.body);
-    if (body["status"] == "SUCCESS") {
-      for (var eachUser in body["data"]) {
-        CustomUser user = CustomUser(
-            name: eachUser["name"],
-            email: eachUser["email"],
-            password: eachUser["password"],
-            rollNo: eachUser["id"],
-            uid: null);
-        print("Deleting User - ${user.email}");
-        var _afterDeleteResponse = await deleteUser(user, secondaryApp);
-        if (_afterDeleteResponse["isDeleted"] == true) {
-          user = _afterDeleteResponse["user"];
-          String studentDeleteDBStatus = await deleteStudentFromDB(
-              studentDataCollectionRef,
-              uid: user.uid!);
-          print(studentDeleteDBStatus);
-          if (studentDeleteDBStatus == "SUCCESS") {
-            print("Successfully deleted user ${user.email}");
-          } else {
-            print("ERROR : Cannot delete user ${user.email} from DB");
-          }
-        } else {
-          print("Cannot delete user ${user.email}");
-        }
-      }
-    } else {
-      print("ERROR : ${body["message"]}");
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": []};
+  try {
+    Map<String, dynamic> _secondaryAppResponse = await secondaryAppGetter();
+    if (_secondaryAppResponse["status"] == "ERROR") {
+      throw (_secondaryAppResponse["body"]);
     }
-  } else {
-    print("ERROR : ${response.statusCode}-${response.reasonPhrase}");
+    FirebaseApp secondaryApp = _secondaryAppResponse["body"];
+    String deleteUsersAppScriptUrl = metadataQuerySnapshot.docs
+        .firstWhere((element) => element.id == "AppScriptUrl")
+        .get("deleteUsers")
+        .toString();
+    String deleteUsersSheetsUrl = metadataQuerySnapshot.docs
+        .firstWhere((element) => element.id == "SheetsUrl")
+        .get("deleteUsers")
+        .toString();
+    Uri deleteUsersWebAPI = Uri.parse(
+        "$deleteUsersAppScriptUrl?DeleteUsersSheetUrl=$deleteUsersSheetsUrl");
+    final response = await http.get(
+      deleteUsersWebAPI,
+      headers: {
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers":
+            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+        "Access-Control-Allow-Methods": "GET"
+      },
+    );
+    if (response.statusCode != 200) {
+      throw ("${response.statusCode} - ${response.body}");
+    }
+    final body = json.decode(response.body);
+    if (body["status"] != "SUCCESS") {
+      throw ("${body["status"]} - $body");
+    }
+    for (var eachUser in body["data"]) {
+      CustomStudentUser user = CustomStudentUser(
+          name: eachUser["name"],
+          email: eachUser["email"],
+          password: eachUser["password"],
+          rollNo: eachUser["id"],
+          uid: null);
+      Map<String, dynamic> _responsePerUser = {
+        "status": "SUCCESS",
+        "body": "",
+        "user": user
+      };
+      try {
+        var _afterDeleteResponse = await deleteStudent(user, secondaryApp);
+        if (_afterDeleteResponse["status"] == "ERROR") {
+          throw (_afterDeleteResponse["body"]);
+        }
+        user = _afterDeleteResponse["body"];
+        Map<String, dynamic> studentDeleteDBMap =
+            await deleteUserFromDB(studentDataCollectionRef, uid: user.uid!);
+        if (studentDeleteDBMap["status"] == "ERROR") {
+          throw (studentDeleteDBMap["body"]);
+        }
+      } catch (e) {
+        _responsePerUser["status"] = "ERROR";
+        _responsePerUser["body"] = e;
+      }
+      _response["body"].add(_responsePerUser);
+    }
+  } catch (e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
   }
+  return _response;
 }
 
-Future<Map<String, dynamic>> deleteUser(
-    CustomUser customUser, FirebaseApp? secondaryApp) async {
+Future<Map<String, dynamic>> deleteStudent(
+    CustomStudentUser customUser, FirebaseApp? secondaryApp) async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
   try {
     FirebaseAuth _auth = FirebaseAuth.instanceFor(app: secondaryApp!);
     await _auth
@@ -246,9 +253,24 @@ Future<Map<String, dynamic>> deleteUser(
       await _auth.currentUser!.delete();
     });
     _auth.signOut();
-    return {"isDeleted": true, "user": customUser};
+    _response["body"] = customUser;
   } catch (e) {
-    print(e);
-    return {"isDeleted": false, "user": customUser, "error": e};
+    _response["status"] = "ERROR";
+    _response["body"] = e;
   }
+  return _response;
+}
+
+Future<Map<String, dynamic>> deleteUserFromDB(
+  CollectionReference usersDataCollectionRef, {
+  required String uid,
+}) {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
+  return usersDataCollectionRef.doc(uid).delete().then((value) {
+    return _response;
+  }).catchError((e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+    return _response;
+  });
 }

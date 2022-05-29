@@ -81,6 +81,12 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         List companies = snapshot.data!.docs.map((doc) => doc.data()).toList();
+        List offCampusCompanies = companies
+            .where((company) => company['offerType'] == 'Off Campus')
+            .toList();
+        List onCampusCompanies = companies
+            .where((company) => company['offerType'] == 'On Campus')
+            .toList();
         return Scaffold(
           floatingActionButton: SpeedDial(
             icon: Icons.add,
