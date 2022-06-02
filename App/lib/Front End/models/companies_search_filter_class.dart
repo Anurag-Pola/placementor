@@ -61,7 +61,7 @@ class CompaniesSearchFilter {
             companyNameFilter.contains(company.companyName);
       }
 
-      if (companyTypeFilter.isNotEmpty && company.companyType.isNotEmpty) {
+      if (companyTypeFilter.isNotEmpty && company.companyType!.isNotEmpty) {
         _companyTypeFilterPass =
             companyTypeFilter.contains(company.companyType);
       }
@@ -70,7 +70,7 @@ class CompaniesSearchFilter {
         _roleNameFilterPass = roleNameFilter.contains(company.roleName);
       }
 
-      if (roleTypeFilter.isNotEmpty && company.roleType.isNotEmpty) {
+      if (roleTypeFilter.isNotEmpty && company.roleType!.isNotEmpty) {
         _roleTypeFilterPass = roleTypeFilter.contains(company.roleType);
       }
 
@@ -78,9 +78,9 @@ class CompaniesSearchFilter {
         _offerTypeFilterPass = offerTypeFilter.contains(company.offerType);
       }
 
-      if (skillsetFilter.isNotEmpty && company.skillset.isNotEmpty) {
+      if (skillsetFilter.isNotEmpty && company.skillset!.isNotEmpty) {
         for (var skill in skillsetFilter) {
-          if (company.skillset.contains(skill)) {
+          if (company.skillset!.contains(skill)) {
             _skillsetFilterPass = true;
             break;
           }
@@ -88,8 +88,8 @@ class CompaniesSearchFilter {
       }
 
       if (packageFilter.isNotEmpty && company.package != null) {
-        _packageFilterPass = (packageFilter[0] <= company.package &&
-            packageFilter[1] >= company.package);
+        _packageFilterPass = (packageFilter[0] <= company.package! &&
+            packageFilter[1] >= company.package!);
       }
 
       bool _companyFilterPass = _companyNameFilterPass &&

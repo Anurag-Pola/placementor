@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
@@ -140,7 +139,7 @@ class _NewsfeedPostState extends State<NewsfeedPost> {
                                     : Icons.radio_button_checked_rounded),
                                 Text(
                                   isRead! ? "Read" : "Mark as Read",
-                                  style: TextStyle(fontSize: 10),
+                                  style: const TextStyle(fontSize: 10),
                                 ),
                               ],
                             ),

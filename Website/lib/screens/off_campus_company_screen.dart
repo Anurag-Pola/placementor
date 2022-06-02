@@ -1,20 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:placementor_tnp/widgets/company_class.dart';
 
 import '../../widgets/on_campus_heading.dart';
 import '../../widgets/on_campus_my_expandable_card.dart';
 import 'off_campus_company_form.dart';
 
-final firestoreInstance =
-    FirebaseFirestore.instance.collection('OffCampusCompanies');
+final firestoreInstance = FirebaseFirestore.instance.collection('Companies');
 
 class OffCampusComapnyScreen extends StatelessWidget {
   const OffCampusComapnyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final company =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    final company = ModalRoute.of(context)!.settings.arguments as Company;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,12 +45,12 @@ class OffCampusComapnyScreen extends StatelessWidget {
           Column(
             children: [
               OnCampusHeading(
-                companyName: company["companyName"]!,
-                roleName: company["roleName"]!,
+                companyName: company.companyName,
+                roleName: company.roleName,
               ),
               const SizedBox(height: 20),
               MyExpandableCard(
-                content: company["description"]!,
+                content: company.jobDescription,
                 heading: "DESCRIPTION",
               )
             ],
@@ -124,11 +123,11 @@ class OffCampusComapnyScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => OffCampusCompanyForm(
-                        companyName: company["companyName"]!,
-                        roleName: company["roleName"]!,
-                        description: company["description"]!,
-                        linkToApply: company["linkToApply"]!,
-                        timestamp: company["timestamp"]!,
+                        companyName: company.companyName,
+                        roleName: company.roleName,
+                        jobDescription: company.jobDescription,
+                        linkToApply: company.linkToApply,
+                        id: company.id,
                       ),
                     ),
                   );
@@ -197,9 +196,7 @@ class OffCampusComapnyScreen extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            firestoreInstance
-                                .doc(company["timestamp"])
-                                .delete();
+                            firestoreInstance.doc(company.id).delete();
                             Navigator.pop(context);
                           },
                           child: const Text(

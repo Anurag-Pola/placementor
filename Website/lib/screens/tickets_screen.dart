@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-FirebaseFirestore firestore = FirebaseFirestore.instance;
-
 class TicketsScreen extends StatefulWidget {
   const TicketsScreen({Key? key}) : super(key: key);
 
@@ -60,6 +58,49 @@ class _TicketsScreenState extends State<TicketsScreen> {
                               child: ListTile(
                                 title: Text(data['title']),
                                 subtitle: Text(data['description']),
+                                trailing: ElevatedButton(
+                                  child: const Text("Resolved"),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text("Are you sure?"),
+                                            content: const Text(
+                                                "This ticket will be deleted permanently as it is resolved!"),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                    color: Colors.green,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: const Text(
+                                                  "Delete",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  FirebaseFirestore.instance
+                                                      .collection('Tickets')
+                                                      .doc(document.id)
+                                                      .delete();
+                                                  Navigator.pop(context);
+                                                  setState(() {});
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                ),
                               ),
                               clipper: ShapeBorderClipper(
                                 shape: RoundedRectangleBorder(

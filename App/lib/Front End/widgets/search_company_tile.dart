@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/experience_tile_class.dart';
-import '../models/faq_tiles_class.dart';
-import '../models/previosly_placed_contact_details_class.dart';
-import '../models/process_timeline_class.dart';
 import '../models/company_class.dart';
 
 class SearchCompanyTile extends StatelessWidget {
@@ -73,13 +69,13 @@ class SearchCompanyTile extends StatelessWidget {
             ),
             Row(
               children: [
-                if (company.roleType.isNotEmpty)
+                if (company.roleType!.isNotEmpty)
                   Chip(
-                    name: company.roleType,
+                    name: company.roleType!,
                   ),
-                if (company.roleType.isNotEmpty)
+                if (company.roleType!.isNotEmpty)
                   Chip(
-                    name: company.lastDate,
+                    name: company.lastDate!,
                   ),
                 const Spacer(),
                 if (company.package != 0.0)

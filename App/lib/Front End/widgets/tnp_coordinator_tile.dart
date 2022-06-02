@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TnPCard extends StatelessWidget {
-  const TnPCard({Key? key}) : super(key: key);
+import '../models/tnp_coordinators_class.dart';
+
+class TnPCoordinatorTile extends StatelessWidget {
+  final TnPCoordinator tnpcoordinator;
+
+  const TnPCoordinatorTile({required this.tnpcoordinator, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +44,20 @@ class TnPCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          const Text(
-            "Name",
+          Text(
+            tnpcoordinator.name,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xff252b42),
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w700,
             ),
           ),
           // const SizedBox(height: 5),
-          const Text(
-            "Department",
+          Text(
+            tnpcoordinator.department,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xff252b42),
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w700,
@@ -63,11 +68,13 @@ class TnPCard extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () async {
-                  const url = 'tel:+91 9876543210';
+                  final url = 'tel:+91${tnpcoordinator.phone}';
                   if (await canLaunch(url)) {
                     await launch(url);
                   } else {
-                    throw 'Could not launch $url';
+                    SnackBar(
+                      content: Text('Could not launch $url'),
+                    );
                   }
                 },
                 icon: const Icon(
@@ -76,7 +83,14 @@ class TnPCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final url = 'mailto:${tnpcoordinator.phone}';
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
                 icon: const Icon(
                   Icons.mail_outline_rounded,
                   color: Color(0xFF1B7AF3),

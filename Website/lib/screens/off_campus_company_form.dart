@@ -1,22 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 
+import '../widgets/company_class.dart';
+
 final firebaseInstance =
-    FirebaseFirestore.instance.collection('OffCampusCompanies');
+    FirebaseFirestore.instance.collection('Companies').withConverter<Company>(
+          fromFirestore: (snapshot, _) => Company.fromJson(snapshot.data()!),
+          toFirestore: (company, _) => company.toJson(),
+        );
 
 class OffCampusCompanyForm extends StatefulWidget {
-  final String timestamp;
+  final String id;
   final String companyName;
   final String roleName;
-  final String description;
+  final String jobDescription;
   final String linkToApply;
 
   const OffCampusCompanyForm(
       {Key? key,
-      this.timestamp = "",
+      this.id = "",
       this.companyName = "",
       this.roleName = "",
-      this.description = "",
+      this.jobDescription = "",
       this.linkToApply = ""})
       : super(key: key);
   @override
@@ -32,15 +37,14 @@ class _OffCampusCompanyFormState extends State<OffCampusCompanyForm> {
   late final TextEditingController _roleNameController =
       TextEditingController(text: widget.roleName);
 
-  late final TextEditingController _descriptionController =
-      TextEditingController(text: widget.description);
+  late final TextEditingController _jobDescriptionController =
+      TextEditingController(text: widget.jobDescription);
 
   late final TextEditingController _linkToApplyController =
       TextEditingController(text: widget.linkToApply);
   double paddingToElements = 39;
 
   String? validateFunction(value) {
-    print(value);
     if (value == null || value.isEmpty) {
       return "Please enter some text";
     }
@@ -108,7 +112,7 @@ class _OffCampusCompanyFormState extends State<OffCampusCompanyForm> {
                     validateFunction: validateFunction,
                     textInputType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
-                    controller: _descriptionController,
+                    controller: _jobDescriptionController,
                   ),
                   Field(
                     text: "Link for Applying",
@@ -123,18 +127,17 @@ class _OffCampusCompanyFormState extends State<OffCampusCompanyForm> {
             InkWell(
               onTap: () async {
                 // if (_formKey.currentState!.validate()) {
-                print("company");
-                final company = {
+                final company = Company.fromJson({
                   "companyName": _companyNameController.text,
                   "roleName": _roleNameController.text,
-                  "description": _descriptionController.text,
+                  "jobDescription": _jobDescriptionController.text,
                   "linkToApply": _linkToApplyController.text,
-                  "timestamp": widget.timestamp == ""
-                      ? DateTime.now().microsecondsSinceEpoch.toString()
-                      : widget.timestamp
-                };
-
-                firebaseInstance.doc(company["timestamp"]).set(company);
+                  "id": widget.id == ""
+                      ? DateTime.now().millisecondsSinceEpoch.toString()
+                      : widget.id,
+                  "offerType": "Off Campus",
+                });
+                firebaseInstance.doc(company.id).set(company);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('🤘Done and Dusted!!✌️')),

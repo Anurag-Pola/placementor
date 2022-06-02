@@ -169,7 +169,7 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text('Vote'),
+                                      title: const Text('Vote'),
                                       content: const Text(
                                           "Are you sure you want vote for the option?"),
                                       actions: <Widget>[
@@ -220,7 +220,7 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
                             },
                             child: Text(
                               isVoted ? 'Voted' : 'Vote',
-                              style: TextStyle(fontSize: 10),
+                              style: const TextStyle(fontSize: 10),
                             ),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(

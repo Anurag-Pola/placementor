@@ -64,29 +64,28 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return FutureBuilder<QuerySnapshot>(
-      future: toggleValue
-          ? FirebaseFirestore.instance
-              .collection('Companies')
-              .withConverter<Company>(
-                fromFirestore: (snapshot, _) =>
-                    Company.fromJson(snapshot.data()!),
-                toFirestore: (company, _) => company.toJson(),
-              )
-              .get()
-          : FirebaseFirestore.instance.collection('OffCampusCompanies').get(),
+    return FutureBuilder<QuerySnapshot<Company>>(
+      future: FirebaseFirestore.instance
+          .collection('Companies')
+          .withConverter<Company>(
+            fromFirestore: (snapshot, _) => Company.fromJson(snapshot.data()!),
+            toFirestore: (company, _) => company.toJson(),
+          )
+          .get(),
       builder: (context, snapshot) {
         if (snapshot.hasError) return const Text('Something went wrong');
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        List companies = snapshot.data!.docs.map((doc) => doc.data()).toList();
-        List offCampusCompanies = companies
-            .where((company) => company['offerType'] == 'Off Campus')
+        List<Company> companies =
+            snapshot.data!.docs.map((doc) => doc.data()).toList();
+        List<Company> onCampusCompanies = companies
+            .where((element) => element.offerType == "On Campus")
             .toList();
-        List onCampusCompanies = companies
-            .where((company) => company['offerType'] == 'On Campus')
+        List<Company> offCampusCompanies = companies
+            .where((element) => element.offerType == "Off Campus")
             .toList();
+
         return Scaffold(
           floatingActionButton: SpeedDial(
             icon: Icons.add,
@@ -150,7 +149,7 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                 controller: myController,
                 width: width,
                 onChanged: (i) {
-                  searched = (companies as List<Company>)
+                  searched = (companies)
                       .where((x) =>
                           x.companyName.contains(i) |
                           x.companyName.toLowerCase().contains(i))
@@ -183,69 +182,41 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                                     childAspectRatio: 1.4,
                                     crossAxisSpacing: 20,
                                     mainAxisSpacing: 20),
-                            itemBuilder: (context, index) => myController
-                                    .text.isEmpty
-                                ? MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: OnCampusCompanyTile(
-                                      id: companies[index].id,
-                                      companyName: companies[index].companyName,
-                                      companyType: companies[index].companyType,
-                                      roleName: companies[index].roleName,
-                                      roleType: companies[index].roleType,
-                                      aboutTheFirm:
-                                          companies[index].aboutTheFirm,
-                                      jobDescription:
-                                          companies[index].jobDescription,
-                                      skillset: companies[index].skillset
-                                          as List<String>,
-                                      processTimeline:
-                                          companies[index].processTimeline,
-                                      previouslyPlacedContacts: companies[index]
-                                          .previouslyPlacedContacts,
-                                      experienceTilesInfo:
-                                          companies[index].experiences,
-                                      faqs: companies[index].faqs,
-                                      lastDate: companies[index].lastDate,
-                                      package: companies[index].package,
-                                      linkToApply: companies[index].linkToApply,
-                                      driveLink: companies[index].driveLink,
-                                      eligibility: companies[index].eligibility,
-                                      offerType: companies[index].offerType,
-                                    ),
-                                  )
-                                : MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: OnCampusCompanyTile(
-                                      id: searched[index].id,
-                                      companyName: searched[index].companyName,
-                                      companyType: searched[index].companyType,
-                                      roleName: searched[index].roleName,
-                                      roleType: searched[index].roleType,
-                                      aboutTheFirm:
-                                          searched[index].aboutTheFirm,
-                                      jobDescription:
-                                          searched[index].jobDescription,
-                                      skillset: searched[index].skillset
-                                          as List<String>,
-                                      processTimeline:
-                                          searched[index].processTimeline,
-                                      previouslyPlacedContacts: searched[index]
-                                          .previouslyPlacedContacts,
-                                      experienceTilesInfo:
-                                          searched[index].experiences,
-                                      faqs: searched[index].faqs,
-                                      lastDate: searched[index].lastDate,
-                                      package: searched[index].package,
-                                      linkToApply: searched[index].linkToApply,
-                                      driveLink: searched[index].driveLink,
-                                      eligibility: searched[index].eligibility,
-                                      offerType: searched[index].offerType,
-                                    ),
-                                  ),
-                            itemCount: myController.text.isEmpty
-                                ? companies.length
-                                : searched.length,
+                            itemBuilder: (context, index) => MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: OnCampusCompanyTile(
+                                id: onCampusCompanies[index].id,
+                                companyName:
+                                    onCampusCompanies[index].companyName,
+                                companyType:
+                                    onCampusCompanies[index].companyType,
+                                roleName: onCampusCompanies[index].roleName,
+                                roleType: onCampusCompanies[index].roleType,
+                                aboutTheFirm:
+                                    onCampusCompanies[index].aboutTheFirm,
+                                jobDescription:
+                                    onCampusCompanies[index].jobDescription,
+                                skillset: onCampusCompanies[index].skillset
+                                    as List<String>,
+                                processTimeline:
+                                    onCampusCompanies[index].processTimeline,
+                                previouslyPlacedContacts:
+                                    onCampusCompanies[index]
+                                        .previouslyPlacedContacts,
+                                experienceTilesInfo:
+                                    onCampusCompanies[index].experiences,
+                                faqs: onCampusCompanies[index].faqs,
+                                lastDate: onCampusCompanies[index].lastDate,
+                                package: onCampusCompanies[index].package,
+                                linkToApply:
+                                    onCampusCompanies[index].linkToApply,
+                                driveLink: onCampusCompanies[index].driveLink,
+                                eligibility:
+                                    onCampusCompanies[index].eligibility,
+                                offerType: onCampusCompanies[index].offerType,
+                              ),
+                            ),
+                            itemCount: onCampusCompanies.length,
                           ),
                         ),
                       ],
@@ -277,13 +248,16 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                                     mainAxisSpacing: 20),
                             itemBuilder: (context, index) =>
                                 OffCampusCompanyTile(
-                              companyName: companies[index]["companyName"],
-                              roleName: companies[index]["roleName"],
-                              description: companies[index]["description"],
-                              linkToApply: companies[index]["linkToApply"],
-                              timestamp: companies[index]["timestamp"],
+                              companyName:
+                                  offCampusCompanies[index].companyName,
+                              roleName: offCampusCompanies[index].roleName,
+                              jobDescription:
+                                  offCampusCompanies[index].jobDescription,
+                              linkToApply:
+                                  offCampusCompanies[index].linkToApply,
+                              id: offCampusCompanies[index].id,
                             ),
-                            itemCount: companies.length,
+                            itemCount: offCampusCompanies.length,
                           ),
                         ),
                       ],

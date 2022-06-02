@@ -9,21 +9,21 @@ import '../models/company_class.dart';
 class OnCampusCompanyTile extends StatelessWidget {
   final String id;
   final String companyName;
-  final String companyType;
+  final String? companyType;
   final String roleName;
-  final String roleType;
-  final String aboutTheFirm;
+  final String? roleType;
+  final String? aboutTheFirm;
   final String jobDescription;
-  final List<String> skillset;
-  final ProcessTimelineClass processTimeline;
-  final List<PreviouslyPlacedContactDetailsClass> previouslyPlacedContacts;
-  final List<ExperienceTileClass> experienceTilesInfo;
-  final List<FAQTilesClass> faqs;
-  final String lastDate;
-  final double package;
+  final List<String>? skillset;
+  final ProcessTimelineClass? processTimeline;
+  final List<PreviouslyPlacedContactDetailsClass>? previouslyPlacedContacts;
+  final List<ExperienceTileClass>? experienceTilesInfo;
+  final List<FAQTilesClass>? faqs;
+  final String? lastDate;
+  final double? package;
   final String linkToApply;
-  final String driveLink;
-  final String eligibility;
+  final String? driveLink;
+  final String? eligibility;
   final String offerType;
 
   const OnCampusCompanyTile({
@@ -177,7 +177,7 @@ class OnCampusCompanyTile extends StatelessWidget {
 }
 
 class Chip extends StatelessWidget {
-  final String name;
+  final String? name;
 
   const Chip({
     Key? key,
@@ -199,7 +199,7 @@ class Chip extends StatelessWidget {
       child: Opacity(
         opacity: 0.80,
         child: Text(
-          name,
+          name ?? "",
           textAlign: TextAlign.right,
           style: const TextStyle(
             color: Color(0xff18191e),

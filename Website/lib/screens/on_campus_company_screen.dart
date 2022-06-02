@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:placementor_tnp/screens/on_campus_company_form.dart';
 
+import '../screens/on_campus_company_form.dart';
 import '../widgets/on_campus_process_timeline.dart';
 import '../widgets/on_campus_experience_tiles.dart';
 import '../widgets/on_campus_faq_tiles.dart';
@@ -80,7 +80,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         ),
                         child: MyExpandableCard(
                           heading: "ABOUT THE FIRM",
-                          content: company.aboutTheFirm,
+                          content: company.aboutTheFirm!,
                         ),
                       ),
                       Container(
@@ -118,7 +118,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            for (var o in company.skillset)
+                            for (var o in company.skillset!)
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -137,7 +137,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                           top: 20,
                         ),
                         child: ProcessTimeline(
-                          processTimeline: company.processTimeline,
+                          processTimeline: company.processTimeline!,
                         ),
                       ),
                       Container(
@@ -147,21 +147,21 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         child: PrevioslyPlacedContactTiles(
                           height: height,
                           previoslyPlacedContactDetailsList:
-                              company.previouslyPlacedContacts,
+                              company.previouslyPlacedContacts!,
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 20),
                         child: ExperienceTiles(
                           height: height,
-                          experienceTilesInfo: company.experiences,
+                          experienceTilesInfo: company.experiences!,
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 20),
                         child: FAQTiles(
                           height: height,
-                          faqs: company.faqs,
+                          faqs: company.faqs!,
                         ),
                       ),
                       const SizedBox(height: 60),
@@ -244,22 +244,22 @@ class OnCampusComapnyScreen extends StatelessWidget {
                       builder: (context) => OnCampusCompanyForm(
                         id: company.id,
                         companyName: company.companyName,
-                        companyType: company.companyType,
+                        companyType: company.companyType!,
                         roleName: company.roleName,
-                        roleType: company.roleType,
+                        roleType: company.roleType!,
                         jobDescription: company.jobDescription,
-                        aboutTheFirm: company.aboutTheFirm,
-                        package: company.package,
+                        aboutTheFirm: company.aboutTheFirm!,
+                        package: company.package!,
                         linkToApply: company.linkToApply,
-                        driveLink: company.driveLink,
-                        lastDate: company.lastDate,
-                        eligibility: company.eligibility,
+                        driveLink: company.driveLink!,
+                        lastDate: company.lastDate!,
+                        eligibility: company.eligibility!,
                         skillset: company.skillset as List<String>,
                         previouslyPlacedContacts:
-                            company.previouslyPlacedContacts,
-                        experiences: company.experiences,
-                        faqs: company.faqs,
-                        processTimeline: company.processTimeline,
+                            company.previouslyPlacedContacts!,
+                        experiences: company.experiences!,
+                        faqs: company.faqs!,
+                        processTimeline: company.processTimeline!,
                       ),
                     ),
                   );
