@@ -1,8 +1,19 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/tnp_card.dart';
+import '../models/tnp_coordinators_class.dart';
+import '../widgets/tnp_coordinator_tile.dart';
+
+CollectionReference<TnPCoordinator> firebasefirestoreinstance =
+    FirebaseFirestore.instance
+        .collection('TnPCoordinators')
+        .withConverter<TnPCoordinator>(
+          fromFirestore: (snapshot, _) =>
+              TnPCoordinator.fromJson(snapshot.data()!),
+          toFirestore: (coordinator, _) => coordinator.toJson(),
+        );
 
 class TnPCoordinatorsScreen extends StatefulWidget {
   const TnPCoordinatorsScreen({Key? key}) : super(key: key);
@@ -42,62 +53,87 @@ class _TnPCoordinatorsScreenState extends State<TnPCoordinatorsScreen> {
             },
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: SizedBox(
-                height: 50,
-                child: Text(
-                  "T&P Coordinators",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w600,
+        body: FutureBuilder<QuerySnapshot<TnPCoordinator>>(
+          future: firebasefirestoreinstance.get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) return const Text('Something went wrong');
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            List<TnPCoordinator> tnpcoordinators =
+                snapshot.data!.docs.map((doc) => doc.data()).toList();
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: SizedBox(
+                    height: 50,
+                    child: Text(
+                      "T&P Coordinators",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 30,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x3f000000),
-                    blurRadius: 4,
-                    offset: Offset(0, 4),
+                Container(
+                  decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x3f000000),
+                        blurRadius: 4,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                    color: Colors.white,
                   ),
-                ],
-                color: Colors.white,
-              ),
-              height: 45,
-              child: ListView.builder(
-                itemCount: chips.length,
-                itemBuilder: (context, index) => TnPBranchChip(
-                  name: chips[index],
-                  radioOn: nameSwitchedOn == chips[index],
-                  onTap: () {
-                    setState(() {
-                      nameSwitchedOn = chips[index];
-                    });
-                  },
+                  height: 45,
+                  child: ListView.builder(
+                    itemCount: chips.length,
+                    itemBuilder: (context, index) => TnPBranchChip(
+                      name: chips[index],
+                      radioOn: nameSwitchedOn == chips[index],
+                      onTap: () {
+                        setState(() {
+                          nameSwitchedOn = chips[index];
+                        });
+                      },
+                    ),
+                    scrollDirection: Axis.horizontal,
+                  ),
                 ),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisExtent: 230,
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisExtent: 230,
+                    ),
+                    itemCount: nameSwitchedOn == "T&P"
+                        ? tnpcoordinators.length
+                        : tnpcoordinators
+                            .where((element) =>
+                                element.department == nameSwitchedOn)
+                            .length,
+                    itemBuilder: (context, index) => TnPCoordinatorTile(
+                      tnpcoordinator: nameSwitchedOn == "T&P"
+                          ? tnpcoordinators[index]
+                          : tnpcoordinators
+                              .where((element) =>
+                                  element.department == nameSwitchedOn)
+                              .toList()[index],
+                    ),
+                  ),
                 ),
-                itemCount: 11,
-                itemBuilder: (context, index) => const TnPCard(),
-              ),
-            )
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

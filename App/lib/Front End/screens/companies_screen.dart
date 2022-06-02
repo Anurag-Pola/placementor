@@ -5,7 +5,6 @@ import 'package:placementor/Front%20End/models/companies_metadata_class.dart';
 import '../models/company_class.dart';
 import '../widgets/on_campus_company_tile.dart';
 import '../widgets/off_campus_company_tile.dart';
-import 'companies_search_screen.dart';
 
 List<Company> searched = [];
 
@@ -46,123 +45,145 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return FutureBuilder<QuerySnapshot<Company>>(
-        future: _getCompaniesSetMetadata(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError)
-            return Text('Something went wrong ${snapshot.error}');
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          List<Company> companies =
-              snapshot.data!.docs.map((doc) => doc.data()).toList();
-          return Scaffold(
-            backgroundColor: const Color(0xFFF7F9FC),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed(
-                      '/companySearchPage',
-                      arguments: [companies, companiesMetadata]),
-                  child: Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12),
-                          child: Icon(Icons.search_rounded,
-                              color: Color.fromARGB(255, 111, 111, 111)),
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Search for an opportunity',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 111, 111, 111),
+    return RefreshIndicator(
+      onRefresh: () {
+        return Future(() {
+          setState(() {});
+        });
+      },
+      child: FutureBuilder<QuerySnapshot<Company>>(
+          future: _getCompaniesSetMetadata(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong ${snapshot.error}');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            List<Company> companies =
+                snapshot.data!.docs.map((doc) => doc.data()).toList();
+            List<Company> onCampusCompanies = companies
+                .where((element) => element.offerType == "On Campus")
+                .toList();
+            List<Company> offCampusCompanies = companies
+                .where((element) => element.offerType == "Off Campus")
+                .toList();
+            return Scaffold(
+              backgroundColor: const Color(0xFFF7F9FC),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pushNamed(
+                        '/companySearchPage',
+                        arguments: [companies, companiesMetadata]),
+                    child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Icon(Icons.search_rounded,
+                                color: Color.fromARGB(255, 111, 111, 111)),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Search for an opportunity',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 111, 111, 111),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 15,
-                    ),
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 20,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x3f000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => OnCampusCompanyTile(
-                      id: companies[index].id,
-                      companyName: companies[index].companyName,
-                      companyType: companies[index].companyType,
-                      roleName: companies[index].roleName,
-                      roleType: companies[index].roleType,
-                      aboutTheFirm: companies[index].aboutTheFirm,
-                      jobDescription: companies[index].jobDescription,
-                      skillset: companies[index].skillset as List<String>,
-                      processTimeline: companies[index].processTimeline,
-                      previouslyPlacedContacts:
-                          companies[index].previouslyPlacedContacts,
-                      experienceTilesInfo: companies[index].experiences,
-                      faqs: companies[index].faqs,
-                      lastDate: companies[index].lastDate,
-                      package: companies[index].package,
-                      linkToApply: companies[index].linkToApply,
-                      driveLink: companies[index].driveLink,
-                      eligibility: companies[index].eligibility,
-                      offerType: companies[index].offerType,
-                    ),
-                    itemCount: companies.length,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 15.0,
-                    vertical: 5,
-                  ),
-                  child: Text(
-                    "Off Campus Opportunities",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown,
+                        ],
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 15,
+                      ),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 20,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x3f000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.18,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) =>
-                        const OffCampusCompanyTile(),
-                    itemCount: 6,
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => OnCampusCompanyTile(
+                        id: onCampusCompanies[index].id,
+                        companyName: onCampusCompanies[index].companyName,
+                        companyType: onCampusCompanies[index].companyType,
+                        roleName: onCampusCompanies[index].roleName,
+                        roleType: onCampusCompanies[index].roleType,
+                        aboutTheFirm: onCampusCompanies[index].aboutTheFirm,
+                        jobDescription: onCampusCompanies[index].jobDescription,
+                        skillset:
+                            onCampusCompanies[index].skillset as List<String>,
+                        processTimeline:
+                            onCampusCompanies[index].processTimeline,
+                        previouslyPlacedContacts:
+                            onCampusCompanies[index].previouslyPlacedContacts,
+                        experienceTilesInfo:
+                            onCampusCompanies[index].experiences,
+                        faqs: onCampusCompanies[index].faqs,
+                        lastDate: onCampusCompanies[index].lastDate,
+                        package: onCampusCompanies[index].package,
+                        linkToApply: onCampusCompanies[index].linkToApply,
+                        driveLink: onCampusCompanies[index].driveLink,
+                        eligibility: onCampusCompanies[index].eligibility,
+                        offerType: onCampusCompanies[index].offerType,
+                      ),
+                      itemCount: onCampusCompanies.length,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 80,
-                )
-              ],
-            ),
-          );
-        });
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.0,
+                      vertical: 5,
+                    ),
+                    child: Text(
+                      "Off Campus Opportunities",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.18,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => OffCampusCompanyTile(
+                        companyName: offCampusCompanies[index].companyName,
+                        roleName: offCampusCompanies[index].roleName,
+                        jobDescription:
+                            offCampusCompanies[index].jobDescription,
+                        linkToApply: offCampusCompanies[index].linkToApply,
+                        id: offCampusCompanies[index].id,
+                      ),
+                      itemCount: offCampusCompanies.length,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 80,
+                  )
+                ],
+              ),
+            );
+          }),
+    );
   }
 }

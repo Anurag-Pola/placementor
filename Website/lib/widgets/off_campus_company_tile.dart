@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'company_class.dart';
+
 class OffCampusCompanyTile extends StatelessWidget {
-  final String timestamp;
+  final String id;
   final String companyName;
   final String roleName;
-  final String description;
+  final String jobDescription;
   final String linkToApply;
 
   const OffCampusCompanyTile({
     Key? key,
-    required this.timestamp,
+    required this.id,
     required this.companyName,
     required this.roleName,
-    required this.description,
+    required this.jobDescription,
     required this.linkToApply,
   }) : super(key: key);
 
@@ -21,13 +23,15 @@ class OffCampusCompanyTile extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/offCampusCompanyPage', arguments: {
-          "companyName": companyName,
-          "roleName": roleName,
-          "description": description,
-          "linkToApply": linkToApply,
-          "timestamp": timestamp,
-        });
+        Navigator.pushNamed(context, '/offCampusCompanyPage',
+            arguments: Company.fromJson({
+              "companyName": companyName,
+              "roleName": roleName,
+              "jobDescription": jobDescription,
+              "linkToApply": linkToApply,
+              "id": id,
+              "offerType": "Off Campus",
+            }));
       },
       child: Container(
         width: 115,

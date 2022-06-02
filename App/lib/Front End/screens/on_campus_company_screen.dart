@@ -73,7 +73,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         ),
                         child: MyExpandableCard(
                           heading: "ABOUT THE FIRM",
-                          content: company.aboutTheFirm,
+                          content: company.aboutTheFirm!,
                         ),
                       ),
                       Container(
@@ -112,7 +112,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            for (var o in company.skillset)
+                            for (var o in company.skillset!)
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -131,7 +131,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                           top: 20,
                         ),
                         child: ProcessTimeline(
-                          processTimeline: company.processTimeline,
+                          processTimeline: company.processTimeline!,
                         ),
                       ),
                       Container(
@@ -141,7 +141,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         child: PrevioslyPlacedContactTiles(
                           height: height,
                           previoslyPlacedContactDetailsList:
-                              company.previouslyPlacedContacts,
+                              company.previouslyPlacedContacts!,
                         ),
                       ),
                       Container(
@@ -150,7 +150,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         ),
                         child: ExperienceTiles(
                           height: height,
-                          experienceTilesInfo: company.experiences,
+                          experienceTilesInfo: company.experiences!,
                         ),
                       ),
                       Container(
@@ -159,7 +159,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         ),
                         child: FAQTiles(
                           height: height,
-                          faqs: company.faqs,
+                          faqs: company.faqs!,
                         ),
                       ),
                       const SizedBox(height: 60),

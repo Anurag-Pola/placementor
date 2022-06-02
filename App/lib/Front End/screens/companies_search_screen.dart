@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:placementor/Front%20End/models/company_class.dart';
 import 'package:placementor/Front%20End/models/companies_search_filter_class.dart';
-import 'package:placementor/Front%20End/screens/companies_screen.dart';
 import 'package:placementor/Front%20End/widgets/search_company_tile.dart';
 
 import '../models/companies_metadata_class.dart';
 import '../widgets/search_bar.dart';
-import '../widgets/search_filter.dart';
 
 CompaniesSearchFilter companiesSearchFilter = CompaniesSearchFilter();
 List<String> searchedCompaniesIndex = [];
@@ -109,7 +107,7 @@ class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
               },
             ),
             searchedCompaniesIndex.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("Sorry, no opportunities found!",
                         style: TextStyle(
                             color: Colors.blueGrey,

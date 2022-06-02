@@ -269,15 +269,35 @@ class Option extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: ListTile(
-              title: Text(
-                resource.title,
-              ),
-              subtitle: Text(
-                resource.description,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  resource.title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  resource.description,
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
             ),
           ),
+          // Flexible(
+          //   child: ListTile(
+          //     title: Text(
+          //       resource.title,
+          //     ),
+          //     subtitle: Text(
+          //       resource.description,
+          //     ),
+          //   ),
+          // ),
           const SizedBox(width: 4),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

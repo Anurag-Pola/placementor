@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
 
+import '../models/company_class.dart';
+
 class OffCampusCompanyTile extends StatelessWidget {
-  const OffCampusCompanyTile({Key? key}) : super(key: key);
+  final String id;
+  final String companyName;
+  final String roleName;
+  final String jobDescription;
+  final String linkToApply;
+
+  const OffCampusCompanyTile({
+    Key? key,
+    required this.id,
+    required this.companyName,
+    required this.roleName,
+    required this.jobDescription,
+    required this.linkToApply,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/offCampusCompanyPage');
+        Navigator.pushNamed(context, '/offCampusCompanyPage',
+            arguments: Company.fromJson({
+              "companyName": companyName,
+              "roleName": roleName,
+              "jobDescription": jobDescription,
+              "linkToApply": linkToApply,
+              "id": id,
+              "offerType": "Off Campus",
+            }));
       },
       child: Container(
         width: 115,
@@ -44,19 +66,21 @@ class OffCampusCompanyTile extends StatelessWidget {
               child: const FlutterLogo(size: 40),
             ),
             const SizedBox(height: 8),
-            const Text(
-              "Analyst",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+            FittedBox(
+              child: Text(
+                roleName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
-            const Text(
-              "Google INC",
+            Text(
+              companyName,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: "Poppins",
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
