@@ -131,18 +131,36 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Spacer(),
+                  const Text(
+                    "Off Campus",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
                   Switch(
-                      activeThumbImage:
-                          const AssetImage('assets/Images/login_pic.png'),
-                      mouseCursor: SystemMouseCursors.click,
-                      value: toggleValue,
-                      onChanged: (value) {
-                        setState(() {
+                    activeColor: Colors.cyan,
+                    inactiveThumbColor: Colors.cyan,
+                    inactiveTrackColor: Colors.cyan,
+                    mouseCursor: SystemMouseCursors.click,
+                    value: toggleValue,
+                    onChanged: (value) {
+                      setState(
+                        () {
                           toggleValue = !toggleValue;
-                        });
-                      })
+                        },
+                      );
+                    },
+                  ),
+                  const Text(
+                    "On Campus",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
                 ],
               ),
               SearchBar(
@@ -366,13 +384,20 @@ const TextStyle textStyle = TextStyle(
   fontWeight: FontWeight.w600,
 );
 
-class FilterAlertDialog extends StatelessWidget {
+class FilterAlertDialog extends StatefulWidget {
   FilterAlertDialog({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<FilterAlertDialog> createState() => _FilterAlertDialogState();
+}
+
+class _FilterAlertDialogState extends State<FilterAlertDialog> {
   final TextEditingController _companyNameController = TextEditingController();
+
   final TextEditingController _roleNameController = TextEditingController();
+
   final TextEditingController _skillsetController = TextEditingController();
 
   @override
@@ -454,13 +479,27 @@ class FilterAlertDialog extends StatelessWidget {
           const Divider(
             color: Colors.black38,
           ),
-          const Text("Package Range (LPA)"),
+          const Text(
+            "Package Range (LPA)",
+          ),
           const PackageSlider(),
         ],
       ),
       actions: [
         TextButton(
-          child: const Text("Close"),
+          child: const Text("Clear All Filters"),
+          onPressed: () {
+            selectedCompanyNameList = [];
+            selectedCompanyTypeList = [];
+            selectedOfferTypeList = [];
+            selectedRoleNameList = [];
+            selectedRoleTypeList = [];
+            selectedSkillList = [];
+            setState(() {});
+          },
+        ),
+        TextButton(
+          child: const Text("OK"),
           onPressed: () => Navigator.pop(context),
         )
       ],

@@ -72,6 +72,14 @@ class _OffCampusOpportunitiesScreenState
                                       const SizedBox(
                                         height: 20,
                                       ),
+                                      Row(
+                                        children: [
+                                          Text("Posted By: ${data['postedBy']}",
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.green)),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                   trailing: Column(
