@@ -160,8 +160,9 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
               Color _color =
                   Colors.primaries[Random().nextInt(Colors.primaries.length)];
               int _selectedByCount = pollOptionData['selectedBy']?.length ?? 0;
-              int _selectedByPercentage =
-                  ((_selectedByCount / _totalVotedCount) * 100).toInt();
+              int _selectedByPercentage = _totalVotedCount != 0
+                  ? ((_selectedByCount / _totalVotedCount) * 100).toInt()
+                  : 0;
               double _coloredBarWidth =
                   _width * 0.5 * (_selectedByPercentage / 100) - 2;
               return Center(

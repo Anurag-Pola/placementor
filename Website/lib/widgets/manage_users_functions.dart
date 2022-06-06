@@ -274,3 +274,123 @@ Future<Map<String, dynamic>> deleteUserFromDB(
     return _response;
   });
 }
+
+Future<Map<String, dynamic>> registerAdminWithEmailPassword(
+    CollectionReference adminDataCollectionRef,
+    CustomAdminUser adminUser) async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": []};
+  try {
+    Map<String, dynamic> _secondaryAppResponse = await secondaryAppGetter();
+    if (_secondaryAppResponse["status"] == "ERROR") {
+      throw (_secondaryAppResponse["body"]);
+    }
+    FirebaseApp secondaryApp = _secondaryAppResponse["body"];
+
+    Map<String, dynamic> _resgisterUser =
+        await registerAdmin(adminUser, secondaryApp);
+    if (_resgisterUser["status"] == "ERROR") {
+      throw (_resgisterUser["body"]);
+    }
+    adminUser = _resgisterUser["body"];
+    Map<String, dynamic> _adminCreateDB =
+        await addAdminToDB(adminDataCollectionRef, admin: adminUser);
+    if (_adminCreateDB["status"] == "ERROR") {
+      throw (_adminCreateDB["body"]);
+    }
+    _response["body"] = adminUser;
+  } catch (e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+  }
+  return _response;
+}
+
+Future<Map<String, dynamic>> registerAdmin(
+    CustomAdminUser adminUser, FirebaseApp? secondaryApp) async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
+  try {
+    FirebaseAuth _auth = FirebaseAuth.instanceFor(app: secondaryApp!);
+    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      email: adminUser.email!,
+      password: adminUser.password!,
+    );
+    User? user = userCredential.user;
+    if (user == null) {
+      throw ("Cannot create user (returns null)");
+    }
+    user.updateDisplayName(adminUser.name);
+    adminUser.uid = user.uid;
+    _auth.signOut();
+    _response["body"] = adminUser;
+  } catch (e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+  }
+  return _response;
+}
+
+Future<Map<String, dynamic>> addAdminToDB(
+  CollectionReference adminDataCollectionRef, {
+  required CustomAdminUser admin,
+}) {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
+  return adminDataCollectionRef
+      .doc(admin.uid!)
+      .set(admin.toJson())
+      .then((value) {
+    return _response;
+  }).catchError((e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+    return _response;
+  });
+}
+
+Future<Map<String, dynamic>> deleteAdminWithEmail(
+    CollectionReference adminDataCollectionRef,
+    CustomAdminUser adminUser) async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": []};
+  try {
+    Map<String, dynamic> _secondaryAppResponse = await secondaryAppGetter();
+    if (_secondaryAppResponse["status"] == "ERROR") {
+      throw (_secondaryAppResponse["body"]);
+    }
+    FirebaseApp secondaryApp = _secondaryAppResponse["body"];
+    var _afterDeleteResponse = await deleteAdmin(adminUser, secondaryApp);
+    if (_afterDeleteResponse["status"] == "ERROR") {
+      throw (_afterDeleteResponse["body"]);
+    }
+    adminUser = _afterDeleteResponse["body"];
+    Map<String, dynamic> adminDeleteDBMap =
+        await deleteUserFromDB(adminDataCollectionRef, uid: adminUser.uid!);
+    if (adminDeleteDBMap["status"] == "ERROR") {
+      throw (adminDeleteDBMap["body"]);
+    }
+    _response["body"] = adminUser;
+  } catch (e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+  }
+  return _response;
+}
+
+Future<Map<String, dynamic>> deleteAdmin(
+    CustomAdminUser adminUser, FirebaseApp? secondaryApp) async {
+  Map<String, dynamic> _response = {"status": "SUCCESS", "body": ""};
+  try {
+    FirebaseAuth _auth = FirebaseAuth.instanceFor(app: secondaryApp!);
+    await _auth
+        .signInWithEmailAndPassword(
+            email: adminUser.email!, password: adminUser.password!)
+        .then((value) async {
+      adminUser.uid = value.user!.uid;
+      await _auth.currentUser!.delete();
+    });
+    _auth.signOut();
+    _response["body"] = adminUser;
+  } catch (e) {
+    _response["status"] = "ERROR";
+    _response["body"] = e;
+  }
+  return _response;
+}

@@ -25,13 +25,15 @@ class _LoginScreenState extends State<LoginScreen> {
     QuerySnapshot querySnapshot = await admins.get();
 
     // Get data from docs and convert map to List
-    final allData =
-        querySnapshot.docs.map((doc) => doc.data().toString()).toList();
-    // print(allData);
-    // print(FirebaseAuth.instance.currentUser!.email);
-    // print(allData
-    //     .contains('{mailid: ${FirebaseAuth.instance.currentUser!.email}}'));
-    return allData.contains('{mailid: ${auth.currentUser!.email}}');
+    final allData = querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+    for (var admin in allData) {
+      if (admin['email'] == auth.currentUser!.email) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
