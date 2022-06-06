@@ -42,77 +42,73 @@ class _LoginScreenState extends State<LoginScreen> {
     final w = MediaQuery.of(context).size.width;
 
     return StreamBuilder<User?>(
-        stream: auth.authStateChanges(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Scaffold(
-              body: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Color(0xffe5b2ca), Color(0xffcd83de)],
-                  ),
-                ),
-                child: OrientationBuilder(
-                  builder: (context, orientation) =>
-                      orientation == Orientation.portrait
-                          ? Column(
-                              children: [
-                                Image.asset(
-                                  'assets/login_pic.png',
-                                  height: h * 0.5,
-                                  width: w * 0.5,
-                                ),
-                                LoginWidget(auth: auth),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: w * 0.45,
-                                  child: Image.asset(
-                                    'assets/Images/login_pic.png',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                const SizedBox(width: 40),
-                                LoginWidget(auth: auth),
-                              ],
-                            ),
+      stream: auth.authStateChanges(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Scaffold(
+            body: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Color(0xffe5b2ca), Color(0xffcd83de)],
                 ),
               ),
-            );
-          }
-          return FutureBuilder(
-              future: getData(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                } else {
-                  if (snapshot.data == true) {
-                    return const TabsScreen();
-                  } else {
-                    return const Scaffold(
-                        body: Center(child: Text('You are not an admin')));
-                  }
-                  //.docs.map((doc)=>doc.data()['email']).contains(FirebaseAuth.instance.currentUser?.email)){
-                  // return const Scaffold(
-                  //   body: Center(
-                  //     child: Text('You are not an admin'),
-                  //   ),
-                  // );
-                }
-              });
-        });
+              child: OrientationBuilder(
+                builder: (context, orientation) =>
+                    orientation == Orientation.portrait
+                        ? Column(
+                            children: [
+                              Image.asset(
+                                'assets/login_pic.png',
+                                height: h * 0.5,
+                                width: w * 0.5,
+                              ),
+                              LoginWidget(auth: auth),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: w * 0.45,
+                                child: Image.asset(
+                                  'assets/Images/login_pic.png',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              const SizedBox(width: 40),
+                              LoginWidget(auth: auth),
+                            ],
+                          ),
+              ),
+            ),
+          );
+        }
+        return FutureBuilder(
+          future: getData(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              if (snapshot.data == true) {
+                return const TabsScreen();
+              } else {
+                return const Scaffold(
+                    body: Center(child: Text('You are not an admin')));
+              }
+            }
+          },
+        );
+      },
+    );
   }
 }
 
@@ -228,6 +224,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 child: TextFormField(
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (!emailexp.hasMatch(value!)) {
                       return 'Email is Invalid';
@@ -269,6 +266,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 child: TextFormField(
                   cursorColor: Colors.black,
                   obscureText: true,
+                  onFieldSubmitted: (_) {
+                    _submit(widget.auth);
+                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Password is Required';

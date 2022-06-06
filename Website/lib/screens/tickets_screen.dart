@@ -56,8 +56,26 @@ class _TicketsScreenState extends State<TicketsScreen> {
                               color: Colors.white,
                               elevation: 18,
                               child: ListTile(
-                                title: Text(data['title']),
-                                subtitle: Text(data['description']),
+                                title: Center(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Text(data['title']))),
+                                subtitle: Column(
+                                  children: [
+                                    Text(data['description']),
+                                    Row(
+                                      children: [
+                                        Text("Posted By: ${data['raisedBy']}",
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.green)),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
                                 trailing: ElevatedButton(
                                   child: const Text("Resolved"),
                                   onPressed: () {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+FirebaseAuth _auth = FirebaseAuth.instance;
 
 class RaiseTicketScreen extends StatefulWidget {
   const RaiseTicketScreen({Key? key}) : super(key: key);
@@ -147,6 +150,7 @@ class _RaiseTicketScreenState extends State<RaiseTicketScreen> {
                         'title': _titleController.text,
                         'description': _descriptionController.text,
                         'timestamp': timestamp,
+                        'raisedBy': _auth.currentUser?.email,
                       });
                       _titleController.clear();
                       _descriptionController.clear();

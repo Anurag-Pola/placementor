@@ -1,7 +1,10 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+FirebaseAuth _auth = FirebaseAuth.instance;
 
 class OffCampusFormScreen extends StatefulWidget {
   const OffCampusFormScreen({Key? key}) : super(key: key);
@@ -105,6 +108,7 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
                         'package': _packageController.text,
                         'url': _urlController.text,
                         'timestamp': timestamp,
+                        'postedBy': _auth.currentUser?.email,
                       });
                       _companyNameController.clear();
                       _roleNameController.clear();
