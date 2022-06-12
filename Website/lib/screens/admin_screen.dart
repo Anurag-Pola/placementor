@@ -46,7 +46,7 @@ class AdminScreen extends StatelessWidget {
     // chips = ['T&P'] +
     chips = (((await metadataCollectionRef.doc('CollegeMetadata').get()).data()
         as Map<String, dynamic>?)!['department']);
-    chips!.insert(0, 'T&P');
+    chips.insert(0, 'T&P');
     print(chips);
     return adminDataCollectionRef
         .withConverter<CustomAdminUser>(

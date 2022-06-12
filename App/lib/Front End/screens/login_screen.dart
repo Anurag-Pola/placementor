@@ -62,9 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (error) {
       var errorMessage = 'Could not authenticate you. Please try again later.';
       showErrorDialog(errorMessage);
-      // setState(() {
-      //   // _isLoading = false;
-      // });
     }
   }
 

@@ -97,10 +97,8 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   late TextEditingController lastDateToApplyController =
       TextEditingController(text: lastdate);
 
-  late String? companyType =
-      widget.companyType == "" ? "Select an Option" : widget.companyType;
-  late String? roleType =
-      widget.roleType == "" ? "Select an Option" : widget.roleType;
+  late String? companyType = widget.companyType;
+  late String? roleType = widget.roleType;
 
   double paddingToElements = 39;
 
@@ -167,7 +165,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                     ),
                     AppDropdownInput(
                       hintText: "Company Type",
-                      options: const ["Select an Option", "Product", "Service"],
+                      options: const ["Product", "Service"],
                       value: companyType,
                       onChanged: (String? value) {
                         setState(() {
@@ -186,7 +184,6 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                     AppDropdownInput(
                       hintText: "Role Type",
                       options: const [
-                        "Select an Option",
                         "Full Time",
                         "Internship",
                         "Internship + Full Time",
@@ -322,6 +319,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                         "offerType": "On Campus",
                       },
                     );
+                    print(company);
                     firebaseInstance.doc(company.id).set(company);
 
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -480,6 +478,9 @@ class AppDropdownInput<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(value);
+    print(options);
+    print(options.contains(value));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -490,36 +491,24 @@ class AppDropdownInput<T> extends StatelessWidget {
         const SizedBox(
           height: 5,
         ),
-        FormField<T>(
-          builder: (FormFieldState<T> state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 15.0,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(
-                    5.0,
-                  ),
-                ),
+        FormField(
+          builder: (FormFieldState state) {
+            return DropdownButtonFormField<T>(
+              decoration: const InputDecoration(
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                border: OutlineInputBorder(),
               ),
-              isEmpty: value == null ||
-                  value == '' ||
-                  value == 'Please select an Option',
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<T>(
+              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+              value: value,
+              hint: const Text("Please select an Option"),
+              isDense: true,
+              onChanged: onChanged,
+              items: options.map((T value) {
+                return DropdownMenuItem<T>(
                   value: value,
-                  isDense: true,
-                  onChanged: onChanged,
-                  items: options.map((T value) {
-                    return DropdownMenuItem<T>(
-                      value: value,
-                      child: Text(getLabel!(value)),
-                    );
-                  }).toList(),
-                ),
-              ),
+                  child: Text(value.toString()),
+                );
+              }).toList(),
             );
           },
         ),
