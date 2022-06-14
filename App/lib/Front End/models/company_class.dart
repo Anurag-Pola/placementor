@@ -32,7 +32,7 @@ class Company {
           companyName: json['companyName'] as String,
           companyType: json['companyType'] == null
               ? null
-              : json['companyName'] as String,
+              : json['companyType'] as String,
           roleName: json['roleName'] as String,
           roleType:
               json['roleType'] == null ? null : json['roleType'] as String,
@@ -74,7 +74,9 @@ class Company {
                   .toList(),
           lastDate:
               json['lastDate'] == null ? null : json['lastDate'] as String,
-          package: json['package'] == null ? null : json['package'] as double,
+          package: json['package'] == null
+              ? null
+              : double.parse(json['package'].toString()),
           linkToApply: json['linkToApply'] as String,
           driveLink:
               json['driveLink'] == null ? null : json['driveLink'] as String,
@@ -148,16 +150,21 @@ class Company {
     };
   }
 
+  @override
+  String toString() {
+    return 'Company{id: $id, companyName: $companyName, companyType: $companyType, roleName: $roleName, roleType: $roleType, aboutTheFirm: $aboutTheFirm, jobDescription: $jobDescription, skillset: $skillset, processTimeline: $processTimeline, previouslyPlacedContacts: $previouslyPlacedContacts, experiences: $experiences, faqs: $faqs, lastDate: $lastDate, package: $package, linkToApply: $linkToApply, driveLink: $driveLink, eligibility: $eligibility, offerType: $offerType}';
+  }
+
   String toSearchTypeString() {
     return [
       companyName,
-      companyType,
+      if (companyType != null) companyType,
       roleName,
       roleType,
-      aboutTheFirm,
+      if (aboutTheFirm != null) aboutTheFirm,
       jobDescription,
-      skillset!.join(' '),
-      eligibility,
+      if (skillset != null) skillset!.join(' '),
+      if (eligibility != null) eligibility,
       offerType
     ].join(' ');
   }

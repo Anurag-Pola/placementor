@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:placementor_tnp/widgets/company_class.dart';
+import 'package:placementor_tnp/models/company_class.dart';
 
 import '../../widgets/on_campus_heading.dart';
 import '../../widgets/on_campus_my_expandable_card.dart';

@@ -13,8 +13,11 @@ class SearchCompanyTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.of(context)
-        //     .pushNamed('/onCampusCompanyPage', arguments: company);
+        Navigator.of(context).pushNamed(
+            company.offerType == 'On Campus'
+                ? '/onCampusCompanyPage'
+                : '/offCampusCompanyPage',
+            arguments: company);
       },
       child: Container(
         child: Column(
@@ -69,16 +72,16 @@ class SearchCompanyTile extends StatelessWidget {
             ),
             Row(
               children: [
-                if (company.roleType!.isNotEmpty)
+                if (company.offerType == 'On Campus')
                   Chip(
                     name: company.roleType!,
                   ),
-                if (company.roleType!.isNotEmpty)
+                if (company.offerType == 'On Campus')
                   Chip(
                     name: company.lastDate!,
                   ),
                 const Spacer(),
-                if (company.package != 0.0)
+                if (company.offerType == 'On Campus' && company.package != 0.0)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: SizedBox(

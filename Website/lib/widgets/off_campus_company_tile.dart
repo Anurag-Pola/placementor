@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'company_class.dart';
+import '../models/company_class.dart';
 
 class OffCampusCompanyTile extends StatelessWidget {
   final String id;

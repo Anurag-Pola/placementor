@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/company_class.dart';
-import '../widgets/experience_tile_class.dart';
-import '../widgets/faq_tiles_class.dart';
+import '../models/company_class.dart';
+import '../models/experience_tile_class.dart';
+import '../models/faq_tiles_class.dart';
 import '../widgets/on_campus_process_timeline.dart';
 import '../widgets/previosly_placed_contact_details_class.dart';
 import '../widgets/process_timeline_class.dart';

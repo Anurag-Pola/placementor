@@ -1,14 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:placementor_tnp/widgets/manage_users_functions.dart';
 
-import '../models/tnp_coordinators_class.dart';
+import '../models/custom_user.dart';
 
-class TnPCoordinatorTile extends StatelessWidget {
-  final TnPCoordinator tnpcoordinator;
+const TextStyle textStyle = TextStyle(
+  color: Color(0xff252b42),
+  fontSize: 14,
+  fontFamily: "Poppins",
+  fontWeight: FontWeight.w600,
+);
 
-  const TnPCoordinatorTile({required this.tnpcoordinator, Key? key})
-      : super(key: key);
+const InputDecoration textFormFieldDecoration = InputDecoration(
+  errorStyle: TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w100,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+    borderSide: BorderSide(
+      color: Color(0xffe5e5e5),
+      width: 1,
+    ),
+  ),
+  contentPadding: EdgeInsets.all(18),
+  fillColor: Color(0xfff8f8f8),
+);
 
+class StudentTile extends StatefulWidget {
+  final CustomStudentUser studentUser;
+
+  const StudentTile({required this.studentUser, Key? key}) : super(key: key);
+
+  @override
+  State<StudentTile> createState() => _StudentTileState();
+}
+
+class _StudentTileState extends State<StudentTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,7 +73,7 @@ class TnPCoordinatorTile extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            tnpcoordinator.name!,
+            widget.studentUser.name!,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xff252b42),
@@ -54,8 +82,9 @@ class TnPCoordinatorTile extends StatelessWidget {
             ),
           ),
           // const SizedBox(height: 5),
+
           Text(
-            tnpcoordinator.department!,
+            widget.studentUser.email,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xff252b42),
@@ -63,40 +92,14 @@ class TnPCoordinatorTile extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () async {
-                  final url = 'tel:+91${tnpcoordinator.phone}';
-                  if (await canLaunchUrlString(url)) {
-                    await launchUrlString(url);
-                  } else {
-                    SnackBar(
-                      content: Text('Could not launch $url'),
-                    );
-                  }
-                },
-                icon: const Icon(
-                  Icons.call_outlined,
-                  color: Color(0xFF46B35C),
-                ),
-              ),
-              IconButton(
-                onPressed: () async {
-                  final url = 'mailto:${tnpcoordinator.phone}';
-                  if (await canLaunchUrlString(url)) {
-                    await launchUrlString(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                },
-                icon: const Icon(
-                  Icons.mail_outline_rounded,
-                  color: Color(0xFF1B7AF3),
-                ),
-              )
-            ],
+          Text(
+            widget.studentUser.rollNo!,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xff252b42),
+              fontFamily: "Montserrat",
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),

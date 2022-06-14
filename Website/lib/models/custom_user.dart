@@ -12,15 +12,21 @@ class CustomStudentUser {
       required this.uid,
       required this.rollNo});
 
-  CustomStudentUser fromJSON(Map<String, dynamic> json) {
-    return CustomStudentUser(
-      name: json['name'] as String,
-      email: json['email'] as String,
-      password: json['password'] as String,
-      uid: json['uid'] as String,
-      rollNo: json['rollNo'] as String,
-    );
-  }
+  CustomStudentUser.fromJSON(Map<String, dynamic> json)
+      : this(
+          name: json['name'] as String,
+          email: json['email'] as String,
+          password: json['password'] as String,
+          uid: json['uid'] as String,
+          rollNo: json['rollNo'] as String,
+        );
+
+  Map<String, dynamic> toJSON() => {
+        'name': name,
+        'email': email,
+        'uid': uid,
+        'rollNo': rollNo,
+      };
 
   @override
   String toString() {

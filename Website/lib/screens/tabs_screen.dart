@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TabsScreen extends StatelessWidget {
-  const TabsScreen({Key? key}) : super(key: key);
-
+  TabsScreen({Key? key}) : super(key: key);
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +43,13 @@ class TabsScreen extends StatelessWidget {
             title: const Text("T&P Coordinators"),
             onTap: () {
               Navigator.pushNamed(context, '/tnpCoordinators');
+            }),
+        ListTile(
+            title: const Text("Log Out"),
+            onTap: () async {
+              await auth.signOut();
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/', (route) => false);
             }),
       ],
     ));

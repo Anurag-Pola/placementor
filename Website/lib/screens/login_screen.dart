@@ -1,10 +1,10 @@
-// ignore_for_file: avoid_print
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:placementor_tnp/screens/tabs_screen.dart';
+
+CollectionReference admins = FirebaseFirestore.instance.collection('Admins');
+FirebaseAuth auth = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,113 +14,64 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  CollectionReference admins = FirebaseFirestore.instance.collection('Admins');
-  // .withConverter<Admins>(
-  //     fromFirestore: (snapshots, _) => Admins.fromJson(snapshots.data()!),
-  //     toFirestore: (admins, _) => admins.toJson());
-
-  Future<bool> getData() async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await admins.get();
-
-    // Get data from docs and convert map to List
-    final allData = querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-    for (var admin in allData) {
-      if (admin['email'] == auth.currentUser!.email) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-
-    return StreamBuilder<User?>(
-      stream: auth.authStateChanges(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Scaffold(
-            body: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [Color(0xffe5b2ca), Color(0xffcd83de)],
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Color(0xffe5b2ca), Color(0xffcd83de)],
+          ),
+        ),
+        child: OrientationBuilder(
+          builder: (context, orientation) => orientation == Orientation.portrait
+              ? Column(
+                  children: [
+                    Image.asset(
+                      'assets/login_pic.png',
+                      height: h * 0.5,
+                      width: w * 0.5,
+                    ),
+                    const LoginWidget(),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: w * 0.45,
+                      child: Image.asset(
+                        'assets/Images/login_pic.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    const SizedBox(width: 40),
+                    const LoginWidget(),
+                  ],
                 ),
-              ),
-              child: OrientationBuilder(
-                builder: (context, orientation) =>
-                    orientation == Orientation.portrait
-                        ? Column(
-                            children: [
-                              Image.asset(
-                                'assets/login_pic.png',
-                                height: h * 0.5,
-                                width: w * 0.5,
-                              ),
-                              LoginWidget(auth: auth),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: w * 0.45,
-                                child: Image.asset(
-                                  'assets/Images/login_pic.png',
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              const SizedBox(width: 40),
-                              LoginWidget(auth: auth),
-                            ],
-                          ),
-              ),
-            ),
-          );
-        }
-        return FutureBuilder(
-          future: getData(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              if (snapshot.data == true) {
-                return const TabsScreen();
-              } else {
-                return const Scaffold(
-                    body: Center(child: Text('You are not an admin')));
-              }
-            }
-          },
-        );
-      },
+        ),
+      ),
     );
   }
 }
 
 class LoginWidget extends StatefulWidget {
-  final FirebaseAuth auth;
-  const LoginWidget({Key? key, required this.auth}) : super(key: key);
+  const LoginWidget({Key? key}) : super(key: key);
   @override
   _LoginWidgetState createState() => _LoginWidgetState();
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  bool _isLoading = false;
+  bool _obscurePassword = true;
 
   String _email = "";
 
@@ -138,6 +89,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           TextButton(
             child: const Text('OKAY'),
             onPressed: () {
+              _formKey.currentState!.reset();
+              setState(() {
+                _isLoading = false;
+              });
               Navigator.of(ctx).pop();
             },
           ),
@@ -146,27 +101,35 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Future<void> _submit(FirebaseAuth auth) async {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
-      // Invalid!
       return;
     }
     _formKey.currentState!.save();
     try {
       setState(() {
-        // _isLoading = true;
+        _isLoading = true;
       });
       UserCredential user = await auth.signInWithEmailAndPassword(
         email: _email,
         password: _password,
       );
+
+      bool _isAdmin = await checkIfUserIsAdmin();
+
+      if (!_isAdmin) {
+        await auth.signOut();
+        throw Exception('You are not an admin');
+      }
+
       print(
           "Succesfully logged in ${user.user!.email} with uid : ${user.user!.uid}");
-      // Navigator.of(context)
-      //     .pushNamedAndRemoveUntil('/tabs-screen', (route) => false);
+
       setState(() {
-        // _isLoading = false;
+        _isLoading = false;
       });
+
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
@@ -175,12 +138,8 @@ class _LoginWidgetState extends State<LoginWidget> {
       }
       showErrorDialog(message);
     } catch (error) {
-      var errorMessage = 'Could not authenticate you. Please try again later.';
-      showErrorDialog(errorMessage);
-      print(error);
-      // setState(() {
-      //   // _isLoading = false;
-      // });
+      // var errorMessage = 'Could not authenticate you. Please try again later.';
+      showErrorDialog(error.toString());
     }
   }
 
@@ -265,9 +224,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 width: w * 0.8,
                 child: TextFormField(
                   cursorColor: Colors.black,
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   onFieldSubmitted: (_) {
-                    _submit(widget.auth);
+                    _submit();
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -299,6 +258,19 @@ class _LoginWidgetState extends State<LoginWidget> {
                           const BorderSide(color: Colors.black, width: 15.0),
                       borderRadius: BorderRadius.circular(h * 0.035),
                     ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -310,7 +282,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         GestureDetector(
           onTap: () {
-            _submit(widget.auth);
+            _submit();
           },
           child: Container(
             margin: const EdgeInsets.only(top: 10, bottom: 20),
@@ -331,17 +303,23 @@ class _LoginWidgetState extends State<LoginWidget> {
               horizontal: w * 0.102,
               vertical: h * 0.02,
             ),
-            child: const Center(
-              child: Text(
-                "Log In",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: "Montserrat",
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+            child: Center(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      "Log In",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
             ),
           ),
         ),
@@ -350,15 +328,9 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 }
 
-class Admins {
-  final String email;
+Future<bool> checkIfUserIsAdmin() async {
+  DocumentSnapshot adminDocument =
+      await admins.doc(auth.currentUser!.uid).get();
 
-  Admins({required this.email});
-
-  Admins.fromJson(Map<String, Object?> json)
-      : this(email: json['email'] as String);
-
-  Map<String, Object?> toJson() {
-    return {'email': email};
-  }
+  return adminDocument.exists;
 }

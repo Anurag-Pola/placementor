@@ -1,8 +1,8 @@
-import '/widgets/experience_tile_class.dart';
-import '/widgets/faq_tiles_class.dart';
+import './experience_tile_class.dart';
+import 'faq_tiles_class.dart';
 import '/widgets/previosly_placed_contact_details_class.dart';
 
-import './process_timeline_class.dart';
+import '../widgets/process_timeline_class.dart';
 
 class Company {
   const Company({
@@ -32,7 +32,7 @@ class Company {
           companyName: json['companyName'] as String,
           companyType: json['companyType'] == null
               ? null
-              : json['companyName'] as String,
+              : json['companyType'] as String,
           roleName: json['roleName'] as String,
           roleType:
               json['roleType'] == null ? null : json['roleType'] as String,
@@ -146,5 +146,24 @@ class Company {
       if (eligibility != null) 'eligibility': eligibility,
       'offerType': offerType,
     };
+  }
+
+  @override
+  String toString() {
+    return 'Company{id: $id, companyName: $companyName, companyType: $companyType, roleName: $roleName, roleType: $roleType, aboutTheFirm: $aboutTheFirm, jobDescription: $jobDescription, skillset: $skillset, processTimeline: $processTimeline, previouslyPlacedContacts: $previouslyPlacedContacts, experiences: $experiences, faqs: $faqs, lastDate: $lastDate, package: $package, linkToApply: $linkToApply, driveLink: $driveLink, eligibility: $eligibility, offerType: $offerType}';
+  }
+
+  String toSearchTypeString() {
+    return [
+      companyName,
+      if (companyType != null) companyType,
+      roleName,
+      roleType,
+      if (aboutTheFirm != null) aboutTheFirm,
+      jobDescription,
+      if (skillset != null) skillset!.join(' '),
+      if (eligibility != null) eligibility,
+      offerType
+    ].join(' ');
   }
 }

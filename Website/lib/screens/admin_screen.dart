@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/add_delete_admin_dialog.dart';
-import '../widgets/custom_user.dart';
+import '../models/custom_user.dart';
 import '../widgets/admin_tile.dart';
 
 const TextStyle textStyle = TextStyle(
@@ -38,16 +38,12 @@ class AdminScreen extends StatelessWidget {
   String nameSwitchedOn = "CSE";
   List chips = [];
 
+  AdminScreen({Key? key}) : super(key: key);
+
   Future<QuerySnapshot<CustomAdminUser>> _getData() async {
-    print(chips);
-    // print(['T&P'] +
-    //     (((await metadataCollectionRef.doc('CollegeMetadata').get()).data()
-    //         as Map<String, dynamic>?).['department']));
-    // chips = ['T&P'] +
     chips = (((await metadataCollectionRef.doc('CollegeMetadata').get()).data()
         as Map<String, dynamic>?)!['department']);
-    chips!.insert(0, 'T&P');
-    print(chips);
+    chips.insert(0, 'T&P');
     return adminDataCollectionRef
         .withConverter<CustomAdminUser>(
           fromFirestore: (snapshot, _) =>
@@ -101,7 +97,6 @@ class AdminScreen extends StatelessWidget {
         onPressed: () async {
           Map<String, dynamic> _actionResponseMap = await addAdminDialog(
               context, metadataCollectionRef, adminDataCollectionRef);
-          print(_actionResponseMap);
           await showDialog(
             context: context,
             barrierDismissible: false,
@@ -259,11 +254,13 @@ class _AdminBranchChipsBarState extends State<AdminBranchChipsBar> {
         : widget.customAdminUsers
             .where((element) => element.department == widget.nameSwitchedOn)
             .toList();
-    print(selectedAdminUsers);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.nameSwitchedOn == "T&P") {
+      selectedAdminUsers = widget.customAdminUsers;
+    }
     return ListView(
       children: [
         Container(

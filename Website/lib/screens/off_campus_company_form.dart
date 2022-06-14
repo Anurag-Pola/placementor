@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 
-import '../widgets/company_class.dart';
+import '../models/company_class.dart';
 
 final firebaseInstance =
     FirebaseFirestore.instance.collection('Companies').withConverter<Company>(

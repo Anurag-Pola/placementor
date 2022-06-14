@@ -78,7 +78,7 @@ class _TabsScreenState extends State<TabsScreen> {
           _child = const ResourcesScreen();
           break;
         case 3:
-          _child = const ProfileScreen();
+          _child = ProfileScreen();
           break;
       }
       _child = AnimatedSwitcher(

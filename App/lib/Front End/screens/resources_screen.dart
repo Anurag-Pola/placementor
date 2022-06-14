@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/resource_class.dart';
 
@@ -24,7 +24,7 @@ class ResourcesScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         var options = snapshot.data!.docs.map((doc) => doc.data()).toList();
-
+        print(options);
         return Scaffold(
           backgroundColor: const Color(0xFFF7F9FC),
           body: Column(
@@ -53,6 +53,7 @@ class ResourcesScreen extends StatelessWidget {
                   itemBuilder: (context, index) => ResourceTile(
                     resource: options[index],
                   ),
+                  itemCount: options.length,
                 ),
               ),
             ],
@@ -115,8 +116,8 @@ class ResourceTile extends StatelessWidget {
           ),
           onTap: () async {
             final url = resource.link;
-            if (await canLaunch(url)) {
-              await launch(url);
+            if (await canLaunchUrlString(url)) {
+              await launchUrlString(url);
             }
           },
         ),

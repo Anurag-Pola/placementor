@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:placementor_tnp/widgets/manage_users_functions.dart';
 
-import 'custom_user.dart';
+import '../models/custom_user.dart';
 
 const TextStyle textStyle = TextStyle(
   color: Color(0xff252b42),
@@ -134,7 +134,6 @@ class _AdminTileState extends State<AdminTile> {
                             await deleteAdminWithEmail(
                                 widget.adminDataCollectionRef,
                                 widget.adminUser);
-                        print(_deleteActionResponseMap);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(_deleteActionResponseMap["status"] ==
                                     "ERROR"

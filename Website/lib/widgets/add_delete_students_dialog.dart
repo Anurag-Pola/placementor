@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'custom_user.dart';
+import '../models/custom_user.dart';
 import 'manage_users_functions.dart';
 
 Future<dynamic> addDeleteStudentsDailog(

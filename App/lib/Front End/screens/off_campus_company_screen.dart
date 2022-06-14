@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+import '../models/company_class.dart';
 import '../widgets/on_campus_heading.dart';
 import '../widgets/on_campus_my_expandable_card.dart';
 
 class OffCampusComapnyScreen extends StatelessWidget {
   const OffCampusComapnyScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    Company company = ModalRoute.of(context)!.settings.arguments as Company;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -21,30 +23,20 @@ class OffCampusComapnyScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.insert_invitation_rounded,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ],
       ),
       backgroundColor: const Color(0xFFF5F7FC),
       body: Stack(
         alignment: Alignment.center,
         children: [
           Column(
-            children: const [
+            children: [
               OnCampusHeading(
-                companyName: "Google",
-                roleName: "Blah",
+                companyName: company.companyName,
+                roleName: company.roleName,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               MyExpandableCard(
-                content:
-                    "Can you bring creative human-centered ideas to life and make great things happen beyond what meets the eye? We believe in teamwork, fun, complex projects, diverse perspectives, and simple solutions. How about you? We're looking for a like-minded",
+                content: company.jobDescription,
                 heading: "DESCRIPTION",
               )
             ],
@@ -52,7 +44,12 @@ class OffCampusComapnyScreen extends StatelessWidget {
           Positioned(
             bottom: 10,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                final url = company.linkToApply;
+                if (await canLaunchUrlString(url)) {
+                  await launchUrlString(url);
+                }
+              },
               child: Container(
                 width: 215,
                 height: 52,

@@ -1,8 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:placementor/Front%20End/widgets/user_functions.dart';
+
+import '../../main.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  ProfileScreen({Key? key}) : super(key: key);
+  String? studentName;
+  String? studentRollNo;
+
+  Future<bool> getStudentDetailsFetched() async {
+    studentName = await getUserName();
+    studentRollNo = await getUserRollNo();
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,44 +60,52 @@ class ProfileScreen extends StatelessWidget {
               left: 10,
               right: 10,
             ),
-            child: Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 21),
-                  child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/images/tnp_coordinators_image.png'),
-                    radius: 44,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Anurag Pola',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+            child: FutureBuilder(
+                future: getStudentDetailsFetched(),
+                builder: (context, snapshot) {
+                  return Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 21),
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage(
+                              'assets/images/tnp_coordinators_image.png'),
+                          radius: 44,
                         ),
                       ),
-                      Text(
-                        '18071A1266',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 18,
-                          fontStyle: FontStyle.italic,
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.hasData && studentName != null
+                                  ? studentName!
+                                  : 'Student Name',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              snapshot.hasData && studentRollNo != null
+                                  ? studentRollNo!
+                                  : 'Roll No',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ],
-            ),
+                  );
+                }),
           ),
           const SizedBox(
             height: 11,
@@ -103,13 +122,6 @@ class ProfileScreen extends StatelessWidget {
             text: "T&P Coordinators",
             action: () {
               Navigator.pushNamed(context, '/' "tnpCoordinatorsPage");
-            },
-          ),
-          ProfileItem(
-            icon: const Icon(Icons.remove_red_eye_rounded),
-            text: "Status Tracker",
-            action: () {
-              Navigator.pushNamed(context, '/' "statusTrackerPage");
             },
           ),
           ProfileItem(
@@ -131,6 +143,10 @@ class ProfileScreen extends StatelessWidget {
             text: "Log Out",
             action: () async {
               await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  (route) => false);
             },
           ),
         ],

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart' as intro;
+import 'package:placementor/Front%20End/widgets/shared_prefs.dart';
+import 'package:placementor/main.dart';
 
 class IntroductionScreen extends StatelessWidget {
   IntroductionScreen({Key? key}) : super(key: key);
 
   final List<String> descriptions = [
     "Get to know everything \nabout placements at \nyour fingertips",
-    "With the help of \nnotifications, grab all \nopportunities",
+    "With the help of \nnewsfeed, grab all \nupdates",
     "Create your profile and \nlet T&P know where you \nstand",
     "Browse roles, processes, \nbasic info and skillsets \nrequired by companies",
-    "Add remainders to \ncalender, make a to-do \nlist, get resume tips and \nmany more...",
+    "Make a to-do \nlist, get resume tips, \nraise query tickets and \nmany more...",
   ];
 
   final List<int> colors = [
@@ -61,8 +63,12 @@ class IntroductionScreen extends StatelessWidget {
                 image: images[4],
               ),
             ],
-            onDone: () {
-              Navigator.of(context).pushReplacementNamed('/loginPage');
+            onDone: () async {
+              await setAppLoadedFirstTimeToTrue();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  (route) => false);
             },
             showSkipButton: true,
             skip: const Text(

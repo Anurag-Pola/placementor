@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/on_campus_process_timeline.dart';
 import '../widgets/on_campus_experience_tiles.dart';
@@ -39,17 +40,17 @@ class OnCampusComapnyScreen extends StatelessWidget {
             ),
             onTap: () {},
           ),
-          const SizedBox(width: 10),
-          GestureDetector(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 18,
-              child: Image.asset(
-                'assets/images/calander.png',
-              ),
-            ),
-            onTap: () {},
-          ),
+          // const SizedBox(width: 10),
+          // GestureDetector(
+          //   child: CircleAvatar(
+          //     backgroundColor: Colors.white,
+          //     radius: 18,
+          //     child: Image.asset(
+          //       'assets/images/calander.png',
+          //     ),
+          //   ),
+          //   onTap: () {},
+          // ),
           const SizedBox(width: 5),
         ],
       ),
@@ -172,7 +173,12 @@ class OnCampusComapnyScreen extends StatelessWidget {
           Positioned(
             bottom: 10,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                final url = company.linkToApply;
+                if (await canLaunchUrlString(url)) {
+                  await launchUrlString(url);
+                }
+              },
               child: Container(
                 width: 215,
                 height: 52,

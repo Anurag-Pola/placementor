@@ -1,35 +1,46 @@
 class TnPCoordinator {
-  String id;
-  String name;
-  String department;
-  String email;
-  String phone;
+  String? name;
+  String? email;
+  String? password;
+  String? uid;
+  String? department;
+  String? phone;
+  String? employeeId;
 
-  TnPCoordinator({
-    required this.id,
-    required this.name,
-    required this.department,
-    required this.email,
-    required this.phone,
-  });
+  TnPCoordinator(
+      {this.name,
+      this.email,
+      this.password,
+      this.uid,
+      this.department,
+      this.phone,
+      this.employeeId});
 
-  factory TnPCoordinator.fromJson(Map<String, dynamic> json) {
-    return TnPCoordinator(
-      id: json['id'],
-      name: json['name'] as String,
-      department: json['department'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-    );
+  TnPCoordinator.fromJSON(Map<String, dynamic> json)
+      : this(
+          name: json['name'] as String,
+          email: json['email'] as String,
+          password: json['password'] as String,
+          uid: json['uid'] as String,
+          department: json['department'] as String,
+          phone: json['phoneNo'] as String,
+          employeeId: json['employeeId'] as String,
+        );
+
+  Map<String, Object?> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'password': password,
+      'uid': uid,
+      'department': department,
+      'phoneNo': phone,
+      'employeeId': employeeId,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'id': id,
-      'name': name,
-      'department': department,
-      'email': email,
-      'phone': phone,
-    };
+  @override
+  String toString() {
+    return "CustomUser { name: $name, email: $email, uid: $uid, department: $department, phoneNo: $phone, employeeId: $employeeId}";
   }
 }

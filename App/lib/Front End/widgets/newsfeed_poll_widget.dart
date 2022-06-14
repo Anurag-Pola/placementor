@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:placementor/Front%20End/widgets/user_functions.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NewsfeedPoll extends StatefulWidget {
   final DocumentSnapshot poll;
@@ -19,8 +19,8 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
   String optionSelectedKey = '-1';
 
   Future<void> _onOpen(LinkableElement link) async {
-    if (await canLaunch(link.url)) {
-      await launch(link.url);
+    if (await canLaunchUrlString(link.url)) {
+      await launchUrlString(link.url);
     } else {
       showDialog(
         context: context,

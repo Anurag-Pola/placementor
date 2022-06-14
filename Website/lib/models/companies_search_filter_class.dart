@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:placementor/Front%20End/models/company_class.dart';
+
+import 'company_class.dart';
 
 class CompaniesSearchFilter {
   late List<Company> companies;
@@ -58,15 +59,13 @@ class CompaniesSearchFilter {
       bool _skillsetFilterPass = skillsetFilter.isEmpty;
       bool _packageFilterPass =
           listEquals(packageFilter, [0, packageMax.toInt() + 1]);
-      print(company);
-
       if (companyNameFilter.isNotEmpty && company.companyName.isNotEmpty) {
         _companyNameFilterPass =
             companyNameFilter.contains(company.companyName);
       }
 
       if (companyTypeFilter.isNotEmpty &&
-          company.offerType == 'On Campus' &&
+          company.companyType != null &&
           company.companyType!.isNotEmpty) {
         _companyTypeFilterPass =
             companyTypeFilter.contains(company.companyType);
@@ -75,8 +74,9 @@ class CompaniesSearchFilter {
       if (roleNameFilter.isNotEmpty && company.roleName.isNotEmpty) {
         _roleNameFilterPass = roleNameFilter.contains(company.roleName);
       }
+
       if (roleTypeFilter.isNotEmpty &&
-          company.offerType == 'On Campus' &&
+          company.roleType != null &&
           company.roleType!.isNotEmpty) {
         _roleTypeFilterPass = roleTypeFilter.contains(company.roleType);
       }
@@ -86,7 +86,7 @@ class CompaniesSearchFilter {
       }
 
       if (skillsetFilter.isNotEmpty &&
-          company.offerType == 'On Campus' &&
+          company.skillset != null &&
           company.skillset!.isNotEmpty) {
         for (var skill in skillsetFilter) {
           if (company.skillset!.contains(skill)) {
@@ -96,12 +96,11 @@ class CompaniesSearchFilter {
         }
       }
 
-      if (packageFilter.isNotEmpty &&
-          company.offerType == 'On Campus' &&
-          company.package != null) {
+      if (packageFilter.isNotEmpty && company.package != null) {
         _packageFilterPass = (packageFilter[0] <= company.package! &&
             packageFilter[1] >= company.package!);
       }
+
       bool _companyFilterPass = _companyNameFilterPass &&
           _companyTypeFilterPass &&
           _roleNameFilterPass &&

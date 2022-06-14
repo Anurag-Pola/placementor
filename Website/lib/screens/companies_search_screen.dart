@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
-import 'package:placementor/Front%20End/models/company_class.dart';
-import 'package:placementor/Front%20End/models/companies_search_filter_class.dart';
-import 'package:placementor/Front%20End/widgets/search_company_tile.dart';
 
 import '../models/companies_metadata_class.dart';
+import '../models/companies_search_filter_class.dart';
+import '../models/company_class.dart';
 import '../widgets/search_bar.dart';
+import '../widgets/search_company_tile.dart';
 
 CompaniesSearchFilter companiesSearchFilter = CompaniesSearchFilter();
 List<String> searchedCompaniesIndex = [];
@@ -25,7 +25,6 @@ class CompaniesSearchScreen extends StatefulWidget {
 class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
   final myController = TextEditingController();
   Map<String, Company> companiesMap = {};
-  bool _searchInUse = false;
 
   @override
   void initState() {
@@ -45,9 +44,10 @@ class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(searchedCompaniesIndex);
     final width = MediaQuery.of(context).size.width;
-    final args = ModalRoute.of(context)!.settings.arguments as List;
+    // final args = ModalRoute.of(context)!.settings.arguments as List;
+    var args = ModalRoute.of(context)!.settings.arguments;
+    args = args as List;
     final companies = args[0] as List<Company>;
     final companiesMetadata = args[1] as CompaniesMetadataClass;
     for (var company in companies) {
@@ -115,14 +115,23 @@ class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
                             fontStyle: FontStyle.italic)),
                   )
                 : Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: searchedCompaniesIndex.length,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 400,
+                              childAspectRatio: 1.4,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20),
                       itemBuilder: (context, index) {
-                        return SearchCompanyTile(
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: SearchCompanyTile(
                             company:
-                                companiesMap[searchedCompaniesIndex[index]]!);
+                                companiesMap[searchedCompaniesIndex[index]]!,
+                          ),
+                        );
                       },
+                      itemCount: searchedCompaniesIndex.length,
                     ),
                   ),
           ],

@@ -8,7 +8,7 @@ import '../widgets/on_campus_faq_tiles.dart';
 import '../widgets/on_campus_my_expandable_card.dart';
 import '../widgets/on_campus_heading.dart';
 import '../widgets/on_campus_previosly_placed_contact_tiles.dart';
-import '../widgets/company_class.dart';
+import '../models/company_class.dart';
 
 final firestoreInstance = FirebaseFirestore.instance.collection('Companies');
 
@@ -43,17 +43,17 @@ class OnCampusComapnyScreen extends StatelessWidget {
             ),
             onTap: () {},
           ),
-          const SizedBox(width: 10),
-          GestureDetector(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 18,
-              child: Image.asset(
-                'assets/Images/calander.png',
-              ),
-            ),
-            onTap: () {},
-          ),
+          // const SizedBox(width: 10),
+          // GestureDetector(
+          //   child: CircleAvatar(
+          //     backgroundColor: Colors.white,
+          //     radius: 18,
+          //     child: Image.asset(
+          //       'assets/Images/calander.png',
+          //     ),
+          //   ),
+          //   onTap: () {},
+          // ),
           const SizedBox(width: 5),
         ],
       ),

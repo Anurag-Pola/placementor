@@ -11,32 +11,36 @@ CollectionReference<TnPCoordinator> firebasefirestoreinstance =
         .collection('TnPCoordinators')
         .withConverter<TnPCoordinator>(
           fromFirestore: (snapshot, _) =>
-              TnPCoordinator.fromJson(snapshot.data()!),
+              TnPCoordinator.fromJSON(snapshot.data()!),
           toFirestore: (coordinator, _) => coordinator.toJson(),
         );
 
-class TnPCoordinatorsScreen extends StatefulWidget {
-  const TnPCoordinatorsScreen({Key? key}) : super(key: key);
-
-  @override
-  _TnPCoordinatorsScreenState createState() => _TnPCoordinatorsScreenState();
-}
-
-class _TnPCoordinatorsScreenState extends State<TnPCoordinatorsScreen> {
+class TnPCoordinatorsScreen extends StatelessWidget {
+  CollectionReference metadataCollectionRef =
+      FirebaseFirestore.instance.collection('Metadata');
+  CollectionReference adminDataCollectionRef =
+      FirebaseFirestore.instance.collection('Admins');
   String nameSwitchedOn = "T&P";
-  List<String> chips = [
-    "T&P",
-    "AE",
-    "CE",
-    "CSE",
-    "ECE",
-    "EIE",
-    "EEE",
-    "IT",
-    "ME"
-  ];
+  List chips = [];
+
+  TnPCoordinatorsScreen({Key? key}) : super(key: key);
+
+  Future<QuerySnapshot<TnPCoordinator>> _getData() async {
+    chips = (((await metadataCollectionRef.doc('CollegeMetadata').get()).data()
+        as Map<String, dynamic>?)!['department']);
+    chips.insert(0, 'T&P');
+    return adminDataCollectionRef
+        .withConverter<TnPCoordinator>(
+          fromFirestore: (snapshot, _) =>
+              TnPCoordinator.fromJSON(snapshot.data()!),
+          toFirestore: (coordinator, _) => coordinator.toJson(),
+        )
+        .get();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F7FC),
@@ -54,86 +58,144 @@ class _TnPCoordinatorsScreenState extends State<TnPCoordinatorsScreen> {
           ),
         ),
         body: FutureBuilder<QuerySnapshot<TnPCoordinator>>(
-          future: firebasefirestoreinstance.get(),
+          future: _getData(),
           builder: (context, snapshot) {
             if (snapshot.hasError) return const Text('Something went wrong');
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.hasData) {
+              List<TnPCoordinator> tnpcoordinators =
+                  snapshot.data!.docs.map((doc) => doc.data()).toList();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: SizedBox(
+                      height: 50,
+                      child: Text(
+                        "T&P Coordinators",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: TnpChipsBarAndGrid(
+                        chips: chips,
+                        height: height,
+                        customAdminUsers: tnpcoordinators,
+                        nameSwitchedOn: nameSwitchedOn),
+                  ),
+                ],
+              );
+            } else {
               return const Center(child: CircularProgressIndicator());
             }
-            List<TnPCoordinator> tnpcoordinators =
-                snapshot.data!.docs.map((doc) => doc.data()).toList();
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: SizedBox(
-                    height: 50,
-                    child: Text(
-                      "T&P Coordinators",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0x3f000000),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  height: 45,
-                  child: ListView.builder(
-                    itemCount: chips.length,
-                    itemBuilder: (context, index) => TnPBranchChip(
-                      name: chips[index],
-                      radioOn: nameSwitchedOn == chips[index],
-                      onTap: () {
-                        setState(() {
-                          nameSwitchedOn = chips[index];
-                        });
-                      },
-                    ),
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisExtent: 230,
-                    ),
-                    itemCount: nameSwitchedOn == "T&P"
-                        ? tnpcoordinators.length
-                        : tnpcoordinators
-                            .where((element) =>
-                                element.department == nameSwitchedOn)
-                            .length,
-                    itemBuilder: (context, index) => TnPCoordinatorTile(
-                      tnpcoordinator: nameSwitchedOn == "T&P"
-                          ? tnpcoordinators[index]
-                          : tnpcoordinators
-                              .where((element) =>
-                                  element.department == nameSwitchedOn)
-                              .toList()[index],
-                    ),
-                  ),
-                ),
-              ],
-            );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class TnpChipsBarAndGrid extends StatefulWidget {
+  final List? chips;
+  String? nameSwitchedOn;
+  final List<TnPCoordinator> customAdminUsers;
+  final double height;
+
+  TnpChipsBarAndGrid({
+    required this.chips,
+    required this.height,
+    this.nameSwitchedOn,
+    required this.customAdminUsers,
+    Key? key,
+  }) : super(key: key);
+  @override
+  State<TnpChipsBarAndGrid> createState() => _TnpChipsBarAndGridState();
+}
+
+class _TnpChipsBarAndGridState extends State<TnpChipsBarAndGrid> {
+  List<TnPCoordinator> selectedAdminUsers = [];
+  void onChipTap(String chipValue) {
+    widget.nameSwitchedOn = chipValue;
+    selectedAdminUsers = widget.nameSwitchedOn == "T&P"
+        ? widget.customAdminUsers
+        : widget.customAdminUsers
+            .where((element) => element.department == widget.nameSwitchedOn)
+            .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.nameSwitchedOn == "T&P") {
+      selectedAdminUsers = widget.customAdminUsers;
+    }
+    return ListView(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x3f000000),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+              ),
+            ],
+            color: Colors.white,
+          ),
+          height: 45,
+          child: ListView.builder(
+            itemCount: widget.chips!.length,
+            itemBuilder: (context, index) => TnPBranchChip(
+              name: widget.chips![index],
+              radioOn: widget.nameSwitchedOn == widget.chips![index],
+              onTap: () {
+                setState(() {
+                  onChipTap(widget.chips![index]);
+                });
+              },
+            ),
+            scrollDirection: Axis.horizontal,
+          ),
+        ),
+        TnpGrid(selectedAdminUsers: selectedAdminUsers, height: widget.height),
+      ],
+    );
+  }
+}
+
+class TnpGrid extends StatefulWidget {
+  const TnpGrid({
+    Key? key,
+    required this.selectedAdminUsers,
+    required this.height,
+  }) : super(key: key);
+
+  final List<TnPCoordinator> selectedAdminUsers;
+  final double height;
+
+  @override
+  State<TnpGrid> createState() => _TnpGridState();
+}
+
+class _TnpGridState extends State<TnpGrid> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.height,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisExtent: 230,
+        ),
+        itemCount: widget.selectedAdminUsers.length,
+        itemBuilder: (context, index) => TnPCoordinatorTile(
+          tnpcoordinator: widget.selectedAdminUsers[index],
         ),
       ),
     );
