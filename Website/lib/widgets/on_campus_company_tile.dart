@@ -53,7 +53,7 @@ class OnCampusCompanyTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
-          '/onCampusCompanyPage',
+          '/on-campus-company-page',
           arguments: Company(
             id: id,
             companyName: companyName,

@@ -38,19 +38,15 @@ class OnCampusComapnyScreen extends StatelessWidget {
                 'assets/images/google_drive.png',
               ),
             ),
-            onTap: () {},
+            onTap: () async {
+              if (company.driveLink != null) {
+                final url = company.driveLink!;
+                if (await canLaunchUrlString(url)) {
+                  await launchUrlString(url);
+                }
+              }
+            },
           ),
-          // const SizedBox(width: 10),
-          // GestureDetector(
-          //   child: CircleAvatar(
-          //     backgroundColor: Colors.white,
-          //     radius: 18,
-          //     child: Image.asset(
-          //       'assets/images/calander.png',
-          //     ),
-          //   ),
-          //   onTap: () {},
-          // ),
           const SizedBox(width: 5),
         ],
       ),

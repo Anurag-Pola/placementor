@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:placementor_tnp/screens/newsfeed_screen.dart';
+import 'package:placementor_tnp/screens/students_screen.dart';
 import 'package:placementor_tnp/screens/tabs_screen.dart';
 
 import 'firebase_options.dart';
@@ -17,7 +18,7 @@ import './screens/manage_users.dart';
 import './screens/resources_screen.dart';
 import 'screens/companies_search_screen.dart';
 import 'screens/off_campus_opportunities_screen.dart';
-import 'screens/admin_screen.dart';
+import 'screens/admins_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,20 +44,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const HomeScreen(),
-        // '/login-screen': (context) => const LoginScreen(),
-        '/manage-users': (context) => const ManageUsers(),
         '/tickets': (context) => const TicketsScreen(),
         '/companies': (context) => const CompaniesScreen(),
-        '/onCampusCompanyForm': (context) => const OnCampusCompanyForm(),
-        '/onCampusCompanyPage': (context) => const OnCampusComapnyScreen(),
-        '/offCampusCompanyPage': (context) => const OffCampusComapnyScreen(),
+        '/on-campus-company-form': (context) => const OnCampusCompanyForm(),
+        '/on-campus-company-page': (context) => const OnCampusComapnyScreen(),
+        '/off-campus-company-page': (context) => const OffCampusComapnyScreen(),
         '/newsfeed': (context) => const NewsfeedScreen(),
         '/resources': (context) => const ResourcesScreen(),
-        '/offCampusOpportunities': (context) =>
+        '/off-campus-opportunities': (context) =>
             const OffCampusOpportunitiesScreen(),
-        '/tnpCoordinators': (context) => AdminScreen(),
-        '/companySearchPage': (context) => const CompaniesSearchScreen(),
-        // '/tabsScreen': (context) => const TabsScreen(),
+        '/admins-page': (context) => AdminsScreen(),
+        '/students-page': (context) => StudentsScreen(),
+        '/company-search-page': (context) => const CompaniesSearchScreen(),
       },
     );
   }

@@ -20,6 +20,31 @@ class _OffCampusOpportunitiesScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: SizedBox(
+            height: 40,
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Off Campus Opportunities",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 30,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
           stream: _offCampusOpportunitiesStream,
           builder:
@@ -33,15 +58,6 @@ class _OffCampusOpportunitiesScreenState
             }
             return Column(
               children: [
-                const Text(
-                  "Off Campus Opportunities",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.brown,
-                  ),
-                ),
-                const SizedBox(height: 20),
                 Expanded(
                   child: ListView(
                     children: snapshot.data!.docs

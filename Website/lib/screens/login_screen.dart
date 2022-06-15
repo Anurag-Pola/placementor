@@ -138,8 +138,10 @@ class _LoginWidgetState extends State<LoginWidget> {
       }
       showErrorDialog(message);
     } catch (error) {
-      // var errorMessage = 'Could not authenticate you. Please try again later.';
-      showErrorDialog(error.toString());
+      var errorMessage = error.toString().endsWith('You are not an admin')
+          ? 'You are not an admin.'
+          : 'Could not authenticate you.';
+      showErrorDialog(errorMessage);
     }
   }
 

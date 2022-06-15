@@ -279,7 +279,9 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
               ),
               InkWell(
                 onTap: () async {
+                  print('Hi');
                   if (_formKey.currentState!.validate()) {
+                    print('Hi3');
                     Map previoslyPlacedContactDetails = {};
                     Map experiences = {};
                     Map faqs = {};
@@ -293,6 +295,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                     for (var faq in globalFaqs) {
                       faqs[faq.timestamp] = faq.toJson();
                     }
+                    print('Hi2');
 
                     final company = Company.fromJson(
                       {
@@ -306,7 +309,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
                         "aboutTheFirm": _aboutTheFirmController.text,
                         "jobDescription": _jobDescriptionController.text,
                         "eligibility": _eligibilityController.text,
-                        "package": _packageController.text,
+                        "package": double.parse(_packageController.text),
                         "lastDate": lastDateToApplyController.text,
                         "linkToApply": _applyLinkController.text,
                         "driveLink": _googleDriveLinkController.text,
@@ -435,7 +438,7 @@ class Field extends StatelessWidget {
           ),
           TextFormField(
             validator: (value) {
-              return validateFunction == null ? validateFunction!(value) : true;
+              return validateFunction!(value);
             },
             decoration: textFormFieldDecoration,
             autocorrect: true,
@@ -478,9 +481,6 @@ class AppDropdownInput<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(value);
-    print(options);
-    print(options.contains(value));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -774,9 +774,7 @@ class _ComplexFieldState extends State<ComplexField> {
           ),
           TextFormField(
             validator: (value) {
-              return widget.validateFunction == null
-                  ? widget.validateFunction!(value)
-                  : true;
+              return widget.validateFunction!(value);
             },
             decoration: textFormFieldDecoration,
             autocorrect: true,

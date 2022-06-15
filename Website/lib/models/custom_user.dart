@@ -8,7 +8,7 @@ class CustomStudentUser {
   CustomStudentUser(
       {required this.name,
       required this.email,
-      required this.password,
+      this.password,
       required this.uid,
       required this.rollNo});
 
@@ -16,7 +16,7 @@ class CustomStudentUser {
       : this(
           name: json['name'] as String,
           email: json['email'] as String,
-          password: json['password'] as String,
+          password: (json['password'] ?? 'encrypted') as String,
           uid: json['uid'] as String,
           rollNo: json['rollNo'] as String,
         );

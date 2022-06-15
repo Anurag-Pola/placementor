@@ -15,8 +15,8 @@ class SearchCompanyTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
             company.offerType == 'On Campus'
-                ? '/onCampusCompanyPage'
-                : '/offCampusCompanyPage',
+                ? '/on-campus-company-page'
+                : '/off-campus-company-page',
             arguments: company);
       },
       child: Container(

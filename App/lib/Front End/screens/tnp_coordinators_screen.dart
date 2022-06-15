@@ -28,6 +28,7 @@ class TnPCoordinatorsScreen extends StatelessWidget {
   Future<QuerySnapshot<TnPCoordinator>> _getData() async {
     chips = (((await metadataCollectionRef.doc('CollegeMetadata').get()).data()
         as Map<String, dynamic>?)!['department']);
+    chips.sort();
     chips.insert(0, 'T&P');
     return adminDataCollectionRef
         .withConverter<TnPCoordinator>(

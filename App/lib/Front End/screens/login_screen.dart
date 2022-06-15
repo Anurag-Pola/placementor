@@ -36,6 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
           TextButton(
             child: const Text('OKAY'),
             onPressed: () {
+              setState(() {
+                _isLoading = false;
+              });
               Navigator.of(ctx).pop();
             },
           ),
@@ -84,8 +87,10 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       showErrorDialog(message);
     } catch (error) {
-      // var errorMessage = 'Could not authenticate you. Please try again later.';
-      showErrorDialog(error.toString());
+      var errorMessage = error.toString().endsWith('You are not a student')
+          ? 'You are not a student.'
+          : 'Could not authenticate you.';
+      showErrorDialog(errorMessage);
     }
   }
 
@@ -159,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: 'Email',
                           hintStyle: TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            // fontWeight: FontWeight.bold,
                             fontSize: h * 0.02,
                           ),
                           // isDense: true,
@@ -195,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             hintText: 'Password',
                             hintStyle: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              // fontWeight: FontWeight.bold,
                               fontSize: h * 0.02,
                             ),
                             // isDense: true,

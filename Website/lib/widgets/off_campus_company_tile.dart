@@ -23,7 +23,7 @@ class OffCampusCompanyTile extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/offCampusCompanyPage',
+        Navigator.pushNamed(context, '/off-campus-company-page',
             arguments: Company.fromJson({
               "companyName": companyName,
               "roleName": roleName,

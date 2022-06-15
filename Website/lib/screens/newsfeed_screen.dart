@@ -47,6 +47,7 @@ class _NewsfeedScreenState extends State<NewsfeedScreen> {
       builder: (context, AsyncSnapshot snapshot) {
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             iconTheme: const IconThemeData(color: Colors.black),
             backgroundColor: Colors.blue.shade100,
             elevation: 0,
@@ -68,36 +69,6 @@ class _NewsfeedScreenState extends State<NewsfeedScreen> {
                   ),
                 ),
               ),
-            ),
-          ),
-          drawer: Drawer(
-            child: ListView(
-              children: <Widget>[
-                const DrawerHeader(
-                  child: Text("Newsfeed"),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                ),
-                ListTile(
-                  title: const Text("Home"),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text("Profile"),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text("Settings"),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
             ),
           ),
           floatingActionButton: SpeedDial(

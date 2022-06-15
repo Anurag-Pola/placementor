@@ -72,7 +72,10 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
                         onPressed: () => Navigator.pop(context),
                       ),
                       TextButton(
-                        child: const Text("Delete"),
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(color: Colors.red),
+                        ),
                         onPressed: () {
                           firebaseInstance.doc(option.timestamp).delete();
                           options.remove(option);
@@ -88,19 +91,33 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
           );
         }
         return Scaffold(
-          body: Column(
-            children: [
-              const Text(
-                "Resources",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.brown,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            iconTheme: const IconThemeData(color: Colors.black),
+            backgroundColor: Colors.grey.shade50,
+            elevation: 0,
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: SizedBox(
+                height: 40,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Resources",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+            ),
+          ),
+          body: Column(
+            children: [
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -116,8 +133,8 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
           ),
           floatingActionButton: Container(
             margin: const EdgeInsets.all(10),
-            height: 40.0,
-            width: 40.0,
+            height: 50.0,
+            width: 50.0,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(30.0)),
               boxShadow: [
@@ -140,22 +157,12 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
               onTap: () {
                 showDialog(context: context, builder: resourcesDialog);
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Icon(
-                    Icons.add_rounded,
-                    color: Colors.white,
-                    size: 20,
-                  ), // icon
-                  Text(
-                    "Add",
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.white,
-                    ),
-                  ), // text
-                ],
+              child: const Center(
+                child: Icon(
+                  Icons.add_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
               ),
             ),
           ),

@@ -30,19 +30,28 @@ const InputDecoration textFormFieldDecoration = InputDecoration(
   fillColor: Color(0xfff8f8f8),
 );
 
-class AdminScreen extends StatelessWidget {
+class AdminsScreen extends StatefulWidget {
+  AdminsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AdminsScreen> createState() => _AdminsScreenState();
+}
+
+class _AdminsScreenState extends State<AdminsScreen> {
   CollectionReference metadataCollectionRef =
       FirebaseFirestore.instance.collection('Metadata');
+
   CollectionReference adminDataCollectionRef =
       FirebaseFirestore.instance.collection('Admins');
-  String nameSwitchedOn = "CSE";
-  List chips = [];
 
-  AdminScreen({Key? key}) : super(key: key);
+  String nameSwitchedOn = "T&P";
+
+  List chips = [];
 
   Future<QuerySnapshot<CustomAdminUser>> _getData() async {
     chips = (((await metadataCollectionRef.doc('CollegeMetadata').get()).data()
         as Map<String, dynamic>?)!['department']);
+    chips.sort();
     chips.insert(0, 'T&P');
     return adminDataCollectionRef
         .withConverter<CustomAdminUser>(
@@ -56,7 +65,36 @@ class AdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    void setStateAdminsScreen() {
+      setState(() {});
+    }
+
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: Colors.grey.shade50,
+        elevation: 0,
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: SizedBox(
+            height: 40,
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "T&P Coordinators",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 30,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: FutureBuilder<QuerySnapshot<CustomAdminUser>>(
           future: _getData(),
           builder: (context, snapshot) {
@@ -69,18 +107,6 @@ class AdminScreen extends StatelessWidget {
 
             return Column(
               children: [
-                const SizedBox(height: 20),
-                const Center(
-                  child: Text(
-                    "TNP Coordinators",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
                 Expanded(
                   child: AdminBranchChipsBar(
                     adminDataCollectionRef: adminDataCollectionRef,
@@ -106,10 +132,7 @@ class AdminScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        _actionResponseMap["status"],
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                      Text(_actionResponseMap["status"]),
                       IconButton(
                         onPressed: () {
                           Navigator.of(context).pop();

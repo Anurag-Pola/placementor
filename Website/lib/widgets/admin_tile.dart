@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:placementor_tnp/widgets/manage_users_functions.dart';
 
 import '../models/custom_user.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
 
 const TextStyle textStyle = TextStyle(
   color: Color(0xff252b42),
@@ -112,56 +115,57 @@ class _AdminTileState extends State<AdminTile> {
               fontWeight: FontWeight.w700,
             ),
           ),
-
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("Delete"),
-                  content: const Text(
-                      "Are you sure you want to delete this T&P Coordinator?"),
-                  actions: [
-                    TextButton(
-                      child: const Text(
-                        "Delete",
-                        style: TextStyle(
-                          color: Colors.red,
+          if (widget.adminUser.uid != auth.currentUser!.uid)
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Delete"),
+                    content: const Text(
+                        "Are you sure you want to delete this T&P Coordinator?"),
+                    actions: [
+                      TextButton(
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
-                      ),
-                      onPressed: () async {
-                        Map<String, dynamic> _deleteActionResponseMap =
-                            await deleteAdminWithEmail(
-                                widget.adminDataCollectionRef,
-                                widget.adminUser);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(_deleteActionResponseMap["status"] ==
-                                    "ERROR"
-                                ? _deleteActionResponseMap["body"]
-                                : "Successfully deleted admin ${_deleteActionResponseMap['body'].name} with uid ${_deleteActionResponseMap['body'].uid}")));
+                        onPressed: () async {
+                          Map<String, dynamic> _deleteActionResponseMap =
+                              await deleteAdminWithEmail(
+                                  widget.adminDataCollectionRef,
+                                  widget.adminUser);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(_deleteActionResponseMap[
+                                          "status"] ==
+                                      "ERROR"
+                                  ? _deleteActionResponseMap["body"]
+                                  : "Successfully deleted admin ${_deleteActionResponseMap['body'].name} with uid ${_deleteActionResponseMap['body'].uid}")));
 
-                        Navigator.pop(context);
-                        setState(() {});
-                      },
-                    ),
-                    TextButton(
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: Colors.green,
-                        ),
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
                       ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-              );
-            },
-            icon: const Icon(
-              Icons.delete_rounded,
-              color: Color(0xFFF44336),
+                      TextButton(
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.delete_rounded,
+                color: Color(0xFFF44336),
+              ),
             ),
-          ),
         ],
       ),
     );

@@ -162,7 +162,7 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
                                   fontSize: 10, color: Colors.grey)),
                           ElevatedButton(
                             onPressed: () async {
-                              if (isVoted) {
+                              if (isVoted || optionSelectedKey == '-1') {
                                 return;
                               }
                               showDialog(
@@ -171,7 +171,7 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
                                     return AlertDialog(
                                       title: const Text('Vote'),
                                       content: const Text(
-                                          "Are you sure you want vote for the option?"),
+                                          "Are you sure you want to vote for the option?"),
                                       actions: <Widget>[
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -224,7 +224,9 @@ class _NewsfeedPollState extends State<NewsfeedPoll> {
                             ),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                isVoted ? Colors.grey : Colors.green,
+                                (isVoted || optionSelectedKey == '-1')
+                                    ? Colors.grey
+                                    : Colors.green,
                               ),
                               foregroundColor: MaterialStateProperty.all<Color>(
                                 Colors.white,

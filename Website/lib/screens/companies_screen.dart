@@ -19,8 +19,8 @@ class CompaniesScreen extends StatefulWidget {
 }
 
 class _CompaniesScreenState extends State<CompaniesScreen> {
-CompaniesMetadataClass? companiesMetadata;
-bool toggleValue = false;
+  CompaniesMetadataClass? companiesMetadata;
+  bool toggleValue = true;
 
   Future<QuerySnapshot<Company>> _getCompaniesSetMetadata() async {
     // var companiesMetadataObj = (await _getCompaniesMetadata()).data() as Map;
@@ -52,8 +52,7 @@ bool toggleValue = false;
     final width = MediaQuery.of(context).size.width;
 
     return FutureBuilder<QuerySnapshot<Company>>(
-                future: _getCompaniesSetMetadata(),
-
+      future: _getCompaniesSetMetadata(),
       builder: (context, snapshot) {
         if (snapshot.hasError) return const Text('Something went wrong');
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -146,51 +145,51 @@ bool toggleValue = false;
                 ],
               ),
               GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed(
-                        '/companySearchPage',
-                        arguments: [companies, companiesMetadata]),
-                    child: Container(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            child: Icon(Icons.search_rounded,
-                                color: Color.fromARGB(255, 111, 111, 111)),
+                onTap: () => Navigator.of(context).pushNamed(
+                    '/company-search-page',
+                    arguments: [companies, companiesMetadata]),
+                child: Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Icon(Icons.search_rounded,
+                            color: Color.fromARGB(255, 111, 111, 111)),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Search for an opportunity',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(255, 111, 111, 111),
                           ),
-                          Expanded(
-                            child: Text(
-                              'Search for an opportunity',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(255, 111, 111, 111),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 15,
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x3f000000),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                        color: Colors.white,
-                      ),
-                    ),
+                    ],
                   ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 15,
+                  ),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x3f000000),
+                        blurRadius: 4,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               toggleValue == true
                   ? Column(
                       children: [

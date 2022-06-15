@@ -26,7 +26,7 @@ class _OffCampusFormScreenState extends State<OffCampusFormScreen> {
   @override
   Widget build(BuildContext context) {
     CollectionReference offCampusOpportunities =
-        FirebaseFirestore.instance.collection('offCampusOpportunities');
+        FirebaseFirestore.instance.collection('OffCampusOpportunities');
     double safeAreaHeight = MediaQuery.of(context).padding.top;
     double height = MediaQuery.of(context).size.height - safeAreaHeight;
     double width = MediaQuery.of(context).size.width;

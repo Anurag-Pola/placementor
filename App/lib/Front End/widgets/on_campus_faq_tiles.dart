@@ -16,10 +16,16 @@ class FAQTiles extends StatefulWidget {
 }
 
 class _FAQTilesState extends State<FAQTiles> {
+  late List<bool> _isOpen;
+
+  @override
+  void initState() {
+    super.initState();
+    _isOpen = List.filled(widget.faqs.length, false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<bool> _isOpen = List.filled(widget.faqs.length, false);
-
     return Container(
       width: double.infinity,
       color: Colors.white,

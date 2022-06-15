@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../screens/on_campus_company_form.dart';
 import '../widgets/on_campus_process_timeline.dart';
@@ -33,27 +34,26 @@ class OnCampusComapnyScreen extends StatelessWidget {
           },
         ),
         actions: [
-          GestureDetector(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 18,
-              child: Image.asset(
-                'assets/Images/google_drive.png',
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 18,
+                child: Image.asset(
+                  'assets/Images/google_drive.png',
+                ),
               ),
+              onTap: () async {
+                if (company.driveLink != null) {
+                  final url = company.driveLink!;
+                  if (await canLaunchUrlString(url)) {
+                    await launchUrlString(url);
+                  }
+                }
+              },
             ),
-            onTap: () {},
           ),
-          // const SizedBox(width: 10),
-          // GestureDetector(
-          //   child: CircleAvatar(
-          //     backgroundColor: Colors.white,
-          //     radius: 18,
-          //     child: Image.asset(
-          //       'assets/Images/calander.png',
-          //     ),
-          //   ),
-          //   onTap: () {},
-          // ),
           const SizedBox(width: 5),
         ],
       ),
@@ -173,40 +173,48 @@ class OnCampusComapnyScreen extends StatelessWidget {
           ),
           Positioned(
             bottom: 10,
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 215,
-                height: 52,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x3f000000),
-                      blurRadius: 4,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                  gradient: const LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Color(0xff925ffc),
-                      Color(0xff3b57ff),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () async {
+                  final url = company.linkToApply;
+                  if (await canLaunchUrlString(url)) {
+                    await launchUrlString(url);
+                  }
+                },
+                child: Container(
+                  width: 215,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x3f000000),
+                        blurRadius: 4,
+                        offset: Offset(0, 4),
+                      ),
                     ],
+                    gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color(0xff925ffc),
+                        Color(0xff3b57ff),
+                      ],
+                    ),
                   ),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                child: const Center(
-                  child: Text(
-                    "APPLY NOW",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                  child: const Center(
+                    child: Text(
+                      "APPLY NOW",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
                     ),
                   ),
                 ),

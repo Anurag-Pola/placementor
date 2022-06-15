@@ -80,14 +80,16 @@ class ProfileScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              snapshot.hasData && studentName != null
-                                  ? studentName!
-                                  : 'Student Name',
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                            FittedBox(
+                              child: Text(
+                                snapshot.hasData && studentName != null
+                                    ? studentName!
+                                    : 'Student Name',
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 24,
+                                  // fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             Text(

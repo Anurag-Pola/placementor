@@ -11,55 +11,67 @@ final firebaseInstance = FirebaseFirestore.instance
       toFirestore: (resource, _) => resource.toJson(),
     );
 
-class ResourcesScreen extends StatelessWidget {
+class ResourcesScreen extends StatefulWidget {
   const ResourcesScreen({Key? key}) : super(key: key);
 
   @override
+  State<ResourcesScreen> createState() => _ResourcesScreenState();
+}
+
+class _ResourcesScreenState extends State<ResourcesScreen> {
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot<ResourceClass>>(
-      future: firebaseInstance.get(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) return const Text('Something went wrong');
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        var options = snapshot.data!.docs.map((doc) => doc.data()).toList();
-        print(options);
-        return Scaffold(
-          backgroundColor: const Color(0xFFF7F9FC),
-          body: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                child: SizedBox(
-                  height: 40,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Resources",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w600,
+    return RefreshIndicator(
+      onRefresh: () {
+        return Future(() {
+          setState(() {});
+        });
+      },
+      child: FutureBuilder<QuerySnapshot<ResourceClass>>(
+        future: firebaseInstance.get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) return const Text('Something went wrong');
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          var options = snapshot.data!.docs.map((doc) => doc.data()).toList();
+          print(options);
+          return Scaffold(
+            backgroundColor: const Color(0xFFF7F9FC),
+            body: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  child: SizedBox(
+                    height: 40,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Resources",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) => ResourceTile(
-                    resource: options[index],
+                Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => ResourceTile(
+                      resource: options[index],
+                    ),
+                    itemCount: options.length,
                   ),
-                  itemCount: options.length,
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
