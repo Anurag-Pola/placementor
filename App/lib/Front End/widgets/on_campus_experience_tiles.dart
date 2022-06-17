@@ -120,12 +120,9 @@ class ExperienceTile extends StatelessWidget {
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image.asset(
-                    'assets/images/tnp_coordinators_image.png',
-                    scale: 1.5,
-                  ),
+                child: Image.asset(
+                  'assets/images/student_user.png',
+                  scale: 1.5,
                 ),
               ),
               const SizedBox(width: 20),

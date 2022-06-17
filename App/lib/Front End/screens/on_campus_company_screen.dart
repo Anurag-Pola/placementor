@@ -57,6 +57,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
           Column(
             children: [
               OnCampusHeading(
+                logo: 'company',
                 companyName: company.companyName,
                 roleName: company.roleName,
               ),

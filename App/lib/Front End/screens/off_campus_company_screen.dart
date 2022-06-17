@@ -3,7 +3,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../models/company_class.dart';
 import '../widgets/on_campus_heading.dart';
-import '../widgets/on_campus_my_expandable_card.dart';
 
 class OffCampusComapnyScreen extends StatelessWidget {
   const OffCampusComapnyScreen({Key? key}) : super(key: key);
@@ -31,13 +30,41 @@ class OffCampusComapnyScreen extends StatelessWidget {
           Column(
             children: [
               OnCampusHeading(
+                logo: 'opportunity',
                 companyName: company.companyName,
                 roleName: company.roleName,
               ),
               const SizedBox(height: 20),
-              MyExpandableCard(
-                content: company.jobDescription,
-                heading: "DESCRIPTION",
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Opacity(
+                      opacity: 0.75,
+                      child: Text(
+                        'DESCRIPTION',
+                        style: TextStyle(
+                          color: Color(0xff18191e),
+                          fontSize: 13,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.75,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(child: Text(company.jobDescription)),
+                    const SizedBox(height: 10),
+                  ],
+                ),
               )
             ],
           ),

@@ -58,6 +58,7 @@ class _OffCampusCompanyFormState extends State<OffCampusCompanyForm> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFF7F9FC),
         elevation: 0,
         leading: IconButton(
@@ -126,25 +127,29 @@ class _OffCampusCompanyFormState extends State<OffCampusCompanyForm> {
             ),
             InkWell(
               onTap: () async {
-                // if (_formKey.currentState!.validate()) {
-                final company = Company.fromJson({
-                  "companyName": _companyNameController.text,
-                  "roleName": _roleNameController.text,
-                  "jobDescription": _jobDescriptionController.text,
-                  "linkToApply": _linkToApplyController.text,
-                  "id": widget.id == ""
-                      ? DateTime.now().millisecondsSinceEpoch.toString()
-                      : widget.id,
-                  "offerType": "Off Campus",
-                });
-                firebaseInstance.doc(company.id).set(company);
+                // if (_companyNameController.text.isNotEmpty &&
+                //     _jobDescriptionController.text.isNotEmpty &&
+                //     _linkToApplyController.text.isNotEmpty &&
+                //     _roleNameController.text.isNotEmpty) {
+                if (_formKey.currentState!.validate()) {
+                  final company = Company.fromJson({
+                    "companyName": _companyNameController.text,
+                    "roleName": _roleNameController.text,
+                    "jobDescription": _jobDescriptionController.text,
+                    "linkToApply": _linkToApplyController.text,
+                    "id": widget.id == ""
+                        ? DateTime.now().millisecondsSinceEpoch.toString()
+                        : widget.id,
+                    "offerType": "Off Campus",
+                  });
+                  firebaseInstance.doc(company.id).set(company);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('🤘Done and Dusted!!✌️')),
-                );
-                await Future.delayed(const Duration(seconds: 2));
-                Navigator.pop(context);
-                // }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Opportunity published successfully.')),
+                  );
+                  await Future.delayed(const Duration(seconds: 2));
+                  Navigator.pop(context);
+                }
               },
               child: Container(
                 width: 215,
@@ -194,7 +199,7 @@ class Field extends StatelessWidget {
   const Field({
     Key? key,
     required this.text,
-    this.validateFunction,
+    required this.validateFunction,
     required this.textInputType,
     required this.textInputAction,
     required this.controller,
@@ -203,7 +208,7 @@ class Field extends StatelessWidget {
 
   final String text;
   final TextEditingController controller;
-  final Function? validateFunction;
+  final Function validateFunction;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
   final bool expand;
@@ -236,7 +241,7 @@ class Field extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width * 0.633,
-      height: textInputType == TextInputType.multiline ? 300 : 90,
+      // height: textInputType == TextInputType.multiline ? 300 : 90,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -251,7 +256,7 @@ class Field extends StatelessWidget {
           ),
           TextFormField(
             validator: (value) {
-              return validateFunction == null ? validateFunction!(value) : true;
+              return validateFunction(value);
             },
             decoration: textFormFieldDecoration,
             autocorrect: true,

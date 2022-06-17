@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:placementor_tnp/widgets/manage_users_functions.dart';
 
 import '../models/custom_user.dart';
 
@@ -63,12 +61,9 @@ class _StudentTileState extends State<StudentTile> {
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: Image.asset(
-                'assets/images/tnp_coordinators_image.png',
-                scale: 1.5,
-              ),
+            child: Image.asset(
+              'assets/images/student_user.png',
+              scale: 1.5,
             ),
           ),
           const SizedBox(height: 10),

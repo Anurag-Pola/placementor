@@ -123,8 +123,9 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                   ),
                   Switch(
                     activeColor: Colors.cyan,
+                    activeTrackColor: Colors.grey,
                     inactiveThumbColor: Colors.cyan,
-                    inactiveTrackColor: Colors.cyan,
+                    inactiveTrackColor: Colors.grey,
                     mouseCursor: SystemMouseCursors.click,
                     value: toggleValue,
                     onChanged: (value) {
@@ -212,8 +213,8 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                           child: GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 400,
-                                    childAspectRatio: 1.4,
+                                    maxCrossAxisExtent: 450,
+                                    childAspectRatio: 1.7,
                                     crossAxisSpacing: 20,
                                     mainAxisSpacing: 20),
                             itemBuilder: (context, index) => MouseRegion(

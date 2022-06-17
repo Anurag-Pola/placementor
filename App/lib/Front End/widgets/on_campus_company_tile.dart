@@ -83,12 +83,17 @@ class OnCampusCompanyTile extends StatelessWidget {
             Row(
               children: [
                 Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(left: 10, top: 5),
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: const FlutterLogo(size: 40),
+                  child: Image.asset(
+                    'assets/images/company.png',
+                    scale: 1.5,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Column(

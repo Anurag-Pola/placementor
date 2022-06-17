@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:placementor_tnp/widgets/lengths.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NewsfeedPoll extends StatefulWidget {
   final DocumentSnapshot poll;
@@ -17,8 +17,8 @@ class NewsfeedPoll extends StatefulWidget {
 
 class _NewsfeedPollState extends State<NewsfeedPoll> {
   Future<void> _onOpen(LinkableElement link) async {
-    if (await canLaunch(link.url)) {
-      await launch(link.url);
+    if (await canLaunchUrlString(link.url)) {
+      await launchUrlString(link.url);
     } else {
       showDialog(
         context: context,

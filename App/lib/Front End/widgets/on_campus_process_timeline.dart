@@ -11,53 +11,80 @@ class ProcessTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 300,
       color: Colors.white,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TimelineTile(
-              alignment: TimelineAlign.manual,
-              lineXY: 0.1,
-              isFirst: true,
-              indicatorStyle: _indicatorStyle(0),
-              afterLineStyle: _lineStyle(),
-              endChild: Content(
-                names: processTimeline.names,
-                i: 0,
-                descriptions: processTimeline.descriptions,
-                dates: processTimeline.dates,
-              ),
-            ),
-            for (var i = 1; i < processTimeline.steps.length - 1; i++)
-              TimelineTile(
-                alignment: TimelineAlign.manual,
-                lineXY: 0.1,
-                indicatorStyle: _indicatorStyle(i),
-                beforeLineStyle: _lineStyle(),
-                afterLineStyle: _lineStyle(),
-                endChild: Content(
-                  names: processTimeline.names,
-                  i: i,
-                  descriptions: processTimeline.descriptions,
-                  dates: processTimeline.dates,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25.0),
+            child: Opacity(
+              opacity: 0.75,
+              child: Text(
+                "PROCESS TIMELINE",
+                style: TextStyle(
+                  color: Color(0xff18191e),
+                  fontSize: 13,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.75,
                 ),
               ),
-            TimelineTile(
-              alignment: TimelineAlign.manual,
-              lineXY: 0.1,
-              isLast: true,
-              indicatorStyle: _indicatorStyle(processTimeline.steps.length - 1),
-              beforeLineStyle: _lineStyle(),
-              endChild: Content(
-                names: processTimeline.names,
-                i: processTimeline.names.length - 1,
-                descriptions: processTimeline.descriptions,
-                dates: processTimeline.dates,
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TimelineTile(
+                    alignment: TimelineAlign.manual,
+                    lineXY: 0.1,
+                    isFirst: true,
+                    indicatorStyle: _indicatorStyle(0),
+                    afterLineStyle: _lineStyle(),
+                    endChild: Content(
+                      names: processTimeline.names,
+                      i: 0,
+                      descriptions: processTimeline.descriptions,
+                      dates: processTimeline.dates,
+                    ),
+                  ),
+                  for (var i = 1; i < processTimeline.steps.length - 1; i++)
+                    TimelineTile(
+                      alignment: TimelineAlign.manual,
+                      lineXY: 0.1,
+                      indicatorStyle: _indicatorStyle(i),
+                      beforeLineStyle: _lineStyle(),
+                      afterLineStyle: _lineStyle(),
+                      endChild: Content(
+                        names: processTimeline.names,
+                        i: i,
+                        descriptions: processTimeline.descriptions,
+                        dates: processTimeline.dates,
+                      ),
+                    ),
+                  TimelineTile(
+                    alignment: TimelineAlign.manual,
+                    lineXY: 0.1,
+                    isLast: true,
+                    indicatorStyle:
+                        _indicatorStyle(processTimeline.steps.length - 1),
+                    beforeLineStyle: _lineStyle(),
+                    endChild: Content(
+                      names: processTimeline.names,
+                      i: processTimeline.names.length - 1,
+                      descriptions: processTimeline.descriptions,
+                      dates: processTimeline.dates,
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

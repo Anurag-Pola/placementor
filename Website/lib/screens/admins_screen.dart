@@ -31,7 +31,7 @@ const InputDecoration textFormFieldDecoration = InputDecoration(
 );
 
 class AdminsScreen extends StatefulWidget {
-  AdminsScreen({Key? key}) : super(key: key);
+  const AdminsScreen({Key? key}) : super(key: key);
 
   @override
   State<AdminsScreen> createState() => _AdminsScreenState();

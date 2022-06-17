@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:placementor/Front%20End/models/companies_search_filter_class.dart';
 
@@ -63,6 +65,7 @@ class _FilterAlertDialogState extends State<FilterAlertDialog> {
         children: [
           const Text("Company Type"),
           Filter(
+            moreOptions: false,
             chipsList: widget.companiesMetadata.companyTypes
                 .map((e) => Chip(label: e, isSelected: false))
                 .toList(),
@@ -74,6 +77,7 @@ class _FilterAlertDialogState extends State<FilterAlertDialog> {
           ),
           const Text("Role Type"),
           Filter(
+            moreOptions: false,
             chipsList: widget.companiesMetadata.roleTypes
                 .map((e) => Chip(label: e, isSelected: false))
                 .toList(),
@@ -85,6 +89,7 @@ class _FilterAlertDialogState extends State<FilterAlertDialog> {
           ),
           const Text("Offer Type"),
           Filter(
+            moreOptions: false,
             chipsList: widget.companiesMetadata.offerTypes
                 .map((e) => Chip(label: e, isSelected: false))
                 .toList(),
@@ -193,6 +198,19 @@ class LittleSearch extends StatefulWidget {
 class _LittleSearchState extends State<LittleSearch> {
   @override
   Widget build(BuildContext context) {
+    List _chipListToShow = widget._chipsList
+        .where((e) => !widget._selectedChipsList.contains(e))
+        .toList();
+    _chipListToShow =
+        _chipListToShow.sublist(0, min(3, _chipListToShow.length));
+    _chipListToShow = _chipListToShow.sublist(
+        0,
+        (min(3, widget._chipsList.length) - widget._selectedChipsList.length >
+                0)
+            ? min(3, widget._chipsList.length) -
+                widget._selectedChipsList.length
+            : 0);
+
     return SizedBox(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -226,10 +244,15 @@ class _LittleSearchState extends State<LittleSearch> {
             height: 5,
           ),
           Filter(
-            chipsList: widget._chipsList
-                .where((element) => element
-                    .toLowerCase()
-                    .contains(widget._controller.text.toLowerCase()))
+            moreOptions: widget._chipsList.length >
+                    (widget._selectedChipsList + _chipListToShow).length
+                ? widget._controller.text.trim().isEmpty
+                : false,
+            chipsList: (widget._controller.text.isEmpty
+                    ? widget._selectedChipsList + _chipListToShow
+                    : widget._chipsList.where((element) => element
+                        .toLowerCase()
+                        .contains(widget._controller.text.toLowerCase())))
                 .map((e) => Chip(label: e, isSelected: false))
                 .toList(),
             selectedChips: widget._selectedChipsList,
@@ -243,15 +266,21 @@ class _LittleSearchState extends State<LittleSearch> {
 class Chip {
   String label;
   bool isSelected;
+
   Chip({required this.label, required this.isSelected});
 }
 
 class Filter extends StatefulWidget {
-  const Filter({Key? key, required this.chipsList, required this.selectedChips})
+  const Filter(
+      {Key? key,
+      required this.chipsList,
+      required this.selectedChips,
+      required this.moreOptions})
       : super(key: key);
 
   final List<Chip> chipsList;
   final List selectedChips;
+  final bool moreOptions;
 
   @override
   State<Filter> createState() => _Filter();
@@ -284,6 +313,15 @@ class _Filter extends State<Filter> {
         ),
       );
       chips.add(item);
+    }
+    if (widget.moreOptions) {
+      chips.add(Container(
+          padding: const EdgeInsets.only(left: 10, right: 5),
+          margin: const EdgeInsets.all(15),
+          child: Text(
+            "more...",
+            style: TextStyle(color: Colors.grey),
+          )));
     }
     return chips;
   }

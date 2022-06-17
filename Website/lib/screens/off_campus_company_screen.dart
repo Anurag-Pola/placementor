@@ -18,17 +18,9 @@ class OffCampusComapnyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: [
           IconButton(
             icon: const Icon(
@@ -46,14 +38,42 @@ class OffCampusComapnyScreen extends StatelessWidget {
           Column(
             children: [
               OnCampusHeading(
+                logo: 'opportunity',
                 companyName: company.companyName,
                 roleName: company.roleName,
               ),
               const SizedBox(height: 20),
-              MyExpandableCard(
-                content: company.jobDescription,
-                heading: "DESCRIPTION",
-              )
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Opacity(
+                      opacity: 0.75,
+                      child: Text(
+                        'DESCRIPTION',
+                        style: TextStyle(
+                          color: Color(0xff18191e),
+                          fontSize: 13,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.75,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(child: Text(company.jobDescription)),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
             ],
           ),
           Positioned(

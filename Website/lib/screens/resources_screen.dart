@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/resource_class.dart';
 
@@ -330,8 +330,8 @@ class Option extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     final url = resource.link;
-                    if (await canLaunch(url)) {
-                      await launch(url);
+                    if (await canLaunchUrlString(url)) {
+                      await launchUrlString(url);
                     }
                   },
                   child: const Icon(

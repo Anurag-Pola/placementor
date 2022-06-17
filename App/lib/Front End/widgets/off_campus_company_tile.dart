@@ -63,7 +63,11 @@ class OffCampusCompanyTile extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const FlutterLogo(size: 40),
+              child: Image.asset(
+                'assets/images/opportunity.png',
+                scale: 1.5,
+                height: 60,
+              ),
             ),
             const SizedBox(height: 8),
             FittedBox(
@@ -79,6 +83,8 @@ class OffCampusCompanyTile extends StatelessWidget {
             ),
             Text(
               companyName,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: "Poppins",

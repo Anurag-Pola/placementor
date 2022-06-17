@@ -86,6 +86,10 @@ flutter:
     - assets/images/google_drive.png
     - assets/images/calander.png
     - assets/images/linkedin-logo.png
+    - assets/images/student_user.png
+    - assets/images/company.png
+    - assets/images/opportunity.png
+    - assets/images/admin_user.png
 
   #   - images/a_dot_ham.jpeg
 

@@ -69,15 +69,15 @@ Future<Map<String, dynamic>> registerStudentWithEmailPassword(
         "$createUsersAppScriptUrl?CreateUsersSheetUrl=$createUsersSheetsUrl");
     final response = await http.get(
       createUsersWebAPI,
-      headers: {
-        "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":
-            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-        "Access-Control-Allow-Methods": "GET"
-      },
+      // headers: {
+      //   "Access-Control-Allow-Credentials": "true",
+      //   "Accept": "application/json",
+      //   "Access-Control-Allow-Origin": "*",
+      //   "Access-Control-Allow-Headers":
+      //       "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+      //   "Access-Control-Allow-Methods": "GET, HEAD"
+      // },
     );
-
     if (response.statusCode != 200) {
       throw ("${response.statusCode} - ${response.body}");
     }
@@ -189,13 +189,13 @@ Future<Map<String, dynamic>> deleteStudentWithEmail(
         "$deleteUsersAppScriptUrl?DeleteUsersSheetUrl=$deleteUsersSheetsUrl");
     final response = await http.get(
       deleteUsersWebAPI,
-      headers: {
-        "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":
-            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-        "Access-Control-Allow-Methods": "GET"
-      },
+      // headers: {
+      //   "Accept": "application/json",
+      //   "Access-Control-Allow-Origin": "*",
+      //   "Access-Control-Allow-Headers":
+      //       "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+      //   "Access-Control-Allow-Methods": "GET"
+      // },
     );
     if (response.statusCode != 200) {
       throw ("${response.statusCode} - ${response.body}");

@@ -118,8 +118,8 @@ class _CompaniesSearchScreenState extends State<CompaniesSearchScreen> {
                     child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 400,
-                              childAspectRatio: 1.4,
+                              maxCrossAxisExtent: 450,
+                              childAspectRatio: 1.7,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20),
                       itemBuilder: (context, index) {
