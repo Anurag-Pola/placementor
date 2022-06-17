@@ -29,7 +29,10 @@ class SearchCompanyTile extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const FlutterLogo(size: 40),
+              child: Image.asset(
+                'assets/Images/${company.offerType == 'On Campus' ? 'company' : 'opportunity'}.png',
+                scale: 1.5,
+              ),
             ),
             const SizedBox(height: 5),
             Column(

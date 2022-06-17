@@ -75,6 +75,10 @@ flutter:
     - assets/Images/google_drive.png
     - assets/Images/linkedin-logo.png
     - assets/Images/tnp_coordinators_image.png
+    - assets/Images/student_user.png
+    - assets/Images/company.png
+    - assets/Images/opportunity.png
+    - assets/Images/admin_user.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

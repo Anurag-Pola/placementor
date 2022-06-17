@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:placementor_tnp/models/companies_metadata_class.dart';
 
 import '../models/company_class.dart';
 import '../models/experience_tile_class.dart';
@@ -14,6 +15,14 @@ final firebaseInstance =
           fromFirestore: (snapshot, _) => Company.fromJson(snapshot.data()!),
           toFirestore: (company, _) => company.toJson(),
         );
+
+final companiesMetadataDocument = FirebaseFirestore.instance
+    .collection('Metadata')
+    .doc('CompaniesMetadata')
+    .withConverter<CompaniesMetadataClass>(
+        fromFirestore: (snapshot, _) =>
+            CompaniesMetadataClass.fromJson(snapshot.data()!),
+        toFirestore: (metadata, _) => metadata.toJson());
 
 List<String> globalSkillset = [];
 ProcessTimelineClass globalProcessTimeline = const ProcessTimelineClass(
@@ -73,6 +82,7 @@ class OnCampusCompanyForm extends StatefulWidget {
 
 class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
   final _formKey = GlobalKey<FormState>();
+  CompaniesMetadataClass? companiesMetadata;
 
   late final TextEditingController _companyNameController =
       TextEditingController(text: widget.companyName);
@@ -109,6 +119,17 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
     return null;
   }
 
+  Future<bool> getCompaniesMetadata() async {
+    companiesMetadata = (await companiesMetadataDocument.get()).data();
+    if (companyType!.isEmpty) {
+      companyType = companiesMetadata!.companyTypes[0];
+    }
+    if (roleType!.isEmpty) {
+      roleType = companiesMetadata!.roleTypes[0];
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     double safeAreaHeight = MediaQuery.of(context).padding.top;
@@ -121,6 +142,7 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: const Color(0xFFF7F9FC),
           elevation: 0,
           leading: IconButton(
@@ -133,245 +155,263 @@ class _OnCampusCompanyFormState extends State<OnCampusCompanyForm> {
             },
           ),
         ),
-        body: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.only(
-                      left: paddingToElements, right: paddingToElements),
+        body: FutureBuilder(
+            future: getCompaniesMetadata(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    const Text(
-                      "Add an On-Campus Company",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: paddingToElements, right: paddingToElements),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Add an On-Campus Company",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: height * 0.027,
+                              ),
+                              Field(
+                                text: "Company Name",
+                                validateFunction: validateFunction,
+                                textInputAction: TextInputAction.next,
+                                textInputType: TextInputType.text,
+                                controller: _companyNameController,
+                              ),
+                              AppDropdownInput<String>(
+                                hintText: "Company Type",
+                                options: companiesMetadata!.companyTypes
+                                    .map((e) => e.toString())
+                                    .toList(),
+                                value: companyType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    companyType = value.toString();
+                                  });
+                                },
+                                getLabel: (value) => value.toString(),
+                              ),
+                              Field(
+                                text: "Role Name",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                controller: _roleNameController,
+                              ),
+                              AppDropdownInput(
+                                hintText: "Role Type",
+                                options: companiesMetadata!.roleTypes
+                                    .map((e) => e.toString())
+                                    .toList(),
+                                value: roleType,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    roleType = value;
+                                  });
+                                },
+                                getLabel: (String value) => value,
+                              ),
+                              Field(
+                                text: "About the firm",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.multiline,
+                                textInputAction: TextInputAction.newline,
+                                controller: _aboutTheFirmController,
+                              ),
+                              Field(
+                                text: "Job Description",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.multiline,
+                                textInputAction: TextInputAction.next,
+                                controller: _jobDescriptionController,
+                              ),
+                              Field(
+                                text: "Eligibility",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                controller: _eligibilityController,
+                              ),
+                              Field(
+                                text: "Package",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                controller: _packageController,
+                              ),
+                              LastDateToApplyField(
+                                lastDateToApplyController:
+                                    lastDateToApplyController,
+                                selectedDate: selectedDate,
+                              ),
+                              ComplexField(
+                                text: "Skillset Required",
+                                validateFunction: validateFunction,
+                                options: widget.skillset,
+                                optionsFor: "Skillset",
+                              ),
+                              ComplexField(
+                                text: "Process Timeline",
+                                validateFunction: validateFunction,
+                                options: [widget.processTimeline],
+                                optionsFor: "Process Timeline",
+                                buttonText: "Add or Update",
+                              ),
+                              ComplexField(
+                                text: "Previously Placed Contact Details",
+                                validateFunction: validateFunction,
+                                options: widget.previouslyPlacedContacts,
+                                optionsFor: "Previously Placed Contact Details",
+                              ),
+                              ComplexField(
+                                text: "Experiences",
+                                validateFunction: validateFunction,
+                                options: widget.experiences,
+                                optionsFor: "Experiences",
+                              ),
+                              ComplexField(
+                                text: "FAQs",
+                                validateFunction: validateFunction,
+                                options: widget.faqs,
+                                optionsFor: "FAQs",
+                              ),
+                              Field(
+                                text: "Link for Applying",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                controller: _applyLinkController,
+                              ),
+                              Field(
+                                text: "Google Drive Link",
+                                validateFunction: validateFunction,
+                                textInputType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                controller: _googleDriveLinkController,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                    SizedBox(
-                      height: height * 0.027,
-                    ),
-                    Field(
-                      text: "Company Name",
-                      validateFunction: validateFunction,
-                      textInputAction: TextInputAction.next,
-                      textInputType: TextInputType.text,
-                      controller: _companyNameController,
-                    ),
-                    AppDropdownInput(
-                      hintText: "Company Type",
-                      options: const ["Product", "Service"],
-                      value: companyType,
-                      onChanged: (String? value) {
-                        setState(() {
-                          companyType = value;
-                        });
+                    InkWell(
+                      onTap: () async {
+                        print('Hi');
+                        if (_formKey.currentState!.validate()) {
+                          print('Hi3');
+                          Map previoslyPlacedContactDetails = {};
+                          Map experiences = {};
+                          Map faqs = {};
+                          for (var contact in globalPreviouslyPlacedContacts) {
+                            previoslyPlacedContactDetails[contact.rollNo] =
+                                contact.toJson();
+                          }
+                          for (var experience in globalExperiences) {
+                            experiences[experience.rollNo] =
+                                experience.toJson();
+                          }
+                          for (var faq in globalFaqs) {
+                            faqs[faq.timestamp] = faq.toJson();
+                          }
+
+                          final company = Company.fromJson(
+                            {
+                              "id": widget.id == ""
+                                  ? DateTime.now()
+                                      .millisecondsSinceEpoch
+                                      .toString()
+                                  : widget.id,
+                              "companyName": _companyNameController.text,
+                              "companyType": companyType,
+                              "roleName": _roleNameController.text,
+                              "roleType": roleType,
+                              "aboutTheFirm": _aboutTheFirmController.text,
+                              "jobDescription": _jobDescriptionController.text,
+                              "eligibility": _eligibilityController.text,
+                              "package": double.parse(_packageController.text),
+                              "lastDate": lastDateToApplyController.text,
+                              "linkToApply": _applyLinkController.text,
+                              "driveLink": _googleDriveLinkController.text,
+                              "skillset": globalSkillset,
+                              "processTimeline": globalProcessTimeline.toJson(),
+                              "previouslyPlacedContacts":
+                                  previoslyPlacedContactDetails,
+                              "experiences": experiences,
+                              "faqs": faqs,
+                              "offerType": "On Campus",
+                            },
+                          );
+                          print(company);
+                          firebaseInstance.doc(company.id).set(company);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Opportunity published successfully.')),
+                          );
+                          await Future.delayed(const Duration(seconds: 2));
+                          Navigator.pop(context);
+                        }
                       },
-                      getLabel: (String value) => value,
-                    ),
-                    Field(
-                      text: "Role Name",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _roleNameController,
-                    ),
-                    AppDropdownInput(
-                      hintText: "Role Type",
-                      options: const [
-                        "Full Time",
-                        "Internship",
-                        "Internship + Full Time",
-                        "Internship Based Full Time"
-                      ],
-                      value: roleType,
-                      onChanged: (String? value) {
-                        setState(() {
-                          roleType = value;
-                        });
-                      },
-                      getLabel: (String value) => value,
-                    ),
-                    Field(
-                      text: "About the firm",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                      controller: _aboutTheFirmController,
-                    ),
-                    Field(
-                      text: "Job Description",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.multiline,
-                      textInputAction: TextInputAction.next,
-                      controller: _jobDescriptionController,
-                    ),
-                    Field(
-                      text: "Eligibility",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _eligibilityController,
-                    ),
-                    Field(
-                      text: "Package",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _packageController,
-                    ),
-                    LastDateToApplyField(
-                      lastDateToApplyController: lastDateToApplyController,
-                      selectedDate: selectedDate,
-                    ),
-                    ComplexField(
-                      text: "Skillset Required",
-                      validateFunction: validateFunction,
-                      options: widget.skillset,
-                      optionsFor: "Skillset",
-                    ),
-                    ComplexField(
-                      text: "Process Timeline",
-                      validateFunction: validateFunction,
-                      options: [widget.processTimeline],
-                      optionsFor: "Process Timeline",
-                      buttonText: "Add or Update",
-                    ),
-                    ComplexField(
-                      text: "Previously Placed Contact Details",
-                      validateFunction: validateFunction,
-                      options: widget.previouslyPlacedContacts,
-                      optionsFor: "Previously Placed Contact Details",
-                    ),
-                    ComplexField(
-                      text: "Experiences",
-                      validateFunction: validateFunction,
-                      options: widget.experiences,
-                      optionsFor: "Experiences",
-                    ),
-                    ComplexField(
-                      text: "FAQs",
-                      validateFunction: validateFunction,
-                      options: widget.faqs,
-                      optionsFor: "FAQs",
-                    ),
-                    Field(
-                      text: "Link for Applying",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _applyLinkController,
-                    ),
-                    Field(
-                      text: "Google Drive Link",
-                      validateFunction: validateFunction,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      controller: _googleDriveLinkController,
+                      child: Container(
+                        width: 215,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x3f000000),
+                              blurRadius: 4,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color(0xff925ffc),
+                              Color(0xff3b57ff),
+                            ],
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 15),
+                        child: const Center(
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              InkWell(
-                onTap: () async {
-                  print('Hi');
-                  if (_formKey.currentState!.validate()) {
-                    print('Hi3');
-                    Map previoslyPlacedContactDetails = {};
-                    Map experiences = {};
-                    Map faqs = {};
-                    for (var contact in globalPreviouslyPlacedContacts) {
-                      previoslyPlacedContactDetails[contact.rollNo] =
-                          contact.toJson();
-                    }
-                    for (var experience in globalExperiences) {
-                      experiences[experience.rollNo] = experience.toJson();
-                    }
-                    for (var faq in globalFaqs) {
-                      faqs[faq.timestamp] = faq.toJson();
-                    }
-                    print('Hi2');
-
-                    final company = Company.fromJson(
-                      {
-                        "id": widget.id == ""
-                            ? DateTime.now().millisecondsSinceEpoch.toString()
-                            : widget.id,
-                        "companyName": _companyNameController.text,
-                        "companyType": companyType,
-                        "roleName": _roleNameController.text,
-                        "roleType": roleType,
-                        "aboutTheFirm": _aboutTheFirmController.text,
-                        "jobDescription": _jobDescriptionController.text,
-                        "eligibility": _eligibilityController.text,
-                        "package": double.parse(_packageController.text),
-                        "lastDate": lastDateToApplyController.text,
-                        "linkToApply": _applyLinkController.text,
-                        "driveLink": _googleDriveLinkController.text,
-                        "skillset": globalSkillset,
-                        "processTimeline": globalProcessTimeline.toJson(),
-                        "previouslyPlacedContacts":
-                            previoslyPlacedContactDetails,
-                        "experiences": experiences,
-                        "faqs": faqs,
-                        "offerType": "On Campus",
-                      },
-                    );
-                    print(company);
-                    firebaseInstance.doc(company.id).set(company);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('🤘Done and Dusted!!✌️')),
-                    );
-                    await Future.delayed(const Duration(seconds: 2));
-                    Navigator.pop(context);
-                  }
-                },
-                child: Container(
-                  width: 215,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x3f000000),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                    gradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color(0xff925ffc),
-                        Color(0xff3b57ff),
-                      ],
-                    ),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                  child: const Center(
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+              );
+            }),
       ),
     );
   }
@@ -421,9 +461,11 @@ class Field extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: width * 0.633,
-      height: textInputType == TextInputType.multiline ? 125 : 90,
+    return Container(
+      // width: width * 0.633,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      width: double.infinity,
+      // height: textInputType == TextInputType.multiline ? 125 : 90,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -705,10 +747,11 @@ class _ComplexFieldState extends State<ComplexField> {
                         break;
                       case "Process Timeline":
                         showDialog(
-                          context: context,
-                          builder: (context) =>
-                              processTimelineDialog(context, widget.options),
-                        );
+                            context: context,
+                            builder: (context) {
+                              print(widget.options);
+                              return processTimelineDialog(context, options);
+                            });
                         break;
                       default:
                     }
@@ -1425,19 +1468,20 @@ class ProcessTimelineOption extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 4),
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () {
-                      func();
-                    },
-                    child: const Icon(
-                      Icons.delete_rounded,
-                      color: Colors.red,
-                      size: 25,
-                    ),
-                  ),
-                )
+
+                // MouseRegion(
+                //   cursor: SystemMouseCursors.click,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       func();
+                //     },
+                //     child: const Icon(
+                //       Icons.delete_rounded,
+                //       color: Colors.red,
+                //       size: 25,
+                //     ),
+                //   ),
+                // )
               ],
             ),
             padding: const EdgeInsets.all(10),
@@ -1475,11 +1519,11 @@ class _LastDateToApplyFieldState extends State<LastDateToApplyField> {
 
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: widget.selectedDate,
-      firstDate: widget.selectedDate,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
       lastDate: widget.selectedDate.add(
         const Duration(
-          days: 365,
+          days: 1000,
         ),
       ),
     );

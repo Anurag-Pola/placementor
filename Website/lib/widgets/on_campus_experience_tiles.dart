@@ -125,7 +125,7 @@ class ExperienceTile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: Image.asset(
-                    'assets/Images/tnp_coordinators_image.png',
+                    'assets/Images/student_user.png',
                     scale: 1.5,
                   ),
                 ),

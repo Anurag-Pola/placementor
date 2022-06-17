@@ -65,12 +65,12 @@ class ProfileScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   return Row(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 21),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage(
-                              'assets/images/tnp_coordinators_image.png'),
-                          radius: 44,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 21),
+                        child: Image.asset(
+                          'assets/images/student_user.png',
+                          scale: 1.5,
+                          height: 60,
                         ),
                       ),
                       const SizedBox(

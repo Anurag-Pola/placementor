@@ -14,7 +14,6 @@ import './screens/tickets_screen.dart';
 import './screens/login_screen.dart';
 import './screens/off_campus_company_screen.dart';
 import './screens/on_campus_company_screen.dart';
-import './screens/manage_users.dart';
 import './screens/resources_screen.dart';
 import 'screens/companies_search_screen.dart';
 import 'screens/off_campus_opportunities_screen.dart';
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/resources': (context) => const ResourcesScreen(),
         '/off-campus-opportunities': (context) =>
             const OffCampusOpportunitiesScreen(),
-        '/admins-page': (context) => AdminsScreen(),
+        '/admins-page': (context) => const AdminsScreen(),
         '/students-page': (context) => StudentsScreen(),
         '/company-search-page': (context) => const CompaniesSearchScreen(),
       },

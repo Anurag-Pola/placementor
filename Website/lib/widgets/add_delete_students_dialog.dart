@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../models/custom_user.dart';
 import 'manage_users_functions.dart';
@@ -15,8 +15,8 @@ Future<dynamic> addDeleteStudentsDailog(
   List<Map<String, dynamic>> actionSummary = [];
 
   Future<void> _onOpen(LinkableElement link) async {
-    if (await canLaunch(link.url)) {
-      await launch(link.url);
+    if (await canLaunchUrlString(link.url)) {
+      await launchUrlString(link.url);
     } else {
       showDialog(
         context: context,

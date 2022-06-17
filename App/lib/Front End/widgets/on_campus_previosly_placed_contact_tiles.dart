@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../models/previosly_placed_contact_details_class.dart';
 
 class PrevioslyPlacedContactTiles extends StatelessWidget {
@@ -115,13 +116,31 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final url = previouslyPlacedContactDetails.linkedin;
+                    if (await canLaunchUrlString(url)) {
+                      await launchUrlString(url);
+                    } else {
+                      SnackBar(
+                        content: Text('Could not launch $url'),
+                      );
+                    }
+                  },
                   icon: Image.asset(
                     "assets/images/linkedin-logo.png",
                     width: 30,
                   )),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final url = 'tel:+91${previouslyPlacedContactDetails.phone}';
+                  if (await canLaunchUrlString(url)) {
+                    await launchUrlString(url);
+                  } else {
+                    SnackBar(
+                      content: Text('Could not launch $url'),
+                    );
+                  }
+                },
                 icon: const Icon(
                   Icons.call_outlined,
                   color: Color(0xFF46B35C),
@@ -130,7 +149,16 @@ class PrevioslyPlacedContactTile extends StatelessWidget {
               ),
               // const SizedBox(width: 30),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final url = 'mailto:${previouslyPlacedContactDetails.email}';
+                  if (await canLaunchUrlString(url)) {
+                    await launchUrlString(url);
+                  } else {
+                    SnackBar(
+                      content: Text('Could not launch $url'),
+                    );
+                  }
+                },
                 icon: const Icon(
                   Icons.mail_outline_rounded,
                   color: Color(0xFF1B7AF3),

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class OnCampusHeading extends StatelessWidget {
   final String companyName;
   final String roleName;
+  final String logo;
 
   const OnCampusHeading({
     Key? key,
     required this.companyName,
     required this.roleName,
+    required this.logo,
   }) : super(key: key);
 
   @override
@@ -18,9 +20,14 @@ class OnCampusHeading extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 8.0),
-            child: FlutterLogo(size: 60),
+          Container(
+            width: 110,
+            height: 76,
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 8.0),
+            child: Image.asset(
+              'assets/Images/$logo.png',
+              scale: 1.5,
+            ),
           ),
           const SizedBox(height: 16),
           Padding(

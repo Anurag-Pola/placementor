@@ -20,83 +20,89 @@ class SearchCompanyTile extends StatelessWidget {
             arguments: company);
       },
       child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
+        child: Center(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Image.asset(
+                      'assets/images/${company.offerType == 'On Campus' ? 'company' : 'opportunity'}.png',
+                      scale: 1.5,
+                    ),
                   ),
-                  child: const FlutterLogo(size: 40),
+                  const SizedBox(width: 10),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          company.roleName,
+                          style: const TextStyle(
+                            color: Color(0xff18191e),
+                            fontSize: 16,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Opacity(
+                        opacity: 0.80,
+                        child: Text(
+                          company.companyName,
+                          style: const TextStyle(
+                            color: Color(0xff18191e),
+                            fontSize: 12,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (company.offerType == 'On Campus')
+                const SizedBox(
+                  height: 20,
                 ),
-                const SizedBox(width: 10),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        company.roleName,
-                        style: const TextStyle(
-                          color: Color(0xff18191e),
-                          fontSize: 16,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+              Row(
+                children: [
+                  if (company.offerType == 'On Campus')
+                    Chip(
+                      name: company.roleType!,
+                    ),
+                  if (company.offerType == 'On Campus')
+                    Chip(
+                      name: company.lastDate!,
+                    ),
+                  const Spacer(),
+                  if (company.offerType == 'On Campus' &&
+                      company.package != 0.0)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: SizedBox(
+                        child: Text(
+                          '${company.package} LPA',
+                          style: const TextStyle(
+                            color: Color(0xff18191e),
+                            fontSize: 12,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 3),
-                    Opacity(
-                      opacity: 0.80,
-                      child: Text(
-                        company.companyName,
-                        style: const TextStyle(
-                          color: Color(0xff18191e),
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                if (company.offerType == 'On Campus')
-                  Chip(
-                    name: company.roleType!,
-                  ),
-                if (company.offerType == 'On Campus')
-                  Chip(
-                    name: company.lastDate!,
-                  ),
-                const Spacer(),
-                if (company.offerType == 'On Campus' && company.package != 0.0)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: SizedBox(
-                      child: Text(
-                        '${company.package} LPA',
-                        style: const TextStyle(
-                          color: Color(0xff18191e),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  )
-              ],
-            ),
-          ],
+                    )
+                ],
+              ),
+            ],
+          ),
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),

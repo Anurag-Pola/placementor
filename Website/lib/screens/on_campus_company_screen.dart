@@ -22,17 +22,9 @@ class OnCampusComapnyScreen extends StatelessWidget {
     final company = ModalRoute.of(context)!.settings.arguments as Company;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: [
           MouseRegion(
             cursor: SystemMouseCursors.click,
@@ -64,6 +56,7 @@ class OnCampusComapnyScreen extends StatelessWidget {
           Column(
             children: [
               OnCampusHeading(
+                logo: 'company',
                 companyName: company.companyName,
                 roleName: company.roleName,
               ),
@@ -93,6 +86,9 @@ class OnCampusComapnyScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
                         width: double.infinity,
                         color: Colors.white,
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
