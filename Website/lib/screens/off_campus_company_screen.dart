@@ -21,15 +21,15 @@ class OffCampusComapnyScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.insert_invitation_rounded,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(
+        //       Icons.insert_invitation_rounded,
+        //       color: Colors.black,
+        //     ),
+        //     onPressed: () {},
+        //   ),
+        // ],
       ),
       backgroundColor: const Color(0xFFF5F7FC),
       body: Stack(

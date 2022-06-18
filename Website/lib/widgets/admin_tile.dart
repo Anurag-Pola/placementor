@@ -70,7 +70,7 @@ class _AdminTileState extends State<AdminTile> {
               shape: BoxShape.circle,
             ),
             child: Image.asset(
-              'assets/images/admin_user.png',
+              'assets/Images/admin_user.png',
               scale: 1.5,
             ),
           ),

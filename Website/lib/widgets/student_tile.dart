@@ -62,7 +62,7 @@ class _StudentTileState extends State<StudentTile> {
               shape: BoxShape.circle,
             ),
             child: Image.asset(
-              'assets/images/student_user.png',
+              'assets/Images/student_user.png',
               scale: 1.5,
             ),
           ),

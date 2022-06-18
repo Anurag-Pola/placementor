@@ -11,12 +11,12 @@ class TabsScreen extends StatelessWidget {
   CustomAdminUser? admin;
   final Map<dynamic, dynamic> _tabsRouteMap = {
     'Companies': '/companies',
-    'Tickets': '/tickets',
     'Newsfeed': '/newsfeed',
     'Resources': '/resources',
-    'Off Campus Opportunities': '/off-campus-opportunities',
     'T&P Coordinators': '/admins-page',
-    'Students': '/students-page'
+    'Students': '/students-page',
+    'Off Campus Opportunities': '/off-campus-opportunities',
+    'Tickets': '/tickets',
   };
   Future<bool> getAdminDetailsFetched() async {
     admin = (await _adminsCollection
@@ -96,7 +96,7 @@ class TabsScreen extends StatelessWidget {
                               height: 120,
                               padding: EdgeInsets.only(left: 30, right: 20),
                               child: Image.asset(
-                                'assets/images/admin_user.png',
+                                'assets/Images/admin_user.png',
                                 scale: 1.5,
                               ),
                             ),
