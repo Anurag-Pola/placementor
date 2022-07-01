@@ -35,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Image.asset(
                       'assets/login_pic.png',
+                      filterQuality: FilterQuality.high,
                       height: h * 0.5,
                       width: w * 0.5,
                     ),
@@ -50,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Image.asset(
                         'assets/Images/login_pic.png',
                         fit: BoxFit.fill,
+                        filterQuality: FilterQuality.high,
                       ),
                     ),
                     const SizedBox(width: 40),
